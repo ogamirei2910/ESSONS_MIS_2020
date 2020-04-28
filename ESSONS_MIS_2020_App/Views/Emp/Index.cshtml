@@ -1,0 +1,69 @@
+﻿@model IEnumerable<ESSONS_MIS_2020_App.Models.EmpModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Danh sách nhân viên</h3>
+                        <br />
+                        <a class="btn btn-primary" href="/Emp/emp_Create">
+                            Tạo mới
+                        </a>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Số thẻ</th>
+                                    <th>Họ tên</th>
+                                    <th>Phòng ban</th>
+                                    <th>CMND</th>
+                                    <th>Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.empID)</td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.empName)
+                                        </td>
+                                        <td>@Html.DisplayFor(modelItem => item.depID)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.empIdentityCard)</td>
+                                        <td>
+                                            @Html.ActionLink("Chi tiết", "emp_Detail", "Emp", new { empID = item.empID }, new { @class = "btn btn-primary btn-sm" })
+                                            @Html.ActionLink("Sửa", "emp_Update", "Emp", new { empID = item.empID }, new { @class = "btn btn-info btn-sm" })
+                                            <a class="btn btn-primary btn-sm" href="#">
+                                                <i class="fas fa-folder">
+                                                </i>
+                                                Đánh giá
+                                            </a>
+                                            <a class="btn btn-danger btn-sm" href="#">
+                                                <i class="fas fa-trash">
+                                                </i>
+                                                Khóa
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>

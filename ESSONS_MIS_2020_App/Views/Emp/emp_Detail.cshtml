@@ -1,0 +1,109 @@
+﻿@model ESSONS_MIS_2020_App.Models.EmpModel
+
+@{
+    ViewData["Title"] = "Chi tiết nhân viên";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Chi tiết nhân viên</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <table class="table">
+                            <tr>
+                                <td style="width: 50%">
+                                    <div class="form-group row">
+                                        <b class="col-sm-3">Số thẻ:</b>
+                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empID)</a>
+                                    </div>
+
+                                    @if (Model.empIDTemp != null)
+                                    {
+                                        <div class="form-group row">
+                                            <b class="col-sm-3">Số thẻ TV:</b>
+                                            <a class="col-sm-5">@Html.DisplayFor(model => model.empIDTemp)</a>
+                                        </div>
+                                    }
+
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3">Họ tên:</b>
+                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empName)</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3">CMND:</b>
+                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empIdentityCard)</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3">Trình dộ:</b>
+                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empEdu)</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3">Địa chỉ:</b>
+                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empAddress)</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3">Chức vụ:</b>
+                                        <a class="col-sm-5">@Html.DisplayFor(model => model.positionID)</a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group row">
+                                        <b class="col-sm-3">Giới tính:</b>
+                                        <a class="col-sm-3">@Html.DisplayFor(model => model.empSex)</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3">Hôn nhân:</b>
+                                        <a class="col-sm-3">@Html.DisplayFor(model => model.empMarriage)</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3">Ngày sinh:</b>
+                                        <a class="col-sm-3">@Html.DisplayFor(model => model.empBirthDay)</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3">Ngày làm:</b>
+                                        <a class="col-sm-3">@Html.DisplayFor(model => model.empInDate)</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3">Điện thoại:</b>
+                                        <a class="col-sm-3">@Html.DisplayFor(model => model.empTel)</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3">Phòng ban:</b>
+                                        <a class="col-sm-3">@Html.DisplayFor(model => model.depID)</a>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        </table>
+                        <form role="form">
+                            <div class="card-footer">
+                                <a href="/Emp/Index" class="btn btn-secondary">Quay Lại</a>
+                                @Html.ActionLink("Sửa", "emp_Update", "Emp", new { empID = Model.empID }, new { @class = "btn btn-info float-right" })
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+

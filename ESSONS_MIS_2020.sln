@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESSONS_MIS_2020", "ESSONS_MIS_2020\ESSONS_MIS_2020.csproj", "{F5A545A6-3DCC-470E-8A5F-6BF9AF0047E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESSONS_MIS_2020_App", "ESSONS_MIS_2020_App\ESSONS_MIS_2020_App.csproj", "{94D68766-955B-4CEC-B10F-34181D3451CF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F5A545A6-3DCC-470E-8A5F-6BF9AF0047E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5A545A6-3DCC-470E-8A5F-6BF9AF0047E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5A545A6-3DCC-470E-8A5F-6BF9AF0047E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5A545A6-3DCC-470E-8A5F-6BF9AF0047E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94D68766-955B-4CEC-B10F-34181D3451CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94D68766-955B-4CEC-B10F-34181D3451CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94D68766-955B-4CEC-B10F-34181D3451CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94D68766-955B-4CEC-B10F-34181D3451CF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C7893C07-BE9A-4349-B3BE-DA76BD670F98}
+	EndGlobalSection
+EndGlobal

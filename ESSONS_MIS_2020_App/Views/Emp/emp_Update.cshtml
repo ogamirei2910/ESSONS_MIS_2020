@@ -1,0 +1,178 @@
+﻿@model ESSONS_MIS_2020_App.Models.EmpModel
+@{
+    ViewData["Title"] = "emp_Update";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Thêm mới nhân viên</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <form method="post" asp-action="emp_Update">
+                        <table class="table">
+                            <tr>
+                                <td width="50%">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Số thẻ</label>
+                                        <div class="col-3">
+                                            <input asp-for="empID" type="text" class="form-control" readonly placeholder="Số thẻ" value="@Model.empID">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Họ tên</label>
+                                        <div class="col-5">
+                                            <input asp-for="empName" type="text" class="form-control" placeholder="Họ tên" value="@Model.empName">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">CMND</label>
+                                        <div class="col-5">
+                                            <input asp-for="empIdentityCard" type="text" class="form-control" placeholder="CMND" value="@Model.empIdentityCard">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Địa chỉ</label>
+                                        <div class="col-7">
+                                            <input asp-for="empAddress" class="form-control" type="text" placeholder="Địa chỉ" value="@Model.empAddress">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Ngày sinh</label>
+                                        <div class="col-5">
+                                            <div class="datepicker date input-group p-0 shadow-sm">
+                                                <input asp-for="empBirthDay" type="text" class="form-control" id="reservationDate" value="@Model.empBirthDay">
+                                                <div class="input-group-append"><span class="input-group-text"></span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Ngày làm</label>
+                                        <div class="col-5">
+                                            <div class="datepicker date input-group p-0 shadow-sm">
+                                                <input asp-for="empInDate" type="text" class="form-control" id="reservationDate" value="@Model.empInDate">
+                                                <div class="input-group-append"><span class="input-group-text"></span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Điện Thoại</label>
+                                        <div class="col-4">
+                                            <input asp-for="empTel" type="text" class="form-control" placeholder="Số điện thoại" value="@Model.empTel">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Hình thẻ</label>
+                                        <div class="custom-file col-6">
+                                            <input asp-for="ProfileImage" class="custom-file-input" id="customFile" type="file">
+                                            <label class="custom-file-label" for="customFile">Chọn hình</label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Giới tính</label>
+                                        <select asp-for="empSex" class="custom-select col-sm-3">
+                                            <option selected="@(Model.empSex == "Nam")">Nam</option>
+                                            <option selected="@(Model.empSex == "Nữ")">Nữ</option>
+                                        </select>
+                                    </div>                                 
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Hôn nhân</label>
+                                        <select asp-for="empMarriage" class="custom-select col-3">
+                                            <option selected="@(Model.empMarriage == "Độc thân")">Độc thân</option>
+                                            <option selected="@(Model.empMarriage == "Kết hôn")">Kết hôn</option>
+                                            <option selected="@(Model.empMarriage == "Ly dị")">Ly dị</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Trình độ</label>
+                                        <select asp-for="empEdu" class="custom-select col-sm-4">
+                                            <option selected="@(Model.empEdu == "Phổ thông")">Phổ thông</option>
+                                            <option selected="@(Model.empEdu == "Trung cấp")">Trung cấp</option>
+                                            <option selected="@(Model.empEdu == "Cao đẳng")">Cao đẳng</option>
+                                            <option selected="@(Model.empEdu == "Đại học")">Đại học</option>
+                                            <option selected="@(Model.empEdu == "Thạc sĩ")">Thạc sĩ</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Chức vụ</label>
+                                        <select asp-for="positionID" class="custom-select col-sm-4" >
+                                            <option selected="@((Model.positionID == "Công nhân")? "selected" : "")">Công nhân</option>
+                                            <option selected="@((Model.positionID == "Nhân viên")? "selected" : "")">Nhân viên</option>
+                                            <option selected="@((Model.positionID == "Tổ trưởng")? "selected" : "")">Tổ trưởng</option>
+                                            <option selected="@((Model.positionID == "Trưởng phòng")? "selected" : "")">Trưởng phòng</option>
+                                        </select>
+                                    </div>
+
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Bộ phận</label>
+                                        <select asp-for="depID" class="custom-select col-sm-3">
+                                            <option selected="@(Model.depID == "Kho")">Kho</option>
+                                            <option selected="@(Model.depID == "Kế toán")">Kế toán</option>
+                                            <option selected="@(Model.depID == "IT")">IT</option>
+                                            <option selected="@(Model.depID == "Nhân sự")">Nhân sự</option>
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div class="card-footer">
+                            <a href="/Emp/Index" class="btn btn-secondary">Quay Lại</a>
+                            <button type="submit" class="btn btn-primary float-right">
+                                Sửa
+                            </button>
+                        </div>
+                    </form>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        // Add the following code if you want the name of the file appear on select
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+        $(function () {
+
+            // INITIALIZE DATEPICKER PLUGIN
+            $('.datepicker').datepicker({
+                clearBtn: true,
+                format: "dd/mm/yyyy"
+            });
+
+
+            // FOR DEMO PURPOSE
+            $('#reservationDate').on('change', function () {
+                var pickedDate = $('input').val();
+                $('#pickedDate').html(pickedDate);
+            });
+        });
+    </script>
+
+}
+

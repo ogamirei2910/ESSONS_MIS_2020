@@ -1,0 +1,77 @@
+﻿@model ESSONS_MIS_2020_App.Models.UserModel
+@{
+    ViewData["Title"] = "Đăng nhập hệ thống";
+    Layout = null;
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ESSONS MIS| Đăng nhập</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/Assets/plugins/fontawesome-free/css/all.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="~/Assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/Assets/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="~/Assets/index2.html"><b>ESSONS</b>MIS</a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Đăng nhập hệ thống</p>
+
+                <form method="post" asp-action="Login">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" asp-for="username" placeholder="Tài khoản">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" asp-for="password" placeholder="Password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <!-- /.col -->
+                        <div class="col-6">
+                            <a href="/MainPage/Index" class="btn btn-secondary">Quay lại</a>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-success float-right" type="submit">Đăng nhập</button>
+                        </div>
+
+                        <!-- /.col -->
+                    </div>
+                </form>
+                <p class="text-danger login-box-msg"> @ViewBag.message</p>
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+    <!-- /.login-box -->
+    <!-- jQuery -->
+    <script src="~/Assets/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/Assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/Assets/dist/js/adminlte.min.js"></script>
+
+</body>
+</html>

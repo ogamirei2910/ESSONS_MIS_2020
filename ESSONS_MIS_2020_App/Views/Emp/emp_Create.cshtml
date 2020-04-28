@@ -1,0 +1,178 @@
+﻿@model ESSONS_MIS_2020_App.Models.EmpModel
+@{
+    ViewData["Title"] = "emp_Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Thêm mới nhân viên</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <form method="post" asp-action="emp_Create" enctype="multipart/form-data">
+                        <table class="table">
+                            <tr>
+                                <td width="50%">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Số thẻ</label>
+                                        <div class="col-3">
+                                            <input asp-for="empID" type="text" class="form-control" placeholder="Số thẻ" value="">
+                                        </div>
+                                        <div class="col-3">
+                                            <input asp-for="empIDTemp" type="text" class="form-control" placeholder="Số thời vụ" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Họ tên</label>
+                                        <div class="col-5">
+                                            <input asp-for="empName" type="text" class="form-control" placeholder="Họ tên" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">CMND</label>
+                                        <div class="col-5">
+                                            <input asp-for="empIdentityCard" type="text" class="form-control" placeholder="CMND" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Địa chỉ</label>
+                                        <div class="col-7">
+                                            <input asp-for="empAddress" class="form-control" type="text" placeholder="Địa chỉ" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Ngày sinh</label>
+                                        <div class="col-5">
+                                            <div class="datepicker date input-group p-0 shadow-sm">
+                                                <input asp-for="empBirthDay" type="text" class="form-control" id="reservationDate">
+                                                <div class="input-group-append"><span class="input-group-text"></span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Ngày làm</label>
+                                        <div class="col-5">
+                                            <div class="datepicker date input-group p-0 shadow-sm">
+                                                <input asp-for="empInDate" type="text" class="form-control" id="reservationDate">
+                                                <div class="input-group-append"><span class="input-group-text"></span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Điện Thoại</label>
+                                        <div class="col-4">
+                                            <input asp-for="empTel" type="text" class="form-control" placeholder="Số điện thoại" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Hình thẻ</label>
+                                        <div class="custom-file col-6">
+                                            <input asp-for="ProfileImage" class="custom-file-input" id="customFile" type="file">
+                                            <label class="custom-file-label" for="customFile">Chọn hình</label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Giới tính</label>
+                                        <select asp-for="empSex" class="custom-select col-sm-3">
+                                            <option>Nam</option>
+                                            <option>Nữ</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Hôn nhân</label>
+                                        <select asp-for="empMarriage" class="custom-select col-3">
+                                            <option>Độc thân</option>
+                                            <option>Kết hôn</option>
+                                            <option>Ly dị</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Trình độ</label>
+                                        <select asp-for="empEdu" class="custom-select col-sm-4">
+                                            <option>Phổ thông</option>
+                                            <option>Trung cấp</option>
+                                            <option>Cao đẳng</option>
+                                            <option>Đại học</option>
+                                            <option>Thạc sĩ</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Chức vụ</label>
+                                        <select asp-for="positionID" class="custom-select col-sm-4">
+                                            <option>Công nhân</option>
+                                            <option>Nhân viên</option>
+                                            <option>Tổ trưởng</option>
+                                            <option>Trưởng phòng</option>
+                                        </select>
+                                    </div>
+
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Bộ phận</label>
+                                        <select asp-for="depID" class="custom-select col-sm-3">
+                                            <option>Kho</option>
+                                            <option>Kế toán</option>
+                                            <option>IT</option>
+                                            <option>Nhân sự</option>
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">
+                                Tạo mới
+                            </button>
+                        </div>
+                    </form>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        // Add the following code if you want the name of the file appear on select
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+        $(function () {
+
+            // INITIALIZE DATEPICKER PLUGIN
+            $('.datepicker').datepicker({
+                clearBtn: true,
+                format: "dd/mm/yyyy"
+            });
+
+
+            // FOR DEMO PURPOSE
+            $('#reservationDate').on('change', function () {
+                var pickedDate = $('input').val();
+                $('#pickedDate').html(pickedDate);
+            });
+        })
+    </script>
+
+}  
