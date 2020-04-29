@@ -203,8 +203,8 @@ namespace ESSONS_MIS_2020.Controllers
             }
         }
 
-        [HttpDelete("{empID}")]
-        public IActionResult Block(int empID)
+        [HttpPost]
+        public IActionResult Block([FromBody]EmpModel em)
         {
             string connection = _configuration.GetConnectionString("DefaultConnection");
 
@@ -215,14 +215,13 @@ namespace ESSONS_MIS_2020.Controllers
                     sql.Open();
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
                     sc.Parameters.Add(
-                        new SqlParameter("@empID", empID));
+                        new SqlParameter("@empID", em.empID));
                     sc.Parameters.Add(
                         new SqlParameter("@type", "Block"));
 
                     SqlDataReader sdr = sc.ExecuteReader();
                 
                 }
-
                 return NoContent();
             }
         }

@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\Assets\plugins\bootstrap\css\" />
     <Folder Include="wwwroot\Assets\plugins\datepicker\" />
     <Folder Include="wwwroot\images\NhanVien\" />
   </ItemGroup>

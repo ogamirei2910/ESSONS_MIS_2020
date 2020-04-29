@@ -152,6 +152,8 @@
     <script src="~/Assets/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="~/Assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Assets/plugins/bootstrap/js/bootstrap.js"></script>
+    <script src="~/Assets/plugins/bootstrap/js/bootstrap.min.js"></script>
     <!-- AdminLTE App -->
     <script src="~/Assets/dist/js/adminlte.min.js"></script>
     <script src="~/Assets/plugins/pace-progress/pace.min.js"></script>
@@ -177,6 +179,9 @@
                 "responsive": true,
             });
         });
+        $('.carousel').carousel({
+            interval: 2000
+        })
     </script>
 
     @RenderSection("Scripts", required: false)

@@ -137,10 +137,13 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View(um.empID);
         }
 
-        public async Task<IActionResult> emp_Block(int empID)
+        public IActionResult emp_Block(int empID)
         {
+            EmpModel em = new EmpModel();
+            em.empID = empID;
             HttpClient hc = _api.Initial();
-            var res = await hc.DeleteAsync($"api/emp/Block/{empID}");
+            var res = hc.PostAsJsonAsync<EmpModel>($"api/emp/Block", em);
+            res.Wait();
 
             return RedirectToAction("Index");
         }

@@ -11,7 +11,7 @@ namespace ESSONS_MIS_2020_App.Helper
         public HttpClient Initial()
         {
             var Client = new HttpClient();
-            Client.BaseAddress = new Uri("http://localhost:50457/");
+            Client.BaseAddress = new Uri("http://192.168.1.86:4444");
             return Client;
         }
     }
