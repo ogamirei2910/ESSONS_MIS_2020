@@ -52,21 +52,22 @@ namespace ESSONS_MIS_2020_App.Controllers
         {
             HttpClient hc = _api.Initial();
             var image = um.ProfileImage;
-            //Saving Image on Server
-            if (image.Length > 0)
+            if(image != null)
             {
-                var filePath = Path.Combine("wwwroot/images/NhanVien", image.FileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                //Saving Image on Server
+                if (image.Length > 0)
                 {
-                    image.CopyTo(fileStream);
+                    var filePath = Path.Combine("wwwroot/images/NhanVien", image.FileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        image.CopyTo(fileStream);
+                    }
                 }
-            }
 
+                um.empImage = um.ProfileImage.FileName;
+                um.ProfileImage = null;
+            }    
             
-            um.empImage = um.ProfileImage.FileName;
-            um.ProfileImage = null;
-            var output = JsonConvert.SerializeObject(um);
-
             um.status = 1;
             um.indat = DateTime.Now.ToString("dd/MM/yyyy");
             um.intime = DateTime.Now.ToString("HH:mm:ss");
@@ -105,6 +106,23 @@ namespace ESSONS_MIS_2020_App.Controllers
         public IActionResult emp_Update(EmpModel um)
         {
             HttpClient hc = _api.Initial();
+            var image = um.ProfileImage;
+            //Saving Image on Server
+            if (image != null)
+            {
+                if (image.Length > 0)
+                {
+                    var filePath = Path.Combine("wwwroot/images/NhanVien", image.FileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        image.CopyTo(fileStream);
+                    }
+                }
+                um.empImage = um.ProfileImage.FileName;
+                um.status = 1;
+                um.ProfileImage = null;
+            }
+
             var res = hc.PostAsJsonAsync<EmpModel>("api/emp/Update", um);
             res.Wait();
 
@@ -119,22 +137,12 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View(um.empID);
         }
 
-        [HttpGet]
-        public IActionResult emp_Block(EmpModel em)
+        public async Task<IActionResult> emp_Block(int empID)
         {
             HttpClient hc = _api.Initial();
-            var res = hc.PostAsJsonAsync<EmpModel>($"api/emp/Block", em);
-            res.Wait();
+            var res = await hc.DeleteAsync($"api/emp/Block/{empID}");
 
-            var results = res.Result;
-            if (results.IsSuccessStatusCode)
-            {
-                ViewBag.Message = "Đã khoá thành công";
-                return View();
-            }
-
-            ViewBag.Message = "Lỗi kết nối hệ thống. Liên hệ IT";
-            return View();
+            return RedirectToAction("Index");
         }
     }
 }

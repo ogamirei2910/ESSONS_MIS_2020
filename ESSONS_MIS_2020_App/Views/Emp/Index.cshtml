@@ -19,6 +19,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
+
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -42,20 +43,12 @@
                                         <td>
                                             @Html.ActionLink("Chi tiết", "emp_Detail", "Emp", new { empID = item.empID }, new { @class = "btn btn-primary btn-sm" })
                                             @Html.ActionLink("Sửa", "emp_Update", "Emp", new { empID = item.empID }, new { @class = "btn btn-info btn-sm" })
-                                            <a class="btn btn-primary btn-sm" href="#">
-                                                <i class="fas fa-folder">
-                                                </i>
-                                                Đánh giá
-                                            </a>
-                                            <a class="btn btn-danger btn-sm" href="#">
-                                                <i class="fas fa-trash">
-                                                </i>
-                                                Khóa
-                                            </a>
+                                            @Html.ActionLink("Khóa", "emp_Block", "Emp", new { empID = item.empID }, new { @class = "btn btn-danger btn-sm" })
                                         </td>
                                     </tr>
                                 }
                         </table>
+
                     </div>
                     <!-- /.card-body -->
                 </div>

@@ -55,6 +55,7 @@ namespace ESSONS_MIS_2020.Controllers
                         em.empStandardDate = sdr["empStandardDate"].ToString();
                         em.empLeaveDate = sdr["empLeaveDate"].ToString();
                         em.positionID = sdr["positionID"].ToString();
+                        em.empImage = sdr["empImage"].ToString();
                     }
                 }
                 return em;
@@ -202,8 +203,8 @@ namespace ESSONS_MIS_2020.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult Delete([FromBody]EmpModel value)
+        [HttpDelete("{empID}")]
+        public IActionResult Block(int empID)
         {
             string connection = _configuration.GetConnectionString("DefaultConnection");
 
@@ -214,16 +215,15 @@ namespace ESSONS_MIS_2020.Controllers
                     sql.Open();
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
                     sc.Parameters.Add(
-                        new SqlParameter("@username", value.empID));
+                        new SqlParameter("@empID", empID));
                     sc.Parameters.Add(
                         new SqlParameter("@type", "Block"));
 
                     SqlDataReader sdr = sc.ExecuteReader();
-                    if (sdr.HasRows == true)
-                        return Ok();
-                    else return NotFound();
-
+                
                 }
+
+                return NoContent();
             }
         }
 

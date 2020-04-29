@@ -14,7 +14,7 @@
                         <h3 class="card-title">Thêm mới nhân viên</h3>
                     </div>
                     <!-- /.card-header -->
-                    <form method="post" asp-action="emp_Update">
+                    <form method="post" asp-action="emp_Update" enctype="multipart/form-data">
                         <table class="table">
                             <tr>
                                 <td width="50%">
@@ -23,7 +23,15 @@
                                         <div class="col-3">
                                             <input asp-for="empID" type="text" class="form-control" readonly placeholder="Số thẻ" value="@Model.empID">
                                         </div>
+                                        @if (Model.empIDTemp != null && Model.empIDTemp != "")
+                                        {
+                                            <div class="col-3">
+                                                <input asp-for="empIDTemp" type="text" class="form-control" placeholder="Số thời vụ" value="@Model.empIDTemp">
+                                            </div>
+                                        }
                                     </div>
+
+
 
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Họ tên</label>
@@ -86,7 +94,7 @@
                                             <option selected="@(Model.empSex == "Nam")">Nam</option>
                                             <option selected="@(Model.empSex == "Nữ")">Nữ</option>
                                         </select>
-                                    </div>                                 
+                                    </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Hôn nhân</label>
@@ -108,7 +116,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Chức vụ</label>
-                                        <select asp-for="positionID" class="custom-select col-sm-4" >
+                                        <select asp-for="positionID" class="custom-select col-sm-4">
                                             <option selected="@((Model.positionID == "Công nhân")? "selected" : "")">Công nhân</option>
                                             <option selected="@((Model.positionID == "Nhân viên")? "selected" : "")">Nhân viên</option>
                                             <option selected="@((Model.positionID == "Tổ trưởng")? "selected" : "")">Tổ trưởng</option>
