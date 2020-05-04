@@ -21,31 +21,31 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Số thẻ</label>
                                         <div class="col-3">
-                                            <input asp-for="empID" type="text" class="form-control" placeholder="Số thẻ" value="">
+                                            <input asp-for="empID" type="text" maxlength="6" class="form-control" placeholder="Số thẻ" value="">
                                         </div>
                                         <div class="col-3">
-                                            <input asp-for="empIDTemp" type="text" class="form-control" placeholder="Số thời vụ" value="">
+                                            <input asp-for="empIDTemp" type="text"  maxlength="10" class="form-control" placeholder="Số thời vụ" value="">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Họ tên</label>
                                         <div class="col-5">
-                                            <input asp-for="empName" type="text" class="form-control" placeholder="Họ tên" value="">
+                                            <input asp-for="empName" maxlength="30" type="text" class="form-control" placeholder="Họ tên" value="">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">CMND</label>
                                         <div class="col-5">
-                                            <input asp-for="empIdentityCard" type="text" class="form-control" placeholder="CMND" value="">
+                                            <input asp-for="empIdentityCard" type="text" maxlength="12" class="form-control" placeholder="CMND" value="">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Địa chỉ</label>
-                                        <div class="col-7">
-                                            <input asp-for="empAddress" class="form-control" type="text" placeholder="Địa chỉ" value="">
+                                        <div class="col-8">
+                                            <input asp-for="empAddress" maxlength="100" class="form-control" type="text" placeholder="Địa chỉ" value="">
                                         </div>
                                     </div>
 
@@ -70,7 +70,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Điện Thoại</label>
                                         <div class="col-4">
-                                            <input asp-for="empTel" type="text" class="form-control" placeholder="Số điện thoại" value="">
+                                            <input asp-for="empTel" maxlength="12" type="text" class="form-control" placeholder="Số điện thoại" value="">
                                         </div>
                                     </div>
 
@@ -110,22 +110,16 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Chức vụ</label>
-                                        <select asp-for="positionID" class="custom-select col-sm-4">
-                                            <option>Công nhân</option>
-                                            <option>Nhân viên</option>
-                                            <option>Tổ trưởng</option>
-                                            <option>Trưởng phòng</option>
+                                        <select asp-for="positionID" class="custom-select col-sm-4" 
+                                                asp-items="@(new SelectList(ViewBag.positionList,"positionID","positionName"))">
                                         </select>
                                     </div>
 
 
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Bộ phận</label>
-                                        <select asp-for="depID" class="custom-select col-sm-3">
-                                            <option>Kho</option>
-                                            <option>Kế toán</option>
-                                            <option>IT</option>
-                                            <option>Nhân sự</option>
+                                        <select asp-for="depID" class="custom-select col-sm-4"
+                                                asp-items="@(new SelectList(ViewBag.departmentList,"depID","depName"))">
                                         </select>
                                     </div>
                                 </td>

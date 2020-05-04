@@ -1,0 +1,163 @@
+﻿@model ESSONS_MIS_2020_App.Models.DateOffModel
+
+@{
+    ViewData["Title"] = "dateoff_Request";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Phép VR - Phép năm - Nghỉ BHXH - Nghỉ việc</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <form method="post" asp-action="dateoff_Request">
+                        <table class="table">
+                            <tr>
+                                <td style="width: 480px">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Số thẻ</label>
+                                        <div class="col-4">
+                                            <input asp-for="empID" type="text" class="form-control" readonly placeholder="Số thẻ" value="@ViewBag.empid">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Họ tên</label>
+                                        <div class="col-6">
+                                            <input type="text" class="form-control" readonly placeholder="Họ tên" value="@ViewBag.message">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Loại xin phép</label>
+                                        <label>&nbsp;&nbsp;</label>
+                                        <select asp-for="dateoffType" class="custom-select col-5" id="loainghiphep" onchange=" myFunction()">
+                                            <option value="1">Phép năm</option>
+                                            <option value="2">Nghỉ ốm đau (BHXH)</option>
+                                            <option value="3">Nghỉ thai sản (BHXH)</option>
+                                            <option value="4">Việc riêng</option>
+                                            <option value="5">Nghỉ việc</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Giấy cần có</label>
+                                        <textarea id="giaycanco" class="form-control" readonly placeholder="Không" rows="3" cols="1"></textarea>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Ngày nghỉ</label>
+                                        <div class="col-5">
+                                            <div class="datepicker date input-group p-0 shadow-sm">
+                                                <input asp-for="dateoffStart" type="text" class="form-control" id="reservationDate">
+                                                <div class="input-group-append"><span class="input-group-text"></span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Ngày kết thúc</label>
+                                        <div class="col-5">
+                                            <div class="datepicker date input-group p-0 shadow-sm">
+                                                <input asp-for="dateoffEnd" type="text" class="form-control" id="reservationDate">
+                                                <div class="input-group-append"><span class="input-group-text"></span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bootstrap-timepicker">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Từ giờ</label>
+                                            <div class="input-group date col-4" id="timepicker" data-target-input="nearest">
+                                                <input asp-for="dateoffStartTime" type="text" class="form-control datetimepicker-input" data-target="#timepicker" />
+                                                <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bootstrap-timepicker">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Đến giờ</label>
+                                            <div class="input-group date col-4" id="timepicker2" data-target-input="nearest">
+                                                <input asp-for="dateoffEndTime" type="text" class="form-control datetimepicker-input" data-target="#timepicker" />
+                                                <div class="input-group-append" data-target="#timepicker2" data-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary" href="#">
+                                Tạo mới
+                            </button>
+                        </div>
+                    </form>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        // Add the following code if you want the name of the file appear on select
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+        $(function () {
+
+            // INITIALIZE DATEPICKER PLUGIN
+            $('.datepicker').datepicker({
+                clearBtn: true,
+                format: "dd/mm/yyyy"
+            });
+
+
+            // FOR DEMO PURPOSE
+            $('#reservationDate').on('change', function () {
+                var pickedDate = $('input').val();
+                $('#pickedDate').html(pickedDate);
+            });
+        })
+
+        //Timepicker
+        $('#timepicker').datetimepicker({
+            format: 'HH:mm'
+        })
+
+        $('#timepicker2').datetimepicker({
+            format: 'HH:mm'
+        })
+
+        function myFunction() {
+            var x = document.getElementById("loainghiphep").value;
+            if (x == '2' || x == '3')
+                document.getElementById("giaycanco").innerHTML = 'Cần giấy nghỉ bệnh';
+            else
+            {
+                if (x != '5')
+                    document.getElementById("giaycanco").innerHTML = 'Không';
+                else
+                    document.getElementById("giaycanco").innerHTML = 'Đơn xin nghỉ việc';
+            }
+                
+        }
+
+    </script>
+}

@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace ESSONS_MIS_2020_App.Models
 {
-    
+
     public class EmpModel
     {
-        public int empID { get; set; }
+        public string empID { get; set; }
         public string empIDTemp { get; set; }
         public string empName { get; set; }
         public string empIdentityCard { get; set; }
@@ -36,5 +36,9 @@ namespace ESSONS_MIS_2020_App.Models
 
         [NotMapped]
         public IFormFile ProfileImage { get; set; }
+
+        public List<PositionModel> positionDB { get; set; }
+        public List<DepartmentModel> departmentDB { get; set; }
+
     }
 }

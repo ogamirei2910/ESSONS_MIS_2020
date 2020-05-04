@@ -15,6 +15,15 @@ namespace ESSONS_MIS_2020_App.Controllers
     public class EmpController : Controller
     {
         EssonsApi _api = new EssonsApi();
+        public void getRole()
+        {
+            var role = HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList");
+            ViewBag.message = role.First().empName.ToString();
+            ViewBag.roleID = role.First().roleID.ToString();
+            var DistinctItems = role.Select(x => x.folderID).Distinct().ToList();
+            ViewBag.folder = DistinctItems;
+            ViewBag.folderList = role;
+        }
         public async Task<IActionResult> Index()
         {
             List<EmpModel> um = new List<EmpModel>();
@@ -25,11 +34,15 @@ namespace ESSONS_MIS_2020_App.Controllers
                 var results = res.Content.ReadAsStringAsync().Result;
                 um = JsonConvert.DeserializeObject<List<EmpModel>>(results);
             }
+            //Role
+            getRole();
+            //-----------------------------------
+
             return View(um);
         }
 
         [HttpGet]
-        public async Task<IActionResult> emp_Detail(int empID)
+        public async Task<IActionResult> emp_Detail(string empID)
         {
             EmpModel um = new EmpModel();
             HttpClient hc = _api.Initial();
@@ -39,11 +52,24 @@ namespace ESSONS_MIS_2020_App.Controllers
                 var results = res.Content.ReadAsStringAsync().Result;
                 um = JsonConvert.DeserializeObject<EmpModel>(results);
             }
+            getRole();
             return View(um);
         }
 
-        public IActionResult emp_Create()
+        public async Task<IActionResult> emp_Create()
         {
+            EmpModel em = new EmpModel();
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.GetAsync("api/emp/GetPositionDepartment");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                em = JsonConvert.DeserializeObject<EmpModel>(results);
+            }
+            ViewBag.positionList = em.positionDB;
+            ViewBag.departmentList = em.departmentDB;
+            getRole();
+
             return View();
         }
 
@@ -71,7 +97,6 @@ namespace ESSONS_MIS_2020_App.Controllers
             um.status = 1;
             um.indat = DateTime.Now.ToString("dd/MM/yyyy");
             um.intime = DateTime.Now.ToString("HH:mm:ss");
-            um.username = HttpContext.Session.GetString("username");
 
             var res = hc.PostAsJsonAsync<EmpModel>("api/emp/Create", um);
 
@@ -89,7 +114,7 @@ namespace ESSONS_MIS_2020_App.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> emp_Update(int empID)
+        public async Task<IActionResult> emp_Update(string empID)
         {
             EmpModel um = new EmpModel();
             HttpClient hc = _api.Initial();
@@ -99,6 +124,25 @@ namespace ESSONS_MIS_2020_App.Controllers
                 var results = res.Content.ReadAsStringAsync().Result;
                 um = JsonConvert.DeserializeObject<EmpModel>(results);
             }
+
+            if(um.empImage != null && um.empImage != "")
+                HttpContext.Session.SetString("empImage", um.empImage);
+            else
+                HttpContext.Session.SetString("empImage", um.empImage);
+
+            EmpModel em = new EmpModel();
+            res = await hc.GetAsync("api/emp/GetPositionDepartment/");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                em = JsonConvert.DeserializeObject<EmpModel>(results);
+            }
+
+            ViewBag.positionList = em.positionDB;
+            ViewBag.departmentList = em.departmentDB;
+
+            getRole();
+
             return View(um);
         }
 
@@ -118,11 +162,13 @@ namespace ESSONS_MIS_2020_App.Controllers
                         image.CopyTo(fileStream);
                     }
                 }
-                um.empImage = um.ProfileImage.FileName;
-                um.status = 1;
+                um.empImage = um.ProfileImage.FileName;          
                 um.ProfileImage = null;
             }
 
+            if(um.empImage == null)
+                um.empImage = HttpContext.Session.GetString("empImage");
+            um.status = 1;
             var res = hc.PostAsJsonAsync<EmpModel>("api/emp/Update", um);
             res.Wait();
 
@@ -137,7 +183,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View(um.empID);
         }
 
-        public IActionResult emp_Block(int empID)
+        public IActionResult emp_Block(string empID)
         {
             EmpModel em = new EmpModel();
             em.empID = empID;

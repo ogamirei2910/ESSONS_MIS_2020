@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace ESSONS_MIS_2020.Models
 {
     public class EmpModel
     {
-        public int empID { get; set; }
+        public string empID { get; set; }
         public string empIDTemp { get; set; }
         public string empName { get; set; }
         public string empIdentityCard { get; set; }
@@ -31,5 +32,8 @@ namespace ESSONS_MIS_2020.Models
         public string intime { get; set; }
         public string username { get; set; }
         public IFormFile ProfileImage { get; set; }
+
+        public List<PositionModel> positionDB { get; set; }
+        public List<DepartmentModel> departmentDB { get; set; }
     }
 }

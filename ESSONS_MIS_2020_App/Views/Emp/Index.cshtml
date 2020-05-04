@@ -34,7 +34,13 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>@Html.DisplayFor(modelItem => item.empID)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.empID)
+                                        @if(item.empIDTemp != "" && item.empIDTemp != null)
+                                        {
+                                            <label> - </label>
+                                            @Html.DisplayFor(modelItem => item.empIDTemp)
+                                        }
+                                        </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.empName)
                                         </td>
@@ -43,7 +49,8 @@
                                         <td>
                                             @Html.ActionLink("Chi tiết", "emp_Detail", "Emp", new { empID = item.empID }, new { @class = "btn btn-primary btn-sm" })
                                             @Html.ActionLink("Sửa", "emp_Update", "Emp", new { empID = item.empID }, new { @class = "btn btn-info btn-sm" })
-                                            @Html.ActionLink("Khóa", "emp_Block", "Emp", new { empID = item.empID }, new { @class = "btn btn-danger btn-sm" })
+                                            @Html.ActionLink("Khóa", "emp_Block", "Emp", new { empID = item.empID }, 
+                                                                                         new { @class = "btn btn-danger btn-sm", onclick = "return confirm('Bạn có muốn khóa nhân viên này ?')" })
                                         </td>
                                     </tr>
                                 }

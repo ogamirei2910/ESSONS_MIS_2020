@@ -6,14 +6,39 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ESSONS_MIS_2020_App.Models;
 using Microsoft.AspNetCore.Http;
+using ESSONS_MIS_2020_App.Helper;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace ESSONS_MIS_2020_App.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        EssonsApi _api = new EssonsApi();
+
+        public async Task<IActionResult> Index()
         {
-            ViewBag.message = HttpContext.Session.GetString("username");
+
+            string username = HttpContext.Session.GetString("username");
+            List<UserRoleModel> um = new List<UserRoleModel>();
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.GetAsync($"api/user/GetRole/{username}");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                um = JsonConvert.DeserializeObject<List<UserRoleModel>>(results);
+            }
+
+            //Role
+            ViewBag.message = um.First().empName.ToString();
+            ViewBag.roleID = um.First().roleID.ToString();
+            ViewBag.empid = um.First().empID.ToString();
+            var DistinctItems = um.Select(x => x.folderID).Distinct().ToList();
+            ViewBag.folder = DistinctItems;
+            ViewBag.folderList = um;
+            HttpContext.Session.SetObjectAsJson("folderList", um);
+            //-------------------------------------------------
+
             return View();
         }
 

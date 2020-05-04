@@ -23,15 +23,10 @@
                                         <div class="col-3">
                                             <input asp-for="empID" type="text" class="form-control" readonly placeholder="Số thẻ" value="@Model.empID">
                                         </div>
-                                        @if (Model.empIDTemp != null && Model.empIDTemp != "")
-                                        {
-                                            <div class="col-3">
-                                                <input asp-for="empIDTemp" type="text" class="form-control" placeholder="Số thời vụ" value="@Model.empIDTemp">
-                                            </div>
-                                        }
+                                        <div class="col-3">
+                                            <input asp-for="empIDTemp" type="text" class="form-control" placeholder="Số thời vụ" value="@Model.empIDTemp">
+                                        </div>
                                     </div>
-
-
 
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Họ tên</label>
@@ -116,22 +111,15 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Chức vụ</label>
-                                        <select asp-for="positionID" class="custom-select col-sm-4">
-                                            <option selected="@((Model.positionID == "Công nhân")? "selected" : "")">Công nhân</option>
-                                            <option selected="@((Model.positionID == "Nhân viên")? "selected" : "")">Nhân viên</option>
-                                            <option selected="@((Model.positionID == "Tổ trưởng")? "selected" : "")">Tổ trưởng</option>
-                                            <option selected="@((Model.positionID == "Trưởng phòng")? "selected" : "")">Trưởng phòng</option>
+                                        <select asp-for="positionID" class="custom-select col-sm-4"
+                                                asp-items="@(new SelectList(ViewBag.positionList,"positionID","positionName"))">
                                         </select>
                                     </div>
 
-
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Bộ phận</label>
-                                        <select asp-for="depID" class="custom-select col-sm-3">
-                                            <option selected="@(Model.depID == "Kho")">Kho</option>
-                                            <option selected="@(Model.depID == "Kế toán")">Kế toán</option>
-                                            <option selected="@(Model.depID == "IT")">IT</option>
-                                            <option selected="@(Model.depID == "Nhân sự")">Nhân sự</option>
+                                        <select asp-for="depID" class="custom-select col-sm-4"
+                                                asp-items="@(new SelectList(ViewBag.departmentList,"depID","depName"))">
                                         </select>
                                     </div>
                                 </td>

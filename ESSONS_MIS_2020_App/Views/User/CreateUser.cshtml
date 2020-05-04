@@ -1,0 +1,64 @@
+﻿@model ESSONS_MIS_2020_App.Models.UserModel
+@{
+    ViewData["Title"] = "CreateUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Thêm mới nhân viên</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <form method="post" asp-action="CreateUser">
+                            <table class="table">
+                                <tr>
+                                    <td width="50%">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Số thẻ</label>
+                                            <div class="col-3">
+                                                <input asp-for="empID" type="text" maxlength="5" class="form-control" placeholder="Số thẻ" value="">
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Tài khoản</label>
+                                            <div class="col-5">
+                                                <input asp-for="username" type="text" maxlength="12" class="form-control" placeholder="CMND" value="">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Mật khẩu</label>
+                                            <div class="col-3">
+                                                <input asp-for="password" type="password" maxlength="20" class="form-control" placeholder="Nhập mật khẩu">
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">
+                                    Tạo mới
+                                </button>
+                            </div>
+                        </form>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+

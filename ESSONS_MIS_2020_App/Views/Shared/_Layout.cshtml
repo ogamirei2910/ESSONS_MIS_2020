@@ -70,695 +70,849 @@
                                     Trang chính
                                 </p>
                             </a>
-                        </li>
+                        </li> @*Trang chính*@
+
+                        <!--Role-->
+                        @if (ViewBag.roleID == "1")
+                        {
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Quản lý người dùng
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/User/CreateUser" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Tạo người dùng</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Quản lý nhân viên
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/Emp/Index" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Kiểm tra thông tin</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/HDLD_Follow" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Theo dõi HĐLĐ</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/HDLD_LDQty" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Theo dõi số lượng LĐ</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/HDLD_LDTVQty" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Theo dõi số lượng LĐTV</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/HDLD_Exp" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Tình trạng HĐLĐ</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            @*Quản lý nhân viên*@
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Thử việc
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/ThuViec" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>HĐ thử việc</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/ThuViec_Comment" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Đánh giá thử việc</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/ThuViec_Result" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Kết quả thử việc</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Nghỉ phép - việc
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/DateOff/dateoff_Detail_Emp?empid=@ViewBag.empid" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Theo dõi nghỉ phép</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/DateOff/dateoff_Request" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Yêu cầu nghỉ</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/DateOff/dateoff_Confirm" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Duyệt yêu cầu</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Phát triển
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Emp_Comment_Detail" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Chi tiết đánh giá</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Emp_SetPosition_Search" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Tra cứu đánh giá</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Thưởng - Phạt
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Emp_Rewards" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Đề xuất</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Emp_Rewards_Confirm" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Duyệt đề xuất</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Emp_Rewards_Search" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Tra cứu đề xuất</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        BHXH
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/BHXH" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Tăng giảm BHXH</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/BHXH_OffDate" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Ốm đau, thai sản</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Chấm công
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Work_Follow" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Theo dõi chấm công</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/OT_Request" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Yêu cầu tăng ca</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/OT_Confirm" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Duyệt tăng ca</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Cal_Late" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Đi trễ, về sớm</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Tính lương
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Salary" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Lương nhân viên</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Salary_Search" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Tra cứu LCB</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Salary_P3" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Tra cứu P3</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Đào tạo
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Edu_Detail" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Kế hoạch đào tạo</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Edu_Request" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Nhu cầu đào tạo</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Edu_Confirm" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Duyệt đào tạo</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Edu_Notice" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Thông báo đào tạo</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Edu_Result" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Kết quả đào tạo</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Tuyển dụng
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/HR_Plan_Detail" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Kế hoạch tuyển dụng</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/HR_Request" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Nhu cầu tuyển dụng</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/HR_Plan_Confirm" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Duyệt tuyển dụng</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/HR_Plan_Notice" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Thông báo tuyển dụng</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/HR_Contact" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Hồ sơ ứng viên</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/HR_Result" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Kết quả tuyển dụng</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Quản lý ra vào
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/TBTS_Follow" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Theo dõi ra vào</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/TBTS_Search" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Tra cứu ra vào</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Công tác
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/CongTac_Plan" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Kế hoạch công tác</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/CongTac_Confirm" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Duyệt công tác</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/CongTac_AddAfterConfirm" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Xác nhận công tác</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/CongTac_Pay" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Thanh toán công tác</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/CongTac_Search" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Tra cứu công tác</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Điều xe
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/DieuXe_Request" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Đề nghị điều xe</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/DieuXe_Confirm" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Xác nhận điều xe</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/BaoTri_Plan" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Kế hoạch bảo trì</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/BaoTri_Confirm" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Duyệt bảo trì</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/DieuXe_Search" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Tra cứu điều xe</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/BaoTri_Search" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Tra cứu bảo dưỡng</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Tiếp khách
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/TiepKhach_Plan" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Kế hoạch tiếp khách</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/TiepKhach_Confirm" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Xác nhận tiếp khách</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/TiepKhach_Status" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Trạng thái tiếp khách</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/TiepKhach_Search" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Tra cứu tiếp khách</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Cuộc họp
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Hop_Plan" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Kế hoạch cuộc họp</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Hop_Notice" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Thông báo cuộc họp</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Hop_Confirm" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Xác nhận cuộc họp</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Hop_Status" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Trạng thái họp</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Hop_Search" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Tra cứu cuộc họp</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Bảo hành Bảo trì
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/BaoHanh_Plan" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Kế hoạch</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/BaoHanh_Confirm" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Xác nhận kế hoạch</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/BaoHanh_Status" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Trạng thái xử lý</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/BaoHanh_Search" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Tra cứu xử lý</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Sửa chữa TBVP
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/BaoHanh_Plan" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Yêu cầu</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/BaoHanh_Confirm" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Xác nhận yêu cầu</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/BaoHanh_Status" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Trạng thái sửa chữa</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/BaoHanh_Search" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Tra cứu sửa chữa</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Sử dụng TBVP
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Use_List" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Danh sách sử dụng</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/Use_Real" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Sử dụng thực tế</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Văn phòng phẩm
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/VPP_Quota" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Định mức VPP</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/VPP_Request" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Nhu cầu VPP</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/VPP_Plan" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Kế hoạch cấp VPP</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/VPP_Send" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Cấp phát VPP</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/VPP_Search" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Tra cứu VPP</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        Quản lý TBVP
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/QuanLy_Add" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Thêm mới thiết bị</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/QuanLy_Status" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Trạng thái thiết bị</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="http://localhost:50147/Home/QuanLy_Search" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Tra cứu thiết bị</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            @foreach (var thumuc in ViewBag.folder)
+                            {
+                                @if (thumuc == 1)
+                                {
+                                    <li class="nav-item has-treeview">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon fas fa-th"></i>
+                                            <p>
+                                                Quản lý nhân viên
+                                                <i class="right fas fa-angle-left"></i>
+                                            </p>
+                                        </a>
+                                        <ul class="nav nav-treeview">
+                                            @foreach (var folderChild in ViewBag.folderList)
+                                            {
+                                                @if (folderChild.folderID == thumuc)
+                                                {
+                                                    @if (folderChild.folderChildID == 0)
+                                                    {
+
+                                                    }
+                                                    else
+                                                    {
+                                                        @if (folderChild.folderChildID == 1)
+                                                        {
+                                                            <li class="nav-item">
+                                                                <a href="/Emp/Index" class="nav-link">
+                                                                    <i class="far fa-circle nav-icon"></i>
+                                                                    <p>Kiểm tra thông tin</p>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                    }
+
+                                                }
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                                @if (thumuc == 2)
+                                {
+                                    <li class="nav-item has-treeview">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon fas fa-th"></i>
+                                            <p>
+                                                Nghỉ phép - VR
+                                                <i class="right fas fa-angle-left"></i>
+                                            </p>
+                                        </a>
+                                        <ul class="nav nav-treeview">
+                                            @foreach (var folderChild in ViewBag.folderList)
+                                            {
+                                                @if (folderChild.folderID == thumuc)
+                                                {
+                                                    @if (folderChild.folderChildID == 0)
+                                                    {
+                                                        <li class="nav-item">
+                                                            <a href="http://localhost:50147/Home/DateOff_Request" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Yêu cầu nghỉ</p>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a href="http://localhost:50147/Home/DateOff_Detail" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Chi tiết nghỉ phép</p>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a href="http://localhost:50147/Home/DateOff_Confirm" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Duyệt yêu cầu</p>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a href="http://localhost:50147/Home/DateOff_List" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Danh sách nghỉ phép</p>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    else
+                                                    {
+                                                        @if (folderChild.folderChildID == 1)
+                                                        {
+
+                                                            <li class="nav-item">
+                                                                <a href="http://localhost:50147/Home/DateOff_Request" class="nav-link">
+                                                                    <i class="far fa-circle nav-icon"></i>
+                                                                    <p>Yêu cầu nghỉ</p>
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a href="http://localhost:50147/Home/DateOff_Detail" class="nav-link">
+                                                                    <i class="far fa-circle nav-icon"></i>
+                                                                    <p>Chi tiết nghỉ phép</p>
+                                                                </a>
+                                                            </li>
+                                                        }
+
+                                                        @if (folderChild.folderChildID == 2)
+                                                        {
+                                                            <li class="nav-item">
+                                                                <a href="http://localhost:50147/Home/DateOff_Confirm" class="nav-link">
+                                                                    <i class="far fa-circle nav-icon"></i>
+                                                                    <p>Duyệt yêu cầu</p>
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a href="http://localhost:50147/Home/DateOff_List" class="nav-link">
+                                                                    <i class="far fa-circle nav-icon"></i>
+                                                                    <p>Danh sách nghỉ phép</p>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                    }
+
+                                                }
+
+
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                            }
+                        }
+                        <!---->
+
                         <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Quản lý nhân viên
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="/Emp/Index" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Kiểm tra thông tin</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/HDLD_Follow" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Theo dõi HĐLĐ</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/HDLD_LDQty" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Theo dõi số lượng LĐ</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/HDLD_LDTVQty" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Theo dõi số lượng LĐTV</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/HDLD_Exp" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tình trạng HĐLĐ</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Thử việc
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/ThuViec" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>HĐ thử việc</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/ThuViec_Comment" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Đánh giá thử việc</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/ThuViec_Result" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Kết quả thử việc</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Nghỉ phép - việc
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/DateOff_Detail" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Theo dõi nghỉ phép</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/DateOff_Request" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Yêu cầu nghỉ</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/DateOff_Confirm" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Duyệt yêu cầu</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Phát triển
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Emp_Comment_Detail" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Chi tiết đánh giá</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Emp_SetPosition_Search" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tra cứu đánh giá</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Thưởng - Phạt
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Emp_Rewards" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Đề xuất</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Emp_Rewards_Confirm" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Duyệt đề xuất</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Emp_Rewards_Search" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tra cứu đề xuất</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    BHXH
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/BHXH" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tăng giảm BHXH</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/BHXH_OffDate" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Ốm đau, thai sản</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Chấm công
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Work_Follow" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Theo dõi chấm công</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/OT_Request" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Yêu cầu tăng ca</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/OT_Confirm" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Duyệt tăng ca</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Cal_Late" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Đi trễ, về sớm</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Tính lương
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Salary" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Lương nhân viên</p>
-                                    </a>
-                                </li>
-                            </ul>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Salary_Search" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tra cứu LCB</p>
-                                    </a>
-                                </li>
-                            </ul>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Salary_P3" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tra cứu P3</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Đào tạo
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Edu_Detail" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Kế hoạch đào tạo</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Edu_Request" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Nhu cầu đào tạo</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Edu_Confirm" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Duyệt đào tạo</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Edu_Notice" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Thông báo đào tạo</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Edu_Result" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Kết quả đào tạo</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Tuyển dụng
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/HR_Plan_Detail" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Kế hoạch tuyển dụng</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/HR_Request" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Nhu cầu tuyển dụng</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/HR_Plan_Confirm" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Duyệt tuyển dụng</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/HR_Plan_Notice" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Thông báo tuyển dụng</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/HR_Contact" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Hồ sơ ứng viên</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/HR_Result" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Kết quả tuyển dụng</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Quản lý ra vào
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/TBTS_Follow" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Theo dõi ra vào</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/TBTS_Search" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tra cứu ra vào</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Công tác
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/CongTac_Plan" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Kế hoạch công tác</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/CongTac_Confirm" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Duyệt công tác</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/CongTac_AddAfterConfirm" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Xác nhận công tác</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/CongTac_Pay" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Thanh toán công tác</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/CongTac_Search" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tra cứu công tác</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Điều xe
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/DieuXe_Request" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Đề nghị điều xe</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/DieuXe_Confirm" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Xác nhận điều xe</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/BaoTri_Plan" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Kế hoạch bảo trì</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/BaoTri_Confirm" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Duyệt bảo trì</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/DieuXe_Search" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tra cứu điều xe</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/BaoTri_Search" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tra cứu bảo dưỡng</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Tiếp khách
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/TiepKhach_Plan" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Kế hoạch tiếp khách</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/TiepKhach_Confirm" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Xác nhận tiếp khách</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/TiepKhach_Status" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Trạng thái tiếp khách</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/TiepKhach_Search" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tra cứu tiếp khách</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Cuộc họp
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Hop_Plan" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Kế hoạch cuộc họp</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Hop_Notice" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Thông báo cuộc họp</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Hop_Confirm" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Xác nhận cuộc họp</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Hop_Status" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Trạng thái họp</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Hop_Search" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tra cứu cuộc họp</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Bảo hành Bảo trì
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/BaoHanh_Plan" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Kế hoạch</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/BaoHanh_Confirm" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Xác nhận kế hoạch</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/BaoHanh_Status" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Trạng thái xử lý</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/BaoHanh_Search" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tra cứu xử lý</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Sửa chữa TBVP
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/BaoHanh_Plan" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Yêu cầu</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/BaoHanh_Confirm" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Xác nhận yêu cầu</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/BaoHanh_Status" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Trạng thái sửa chữa</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/BaoHanh_Search" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tra cứu sửa chữa</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Sử dụng TBVP
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Use_List" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Danh sách sử dụng</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/Use_Real" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Sử dụng thực tế</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Văn phòng phẩm
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/VPP_Quota" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Định mức VPP</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/VPP_Request" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Nhu cầu VPP</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/VPP_Plan" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Kế hoạch cấp VPP</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/VPP_Send" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Cấp phát VPP</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/VPP_Search" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tra cứu VPP</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Quản lý TBVP
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/QuanLy_Add" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Thêm mới thiết bị</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/QuanLy_Status" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Trạng thái thiết bị</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="http://localhost:50147/Home/QuanLy_Search" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tra cứu thiết bị</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="http://localhost:50147/Home/Login" class="nav-link">
+                            <a href="/User/Login" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>
                                     Đăng xuất
                                 </p>
                             </a>
                         </li>
+                        @*Đăng xuất*@
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
