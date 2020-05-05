@@ -26,6 +26,19 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.folder = DistinctItems;
             ViewBag.folderList = role;
         }
+
+        public IActionResult dateoff_Readbarcode()
+        {
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult dateoff_Readbarcode(string abc)
+        {
+            return View();
+        }
+
         public IActionResult dateoff_Request()
         {
             getRole();
@@ -77,10 +90,44 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View();
         }
 
-        public IActionResult dateoff_Confirm()
+        public async Task<IActionResult> dateoff_Confirm()
         {
             getRole();
-            return View();
+            List<DateOffModel> um = new List<DateOffModel>();
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.GetAsync($"api/dateoff/GetEmpConfirm/{ViewBag.empid}");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                um = JsonConvert.DeserializeObject<List<DateOffModel>>(results);
+            }
+            return View(um);
+        }
+
+        public IActionResult dateoff_Update(string dateoffID)
+        {
+            getRole();
+            DateOffModel em = new DateOffModel();
+            em.status = 1;
+            em.dateoffID = dateoffID;
+            HttpClient hc = _api.Initial();
+            var res = hc.PostAsJsonAsync<DateOffModel>($"api/dateoff/Update", em);
+            res.Wait();
+
+            return RedirectToAction("dateoff_Confirm");
+        }
+
+        public IActionResult dateoff_Delete(string dateoffID)
+        {
+            getRole();
+            DateOffModel em = new DateOffModel();
+            em.dateoffID = dateoffID;
+            em.status = 3;
+            HttpClient hc = _api.Initial();
+            var res = hc.PostAsJsonAsync<DateOffModel>($"api/dateoff/Delete", em);
+            res.Wait();
+
+            return RedirectToAction("dateoff_Confirm");
         }
 
         public IActionResult dateoff_Detail()
@@ -98,6 +145,14 @@ namespace ESSONS_MIS_2020_App.Controllers
                 var results = res.Content.ReadAsStringAsync().Result;
                 um = JsonConvert.DeserializeObject<List<DateOffModel>>(results);
             }
+            res = await hc.GetAsync($"api/dateoff/GetDateOffInfo/{empID}");
+
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                ViewBag.InfoList = JsonConvert.DeserializeObject<DateOffInfoModel>(results);
+            }
+
             getRole();
             return View(um);
         }

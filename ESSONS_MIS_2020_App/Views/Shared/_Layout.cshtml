@@ -833,27 +833,21 @@
                                                     @if (folderChild.folderChildID == 0)
                                                     {
                                                         <li class="nav-item">
-                                                            <a href="http://localhost:50147/Home/DateOff_Request" class="nav-link">
+                                                            <a href="/DateOff/dateoff_Detail_Emp?empid=@ViewBag.empid" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Theo dõi nghỉ phép</p>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a href="/DateOff/dateoff_Request" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Yêu cầu nghỉ</p>
                                                             </a>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a href="http://localhost:50147/Home/DateOff_Detail" class="nav-link">
-                                                                <i class="far fa-circle nav-icon"></i>
-                                                                <p>Chi tiết nghỉ phép</p>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="http://localhost:50147/Home/DateOff_Confirm" class="nav-link">
+                                                            <a href="/DateOff/dateoff_Confirm" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Duyệt yêu cầu</p>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="http://localhost:50147/Home/DateOff_List" class="nav-link">
-                                                                <i class="far fa-circle nav-icon"></i>
-                                                                <p>Danh sách nghỉ phép</p>
                                                             </a>
                                                         </li>
                                                     }
@@ -863,31 +857,26 @@
                                                         {
 
                                                             <li class="nav-item">
-                                                                <a href="http://localhost:50147/Home/DateOff_Request" class="nav-link">
+                                                                <a href="/DateOff/dateoff_Detail_Emp?empid=@ViewBag.empid" class="nav-link">
+                                                                    <i class="far fa-circle nav-icon"></i>
+                                                                    <p>Theo dõi nghỉ phép</p>
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a href="/DateOff/dateoff_Request" class="nav-link">
                                                                     <i class="far fa-circle nav-icon"></i>
                                                                     <p>Yêu cầu nghỉ</p>
                                                                 </a>
                                                             </li>
-                                                            <li class="nav-item">
-                                                                <a href="http://localhost:50147/Home/DateOff_Detail" class="nav-link">
-                                                                    <i class="far fa-circle nav-icon"></i>
-                                                                    <p>Chi tiết nghỉ phép</p>
-                                                                </a>
-                                                            </li>
+
                                                         }
 
                                                         @if (folderChild.folderChildID == 2)
                                                         {
                                                             <li class="nav-item">
-                                                                <a href="http://localhost:50147/Home/DateOff_Confirm" class="nav-link">
+                                                                <a href="/DateOff/dateoff_Confirm" class="nav-link">
                                                                     <i class="far fa-circle nav-icon"></i>
                                                                     <p>Duyệt yêu cầu</p>
-                                                                </a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a href="http://localhost:50147/Home/DateOff_List" class="nav-link">
-                                                                    <i class="far fa-circle nav-icon"></i>
-                                                                    <p>Danh sách nghỉ phép</p>
                                                                 </a>
                                                             </li>
                                                         }

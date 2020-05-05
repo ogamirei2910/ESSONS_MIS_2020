@@ -1,4 +1,5 @@
-﻿
+﻿@model IEnumerable<ESSONS_MIS_2020_App.Models.DateOffModel>
+
 @{
     ViewData["Title"] = "dateoff_Confirm";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -26,32 +27,39 @@
                                     <th>Ngày kết thúc</th>
                                     <th>Từ giờ</th>
                                     <th>Đến giờ</th>
-                                    <th>Số ngày</th>
+                                    <th>Số giờ</th>
                                     <th>Chức năng</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        Lê Hoài Nam
-                                    </td>
-                                    <td>1</td>
-                                    <td>VR</td>
-                                    <td>02/02/2020</td>
-                                    <td>03/02/2020</td>
-                                    <td>16:00:00</td>
-                                    <td>18:00:00</td>
-                                    <td>2</td>
-                                    <td>
-                                        <a class="btn btn-info btn-sm" href="#">
-                                            Duyệt
-                                        </a>
-                                        <a class="btn btn-danger btn-sm" href="#">
-                                            Hủy
-                                        </a>
-                                    </td>
-                                </tr>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.empID)</td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.empName)
+                                        </td>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffID)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffType)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffStart)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffEnd)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffStartTime)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffEndTime)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffNumber)</td>
+                                        <td>
+                                            @Html.ActionLink("Duyệt", "dateoff_Update", "dateoff", new { dateoffID = item.dateoffID },
+                                                                                              new { @class = "btn btn-info btn-sm" })
+                                            @Html.ActionLink("Hủy", "dateoff_Delete", "dateoff", new { dateoffID = item.dateoffID },
+                                                                                                new
+                                                                                                {
+                                                                                                    @class = "btn btn-danger btn-sm",
+                                                                                                    onclick = "return confirm('Bạn có muốn hủy yêu cầu này ?')"
+                                                                                                })
+                                        </td>
+                                    </tr>
+                                }
+
                         </table>
                     </div>
                     <!-- /.card-body -->
