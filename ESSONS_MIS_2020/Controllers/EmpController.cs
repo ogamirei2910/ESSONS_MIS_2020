@@ -276,5 +276,30 @@ namespace ESSONS_MIS_2020.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult LoginCongNhan([FromBody]EmpModel em)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_employee", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@empID", em.empID));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "GetEmpID"));
+
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.HasRows == true)
+                        return Ok();
+                    else
+                        return NotFound();
+                }
+            }
+        }
+
     }
 }

@@ -1,0 +1,91 @@
+﻿@model ESSONS_MIS_2020_App.Models.EmpModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ESSONS MIS| Đăng nhập</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/Assets/plugins/fontawesome-free/css/all.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="~/Assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/Assets/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="#"><b>ESSONS</b>MIS</a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <form method="post" id="loginForm" name="loginForm" asp-action="Login">
+                <div class="card-body login-card-body">
+                    <p class="login-box-msg">Đăng nhập hệ thống</p>
+                    <div class="row">
+                        <input id="txtValue" asp-for="empID" autocomplete="off" autofocus type="text" maxlength="5" onkeyup="return myFunction()" class="form-control col-12" placeholder="Số thẻ" value="@ViewBag.sothe">
+                    </div>
+                </div>
+            </form>
+            <p class="text-danger login-box-msg"> @ViewBag.message</p>
+            <!-- /.login-card-body -->
+            
+        </div>
+    </div>
+    <!-- /.login-box -->
+    <!-- jQuery -->
+    <script src="~/Assets/plugins/jquery/jquery.js"></script>
+    <script src="~/Assets/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/Assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/Assets/dist/js/adminlte.min.js"></script>
+    <script>
+        function myFunction() {
+
+            var iCount = $("#txtValue").val().length;
+
+            if (iCount > 4) {
+                $('#loginForm').submit();
+            }
+
+        }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //Disable full page
+            $('body').bind('cut copy paste', function (e) {
+                e.preventDefault();
+            });
+
+            //Disable part of page
+            $('#id').bind('cut copy paste', function (e) {
+                e.preventDefault();
+            });
+        });
+
+        var delay = (function () {
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+
+        $("#txtValue").on("input", function () {
+            delay(function () {
+                if ($("#txtValue").val().length < 6) {
+                    $("#txtValue").val("");
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

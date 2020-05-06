@@ -28,6 +28,7 @@ namespace ESSONS_MIS_2020_App.Models
         public string empLeaveDate { get; set; }
         public string empImage { get; set; }
 
+        public string empYearOff { get; set; }
         public string positionID { get; set; }
         public int status { get; set; }
         public string indat { get; set; }

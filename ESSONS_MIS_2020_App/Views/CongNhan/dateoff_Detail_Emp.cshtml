@@ -1,0 +1,108 @@
+﻿@model IEnumerable<ESSONS_MIS_2020_App.Models.DateOffModel>
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_LayoutCongNhan.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Chi tiết công nhân</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table class="table">
+                            <tr>
+                                <td style="width: 480px">
+                                    <div class="form-group row">
+                                        <b class="col-sm-3 col-form-label">Số thẻ</b>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.empinfo.empID</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3 col-form-label">Họ tên</b>
+                                        <a class="col-sm-5 col-form-label">@ViewBag.empinfo.empName</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3 col-form-label">Tổng phép năm</b>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.phepnam ngày</a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group row">
+                                        <b class="col-sm-3 col-form-label">Đã dùng phép năm</b>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.phepnamdadung ngày</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3 col-form-label">Phép VR</b>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.pheprieng giờ</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3 col-form-label">Không phép</b>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.khongphep giờ</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3 col-form-label">Nghỉ BHXH</b>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.BHXH giờ</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <br />
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Mã nghỉ</th>
+                                    <th>Loại phép</th>
+                                    <th>Từ ngày</th>
+                                    <th>Đến ngày</th>
+                                    <th>Từ giờ</th>
+                                    <th>Đến giờ</th>
+                                    <th>Số giờ</th>
+                                    <th>Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffID)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffType)</td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.dateoffStart)
+                                        </td>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffEnd)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffStartTime)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffEndTime)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffNumber)</td>
+                                        <td>
+                                            @Html.ActionLink("Hủy", "dateoff_Delete", "CongNhan", new { dateoffID = item.dateoffID },
+                                                                                                new
+                                                                                                {
+                                                                                                    @class = "btn btn-danger btn-sm",
+                                                                                                    onclick = "return confirm('Bạn có muốn hủy yêu cầu này ?')"
+                                                                                                })
+                                        </td>
+                                    </tr>
+                                }
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+</div>
+

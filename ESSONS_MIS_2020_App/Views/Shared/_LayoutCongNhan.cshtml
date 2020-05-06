@@ -23,7 +23,7 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a class="nav-link" href="http://localhost:50147/Home/MainPage">Trang chủ</a>
+                    <a class="nav-link" href="CongNhan/Index">Trang chủ</a>
                 </li>
             </ul>
 
@@ -33,7 +33,7 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="http://localhost:50147/Home/MainPage" class="brand-link">
+            <a href="CongNhan/Index" class="brand-link">
                 <center><span class="brand-text font-weight-light">ESSONS MIS</span></center>
             </a>
 
@@ -43,6 +43,7 @@
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="info">
                         <img class="img-circle elevation-2" alt="User Image" height="160" width="160" src="~/Assets/dist/img/cong-ty-tnhh-cong-nghiep-toan-cau-essons.png">
+                        <a>@ViewBag.EmpInfo.empName</a>
                     </div>
                 </div>
 
@@ -52,7 +53,7 @@
                         <!-- Add icons to the links using the .nav-icon class
                         with font-awesome or any other icon font library -->
                         <li class="nav-item">
-                            <a href="http://localhost:50147/Home/CongNhan_DateOff" class="nav-link">
+                            <a href="/CongNhan/dateoff_Request" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
                                     Xin nghỉ phép
@@ -60,8 +61,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="http://localhost:50147/Home/Login_CongNhan" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
+                            <a href="/CongNhan/Index"" class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>
                                     Đăng xuất
                                 </p>

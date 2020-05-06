@@ -113,6 +113,10 @@ dl {
   margin-bottom: 1rem;
 }
 
+.tooltip-inner {
+    max-width: 500px !important;
+}
+
 ol ol,
 ul ul,
 ol ul,
