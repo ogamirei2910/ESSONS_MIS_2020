@@ -24,7 +24,7 @@
                                             <input asp-for="empID" type="text" maxlength="6" class="form-control" placeholder="Số thẻ" value="">
                                         </div>
                                         <div class="col-3">
-                                            <input asp-for="empIDTemp" type="text"  maxlength="10" class="form-control" placeholder="Số thời vụ" value="">
+                                            <input asp-for="empIDTemp" type="text" maxlength="10" class="form-control" placeholder="Số thời vụ" value="">
                                         </div>
                                     </div>
 
@@ -36,19 +36,21 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">CMND</label>
-                                        <div class="col-5">
-                                            <input asp-for="empIdentityCard" type="text" maxlength="12" class="form-control" placeholder="CMND" value="">
+                                        <label class="col-sm-3 col-form-label">Điện Thoại</label>
+                                        <div class="col-4">
+                                            <input asp-for="empTel" maxlength="15" type="text" class="form-control" placeholder="Số điện thoại" value="">
                                         </div>
                                     </div>
-
+                                </td>
+                                <td>
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Địa chỉ</label>
-                                        <div class="col-8">
-                                            <input asp-for="empAddress" maxlength="100" class="form-control" type="text" placeholder="Địa chỉ" value="">
-                                        </div>
+                                        <label class="col-sm-3 col-form-label">Giới tính</label>
+                                        <label>&nbsp;</label>
+                                        <select asp-for="empSex" class="custom-select col-sm-3">
+                                            <option>Nam</option>
+                                            <option>Nữ</option>
+                                        </select>
                                     </div>
-
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Ngày sinh</label>
                                         <div class="col-5">
@@ -58,72 +60,226 @@
                                             </div>
                                         </div>
                                     </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Ngày làm</label>
-                                        <div class="col-5">
-                                            <div class="datepicker date input-group p-0 shadow-sm">
-                                                <input asp-for="empInDate" type="text" class="form-control" id="reservationDate">
-                                                <div class="input-group-append"><span class="input-group-text"></span></div>
-                                            </div>
-                                        </div>
+                                        <label class="col-sm-3 col-form-label">Nhóm B.phận</label>
+                                        <select asp-for="depID" class="custom-select col-sm-4">
+                                        </select>
                                     </div>
+                                    @*asp-items="@(new SelectList(ViewBag.departmentList,"depID","depName"))"*@
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Điện Thoại</label>
-                                        <div class="col-4">
-                                            <input asp-for="empTel" maxlength="12" type="text" class="form-control" placeholder="Số điện thoại" value="">
+                                        <label class="col-sm-3 col-form-label">Bộ phận</label>
+                                        <select asp-for="depID" class="custom-select col-sm-4">
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Chức vụ</label>
+                                        <select asp-for="positionID" class="custom-select col-sm-4">
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Dân tộc</label>
+                                        <div class="col-3">
+                                            <input asp-for="empAddress" maxlength="20" class="form-control" type="text" placeholder="Tạm trú" value="">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Hình thẻ</label>
-                                        <div class="custom-file col-6">
-                                            <input asp-for="ProfileImage" class="custom-file-input" id="customFile" type="file">
-                                            <label class="custom-file-label" for="customFile">Chọn hình</label>
+                                        <label class="col-sm-3 col-form-label">Tôn giáo</label>
+                                        <div class="col-3">
+                                            <input asp-for="empAddressTemp" maxlength="20" class="form-control" type="text" placeholder="Tạm trú" value="">
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Giới tính</label>
-                                        <select asp-for="empSex" class="custom-select col-sm-3">
-                                            <option>Nam</option>
-                                            <option>Nữ</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Hôn nhân</label>
-                                        <select asp-for="empMarriage" class="custom-select col-3">
-                                            <option>Độc thân</option>
-                                            <option>Kết hôn</option>
-                                            <option>Ly dị</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Trình độ</label>
-                                        <select asp-for="empEdu" class="custom-select col-sm-4">
-                                            <option>Phổ thông</option>
-                                            <option>Trung cấp</option>
-                                            <option>Cao đẳng</option>
-                                            <option>Đại học</option>
-                                            <option>Thạc sĩ</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Chức vụ</label>
-                                        <select asp-for="positionID" class="custom-select col-sm-4" 
-                                                asp-items="@(new SelectList(ViewBag.positionList,"positionID","positionName"))">
+                                        <label class="col-sm-3 col-form-label">Nơi sinh</label>
+                                        <select asp-for="depID" class="custom-select col-sm-4">
                                         </select>
                                     </div>
 
-
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Bộ phận</label>
-                                        <select asp-for="depID" class="custom-select col-sm-4"
-                                                asp-items="@(new SelectList(ViewBag.departmentList,"depID","depName"))">
+                                        <label class="col-sm-3 col-form-label">Nguyên quán</label>
+                                        <select asp-for="depID" class="custom-select col-sm-4">
                                         </select>
                                     </div>
                                 </td>
                             </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Thường trú</label>
+                                        <div class="col-8">
+                                            <input asp-for="empAddress" maxlength="100" class="form-control" type="text" placeholder="Thường trú" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Tạm trú</label>
+                                        <div class="col-8">
+                                            <input asp-for="empAddressTemp" maxlength="100" class="form-control" type="text" placeholder="Tạm trú" value="">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">CMND/Căn cước</label>
+                                        <div class="col-3">
+                                            <input asp-for="empIdentityCard" type="text" maxlength="12" class="form-control" placeholder="CMND" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Nơi cấp</label>
+                                        <div class="col-3">
+                                            <input asp-for="empIdentityPlace" type="text" maxlength="12" class="form-control" placeholder="Nơi cấp" value="">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Ngày cấp</label>
+                                        <div class="col-3">
+                                            <input asp-for="empIdentityDate" type="text" maxlength="12" class="form-control" placeholder="Ngày cấp" value="">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Văn hóa</label>
+                                        <div class="col-3">
+                                            <input asp-for="empAddressTemp" maxlength="10" class="form-control" type="number" placeholder="Tạm trú" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Trình độ</label>
+                                        <div class="col-3">
+                                            <input asp-for="empEdu" maxlength="30" type="text" class="form-control" placeholder="Trình độ" value="">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Trình độ tin học</label>
+                                        <div class="col-3">
+                                            <input asp-for="empAddressTemp" maxlength="20" class="form-control" type="text" placeholder="Tạm trú" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Trình độ ngoại ngữ</label>
+                                        <div class="col-3">
+                                            <input asp-for="empAddressTemp" maxlength="20" class="form-control" type="text" placeholder="Tạm trú" value="">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                           <tr>
+                               <td>
+                                   <div class="form-group row">
+                                       <label class="col-sm-3 col-form-label">Hôn nhân</label>
+                                       <select asp-for="empMarriage" class="custom-select col-3">
+                                           <option>Độc thân</option>
+                                           <option>Kết hôn</option>
+                                       </select>
+                                   </div>
+                               </td>
+                               <td>
+                                   <div class="form-group row">
+                                       <label class="col-sm-3 col-form-label">Số con</label>
+                                       <div class="col-3">
+                                           <input asp-for="empAddressTemp" maxlength="10" class="form-control" type="number" placeholder="Tạm trú" value="">
+                                       </div>
+                                   </div>
+                               </td>
+                           </tr>
+                           <tr>
+                               <td>
+                                   <div class="form-group row">
+                                       <label class="col-sm-3 col-form-label">Chủ hộ khẩu</label>
+                                       <div class="col-6">
+                                           <input asp-for="empAddressTemp" maxlength="100" class="form-control" type="text" placeholder="Tạm trú" value="">
+                                       </div>
+                                   </div>
+                                   <div class="form-group row">
+                                       <label class="col-sm-3 col-form-label">Số hộ khẩu</label>
+                                       <div class="col-6">
+                                           <input asp-for="empAddressTemp" maxlength="100" class="form-control" type="text" placeholder="Tạm trú" value="">
+                                       </div>
+                                   </div>
+                               </td>
+                               <td>
+                                   <div class="form-group row">
+                                       <label class="col-sm-3 col-form-label">Giấy khai sinh</label>
+                                       <div class="col-3">
+                                           <input asp-for="empAddressTemp" maxlength="10" class="form-control" type="text" placeholder="Tạm trú" value="">
+                                       </div>
+                                   </div>
+                                   <div class="form-group row">
+                                       <label class="col-sm-3 col-form-label">HK ngoại tỉnh</label>
+                                       <div class="col-3">
+                                           <input asp-for="empAddressTemp" maxlength="10" class="form-control" type="number" placeholder="Tạm trú" value="">
+                                       </div>
+                                   </div>
+                               </td>
+                           </tr>
+                           <tr>
+                               <td>
+                                   <div class="form-group row">
+                                       <label class="col-sm-3  col-form-label">Ngày làm</label>
+                                       <div class="col-8">
+                                           <div class="datepicker date input-group p-0 shadow-sm">
+                                               <input asp-for="empInDate" type="text" class="form-control" id="reservationDate">
+                                               <div class="input-group-append"><span class="input-group-text"></span></div>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </td>
+                               <td></td>
+                           </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Số thẻ</label>
+                                        <div class="col-7">
+                                            <input asp-for="empAddressTemp" maxlength="100" class="form-control" type="text" placeholder="Tạm trú" value="">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Tên NH</label>
+                                        <div class="col-4">
+                                            <input asp-for="empAddressTemp" maxlength="100" class="form-control" type="text" placeholder="Tạm trú" value="Quốc tế VIB">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Hình thẻ</label>
+                                        <div class="custom-file col-8">
+                                            <input asp-for="ProfileImage" class="custom-file-input" id="customFile" type="file">
+                                            <label class="custom-file-label" for="customFile">Chọn hình</label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr>                                                                                                                                                                                   
                         </table>
 
                         <div class="card-footer">

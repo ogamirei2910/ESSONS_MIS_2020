@@ -56,6 +56,26 @@ namespace ESSONS_MIS_2020.Controllers
                         em.empLeaveDate = sdr["empLeaveDate"].ToString();
                         em.positionID = sdr["positionName"].ToString();
                         em.empImage = sdr["empImage"].ToString();
+
+                        em.empAddressTemp = sdr["empAddressTemp"].ToString();
+                        em.empBankNo = sdr["empBankNo"].ToString();
+                        em.empBankName = sdr["empBankName"].ToString();
+                        em.empBirthCertificate = int.Parse(sdr["empBirthCertificate"].ToString());
+                        em.empBorn = sdr["empBorn"].ToString();
+                        em.empChild = int.Parse(sdr["empChild"].ToString());
+                        em.empComputer = sdr["empComputer"].ToString();
+                        em.empCultural = int.Parse(sdr["empCultural"].ToString());
+                        em.empDomicile = sdr["empDomicile"].ToString();
+                        em.empIdentityPlace = sdr["empempIdentityPlace"].ToString();
+                        em.empIdentityDate = sdr["empIdentityDate"].ToString();
+                        em.empHouseHold = sdr["empHouseHold"].ToString();
+                        em.empHouseHoldOwn = sdr["empHouseHoldOwn"].ToString();
+                        em.empLanguage = sdr["empLanguage"].ToString();
+                        em.empNation = sdr["empNation"].ToString();
+                        em.empProvince = int.Parse(sdr["empProvince"].ToString());
+                        em.empReligion = sdr["empHouseHoldOwn"].ToString();
+                        em.empYearOff = int.Parse(sdr["empYearOff"].ToString());
+                        em.empReligion = sdr["empHouseHoldOwn"].ToString();
                     }
                 }
                 return em;
@@ -191,6 +211,44 @@ namespace ESSONS_MIS_2020.Controllers
                     sc.Parameters.Add(
                         new SqlParameter("@username", model.username));
                     sc.Parameters.Add(
+                        new SqlParameter("@empYearOff", model.empYearOff));
+
+                    sc.Parameters.Add(
+                       new SqlParameter("@empIdentityPlace", model.empIdentityPlace));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empIdentityDate", model.empIdentityDate));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empNation", model.empNation));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empReligion", model.empReligion));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empBorn", model.empBorn));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empDomicile", model.empDomicile));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empAddressTemp", model.empAddressTemp));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empCultural", model.empCultural));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empLanguage", model.empLanguage));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empComputer", model.empComputer));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empChild", model.empChild));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empBirthCertificate", model.empBirthCertificate));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empHouseHold", model.empHouseHold));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empHouseHoldOwn", model.empHouseHoldOwn));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empProvince", model.empProvince));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empBankNo", model.empBankNo));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empBankName", model.empBankName));
+
+                    sc.Parameters.Add(
                         new SqlParameter("@type", "Insert"));
 
                     SqlDataReader sdr = sc.ExecuteReader();
@@ -241,6 +299,43 @@ namespace ESSONS_MIS_2020.Controllers
                         new SqlParameter("@empImage", value.empImage));
                     sc.Parameters.Add(
                         new SqlParameter("@username", value.username));
+                    sc.Parameters.Add(
+                        new SqlParameter("@empYearOff", value.empYearOff));
+
+                    sc.Parameters.Add(
+                       new SqlParameter("@empIdentityPlace", value.empIdentityPlace));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empIdentityDate", value.empIdentityDate));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empNation", value.empNation));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empReligion", value.empReligion));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empBorn", value.empBorn));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empDomicile", value.empDomicile));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empAddressTemp", value.empAddressTemp));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empCultural", value.empCultural));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empLanguage", value.empLanguage));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empComputer", value.empComputer));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empChild", value.empChild));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empBirthCertificate", value.empBirthCertificate));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empHouseHold", value.empHouseHold));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empHouseHoldOwn", value.empHouseHoldOwn));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empProvince", value.empProvince));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empBankNo", value.empBankNo));
+                    sc.Parameters.Add(
+                       new SqlParameter("@empBankName", value.empBankName));
                     sc.Parameters.Add(
                         new SqlParameter("@type", "Update"));
 

@@ -24,16 +24,32 @@ namespace ESSONS_MIS_2020.Models
         public string empInDate { get; set; }
         public string empStandardDate { get; set; }
         public string empLeaveDate { get; set; }
-
         public string empImage { get; set; }
-
-        public string empYearOff { get; set; }
+        public int empYearOff { get; set; }
         public string positionID { get; set; }
         public int status { get; set; }
         public string indat { get; set; }
         public string intime { get; set; }
         public string username { get; set; }
         public IFormFile ProfileImage { get; set; }
+
+        public string empIdentityPlace { get; set; }
+        public string empIdentityDate { get; set; }
+        public string empNation { get; set; }
+        public string empReligion { get; set; }
+        public string empBorn { get; set; }
+        public string empDomicile { get; set; }
+        public string empAddressTemp { get; set; }
+        public int empCultural { get; set; }
+        public string empLanguage { get; set; }
+        public string empComputer { get; set; }
+        public int empChild { get; set; }
+        public int empBirthCertificate { get; set; }
+        public string empHouseHold { get; set; }
+        public string empHouseHoldOwn { get; set; }
+        public int empProvince { get; set; }
+        public string empBankNo { get; set; }
+        public string empBankName { get; set; }
 
         public List<PositionModel> positionDB { get; set; }
         public List<DepartmentModel> departmentDB { get; set; }

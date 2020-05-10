@@ -60,14 +60,14 @@ namespace ESSONS_MIS_2020_App.Controllers
         {
             EmpModel em = new EmpModel();
             HttpClient hc = _api.Initial();
-            HttpResponseMessage res = await hc.GetAsync("api/emp/GetPositionDepartment");
-            if (res.IsSuccessStatusCode)
-            {
-                var results = res.Content.ReadAsStringAsync().Result;
-                em = JsonConvert.DeserializeObject<EmpModel>(results);
-            }
-            ViewBag.positionList = em.positionDB;
-            ViewBag.departmentList = em.departmentDB;
+            HttpResponseMessage res = await hc.GetAsync("api/emp/");
+            //if (res.IsSuccessStatusCode)
+            //{
+            //    var results = res.Content.ReadAsStringAsync().Result;
+            //    em = JsonConvert.DeserializeObject<EmpModel>(results);
+            //}
+            //ViewBag.positionList = em.positionDB;
+            //ViewBag.departmentList = em.departmentDB;
             getRole();
 
             return View();
