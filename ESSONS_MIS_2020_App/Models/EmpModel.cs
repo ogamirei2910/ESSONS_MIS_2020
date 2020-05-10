@@ -56,8 +56,7 @@ namespace ESSONS_MIS_2020_App.Models
         [NotMapped]
         public IFormFile ProfileImage { get; set; }
 
-        public List<PositionModel> positionDB { get; set; }
-        public List<DepartmentModel> departmentDB { get; set; }
-
+        public string depchildID { get; set; }
+        
     }
 }

@@ -1,0 +1,7 @@
+﻿@model IEnumerable<ESSONS_MIS_2020_App.Models.PositionModel>
+
+    <option value="0">Chọn vị trí</option>
+@foreach (var item in ViewBag.PositionList)
+{
+    <option value="@item.positionID">@item.positionName</option>
+}

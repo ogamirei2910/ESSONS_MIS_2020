@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ESSONS_MIS_2020.Models
 {
-    public class DepartmentChild
+    public class DepartmentChildModel
     {
         public string DepChildID { get; set; }
 

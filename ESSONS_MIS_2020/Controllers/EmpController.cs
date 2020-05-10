@@ -57,6 +57,8 @@ namespace ESSONS_MIS_2020.Controllers
                         em.positionID = sdr["positionName"].ToString();
                         em.empImage = sdr["empImage"].ToString();
 
+                        em.positionID = sdr["positionName"].ToString();
+                        em.depchildID = sdr["depchildName"].ToString();
                         em.empAddressTemp = sdr["empAddressTemp"].ToString();
                         em.empBankNo = sdr["empBankNo"].ToString();
                         em.empBankName = sdr["empBankName"].ToString();
@@ -116,34 +118,13 @@ namespace ESSONS_MIS_2020.Controllers
         }
 
         [HttpGet]
-        public EmpModel GetPositionDepartment()
+        public List<DepartmentModel> GetDepartment()
         {
-            EmpModel em = new EmpModel();
-            List<PositionModel> lpm = new List<PositionModel>();
             List<DepartmentModel> ldm = new List<DepartmentModel>();
-
             string connection = _configuration.GetConnectionString("DefaultConnection");
 
             using (SqlConnection sql = new SqlConnection(connection))
             {
-                using (SqlCommand sc = new SqlCommand("sp_position", sql))
-                {
-                    sql.Open();
-                    sc.CommandType = System.Data.CommandType.StoredProcedure;
-                    SqlDataReader sdr = sc.ExecuteReader();
-                    while (sdr.Read())
-                    {
-                        PositionModel pm = new PositionModel();
-                        pm.positionID = sdr["positionID"].ToString();
-                        pm.positionName = sdr["positionName"].ToString();
-                        lpm.Add(pm);
-                    }
-                    em.positionDB = lpm;
-                    sdr.Close();
-                    sql.Close();
-
-                }
-
                 using (SqlCommand sc = new SqlCommand("sp_department", sql))
                 {
                     sql.Open();
@@ -156,11 +137,67 @@ namespace ESSONS_MIS_2020.Controllers
                         dm.depName = sdr["depName"].ToString();
                         ldm.Add(dm);
                     }
-                    em.departmentDB = ldm;
+                }
+            }
+            return ldm;
+        }
+
+        [HttpGet]
+        public IEnumerable<DepartmentChildModel> GetDepartmentChild(string depID)
+        {
+            List<DepartmentChildModel> ldm = new List<DepartmentChildModel>();
+
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_departmentchild", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                       new SqlParameter("@depID", depID));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        DepartmentChildModel dm = new DepartmentChildModel();
+                        dm.DepChildID = sdr["depchildID"].ToString();
+                        dm.DepChildName = sdr["depchildName"].ToString();
+                        ldm.Add(dm);
+                    }
                 }
             }
 
-            return em;
+            return ldm;
+        }
+
+        [HttpGet]
+        public List<PositionModel> GetPosition(string depchildID)
+        {
+            List<PositionModel> ldm = new List<PositionModel>();
+
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_position", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                       new SqlParameter("@depchildID", depchildID));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        PositionModel dm = new PositionModel();
+                        dm.positionID = sdr["positionID"].ToString();
+                        dm.positionName = sdr["positionName"].ToString();
+                        ldm.Add(dm);
+                    }
+                }
+            }
+
+            return ldm;
         }
 
         [HttpPost]

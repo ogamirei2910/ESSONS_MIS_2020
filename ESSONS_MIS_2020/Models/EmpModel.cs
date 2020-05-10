@@ -51,7 +51,6 @@ namespace ESSONS_MIS_2020.Models
         public string empBankNo { get; set; }
         public string empBankName { get; set; }
 
-        public List<PositionModel> positionDB { get; set; }
-        public List<DepartmentModel> departmentDB { get; set; }
+        public string depchildID { get; set; }
     }
 }

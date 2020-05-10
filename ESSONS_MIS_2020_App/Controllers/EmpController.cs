@@ -8,6 +8,7 @@ using ESSONS_MIS_2020_App.Helper;
 using ESSONS_MIS_2020_App.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 
 namespace ESSONS_MIS_2020_App.Controllers
@@ -58,16 +59,15 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public async Task<IActionResult> emp_Create()
         {
-            EmpModel em = new EmpModel();
+            List<DepartmentModel> em = new List<DepartmentModel>();
             HttpClient hc = _api.Initial();
-            HttpResponseMessage res = await hc.GetAsync("api/emp/");
-            //if (res.IsSuccessStatusCode)
-            //{
-            //    var results = res.Content.ReadAsStringAsync().Result;
-            //    em = JsonConvert.DeserializeObject<EmpModel>(results);
-            //}
-            //ViewBag.positionList = em.positionDB;
-            //ViewBag.departmentList = em.departmentDB;
+            HttpResponseMessage res = await hc.GetAsync("api/emp/GetDepartment");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                em = JsonConvert.DeserializeObject<List<DepartmentModel>>(results);
+            }
+            ViewBag.departmentList = em;
             getRole();
 
             return View();
@@ -78,7 +78,7 @@ namespace ESSONS_MIS_2020_App.Controllers
         {
             HttpClient hc = _api.Initial();
             var image = um.ProfileImage;
-            if(image != null)
+            if (image != null)
             {
                 //Saving Image on Server
                 if (image.Length > 0)
@@ -92,8 +92,9 @@ namespace ESSONS_MIS_2020_App.Controllers
 
                 um.empImage = um.ProfileImage.FileName;
                 um.ProfileImage = null;
-            }    
-            
+            }
+
+            um.username = HttpContext.Session.GetString("username");
             um.status = 1;
             um.indat = DateTime.Now.ToString("dd/MM/yyyy");
             um.intime = DateTime.Now.ToString("HH:mm:ss");
@@ -125,7 +126,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 um = JsonConvert.DeserializeObject<EmpModel>(results);
             }
 
-            if(um.empImage != null && um.empImage != "")
+            if (um.empImage != null && um.empImage != "")
                 HttpContext.Session.SetString("empImage", um.empImage);
             else
                 HttpContext.Session.SetString("empImage", um.empImage);
@@ -138,8 +139,6 @@ namespace ESSONS_MIS_2020_App.Controllers
                 em = JsonConvert.DeserializeObject<EmpModel>(results);
             }
 
-            ViewBag.positionList = em.positionDB;
-            ViewBag.departmentList = em.departmentDB;
 
             getRole();
 
@@ -162,12 +161,13 @@ namespace ESSONS_MIS_2020_App.Controllers
                         image.CopyTo(fileStream);
                     }
                 }
-                um.empImage = um.ProfileImage.FileName;          
+                um.empImage = um.ProfileImage.FileName;
                 um.ProfileImage = null;
             }
 
-            if(um.empImage == null)
+            if (um.empImage == null)
                 um.empImage = HttpContext.Session.GetString("empImage");
+            um.username = HttpContext.Session.GetString("username");
             um.status = 1;
             var res = hc.PostAsJsonAsync<EmpModel>("api/emp/Update", um);
             res.Wait();
@@ -192,6 +192,35 @@ namespace ESSONS_MIS_2020_App.Controllers
             res.Wait();
 
             return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> DepartmentChild(string depID)
+        {
+            List<DepartmentChildModel> em = new List<DepartmentChildModel>();
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.GetAsync($"api/emp/GetDepartmentChild?depID={depID}");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                em = JsonConvert.DeserializeObject<List<DepartmentChildModel>>(results);
+            }
+            ViewBag.DepartmentCList = em;
+            return PartialView("DisplayDepartmentChild");
+        }
+
+
+        public async Task<IActionResult> Position (string depchildID)
+        {
+            List<PositionModel> em = new List<PositionModel>();
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.GetAsync($"api/emp/GetPosition?depchildID={depchildID}");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                em = JsonConvert.DeserializeObject<List<PositionModel>>(results);
+            }
+            ViewBag.PositionList = em;
+            return PartialView("DisplayPosition");
         }
     }
 }
