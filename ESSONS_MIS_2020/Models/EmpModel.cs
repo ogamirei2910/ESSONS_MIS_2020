@@ -52,5 +52,6 @@ namespace ESSONS_MIS_2020.Models
         public string empBankName { get; set; }
 
         public string depchildID { get; set; }
+        public string positionName { get; set; }
     }
 }

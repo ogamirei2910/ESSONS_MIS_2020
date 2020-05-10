@@ -25,7 +25,7 @@
                                 <tr>
                                     <th>Số thẻ</th>
                                     <th>Họ tên</th>
-                                    <th>Phòng ban</th>
+                                    <th>Chức vụ</th>
                                     <th>CMND</th>
                                     <th>Chức năng</th>
                                 </tr>
@@ -44,7 +44,7 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.empName)
                                         </td>
-                                        <td>@Html.DisplayFor(modelItem => item.depID)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.positionName)</td>
                                         <td>@Html.DisplayFor(modelItem => item.empIdentityCard)</td>
                                         <td>
                                             @Html.ActionLink("Chi tiết", "emp_Detail", "Emp", new { empID = item.empID }, new { @class = "btn btn-primary btn-sm" })

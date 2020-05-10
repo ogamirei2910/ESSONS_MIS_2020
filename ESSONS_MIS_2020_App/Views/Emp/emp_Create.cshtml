@@ -85,6 +85,7 @@
                                                 asp-items="@(new SelectList(""))">
                                         </select>
                                     </div>
+                                    <input type="hidden" asp-for="positionName" id="positionName" />
                                 </td>
                             </tr>
                             <tr>
@@ -469,6 +470,10 @@
                     }
                 })
 
+            })
+            position.change(function () {
+                var positionvalue = $(this).val();
+                $("#positionName").val(positionvalue);
             })
         })
 

@@ -57,7 +57,6 @@ namespace ESSONS_MIS_2020.Controllers
                         em.positionID = sdr["positionName"].ToString();
                         em.empImage = sdr["empImage"].ToString();
 
-                        em.positionID = sdr["positionName"].ToString();
                         em.depchildID = sdr["depchildName"].ToString();
                         em.empAddressTemp = sdr["empAddressTemp"].ToString();
                         em.empBankNo = sdr["empBankNo"].ToString();
@@ -68,7 +67,7 @@ namespace ESSONS_MIS_2020.Controllers
                         em.empComputer = sdr["empComputer"].ToString();
                         em.empCultural = int.Parse(sdr["empCultural"].ToString());
                         em.empDomicile = sdr["empDomicile"].ToString();
-                        em.empIdentityPlace = sdr["empempIdentityPlace"].ToString();
+                        em.empIdentityPlace = sdr["empIdentityPlace"].ToString();
                         em.empIdentityDate = sdr["empIdentityDate"].ToString();
                         em.empHouseHold = sdr["empHouseHold"].ToString();
                         em.empHouseHoldOwn = sdr["empHouseHoldOwn"].ToString();
@@ -76,7 +75,7 @@ namespace ESSONS_MIS_2020.Controllers
                         em.empNation = sdr["empNation"].ToString();
                         em.empProvince = int.Parse(sdr["empProvince"].ToString());
                         em.empReligion = sdr["empHouseHoldOwn"].ToString();
-                        em.empYearOff = int.Parse(sdr["empYearOff"].ToString());
+                        //em.empYearOff = int.Parse(sdr["empYearOff"].ToString());
                         em.empReligion = sdr["empHouseHoldOwn"].ToString();
                     }
                 }
@@ -107,7 +106,7 @@ namespace ESSONS_MIS_2020.Controllers
                         if(sdr["empIDTemp"] != null)
                             emc.empIDTemp = sdr["empIDTemp"].ToString();
                         emc.empName = sdr["empName"].ToString();
-                        emc.depID = sdr["depName"].ToString();
+                        emc.positionName = sdr["positionName"].ToString();
                         emc.empIdentityCard = sdr["empIdentityCard"].ToString();
 
                         em.Add(emc);
@@ -250,6 +249,8 @@ namespace ESSONS_MIS_2020.Controllers
                     sc.Parameters.Add(
                         new SqlParameter("@empYearOff", model.empYearOff));
 
+                    sc.Parameters.Add(
+                       new SqlParameter("@positionName", model.positionName));
                     sc.Parameters.Add(
                        new SqlParameter("@empIdentityPlace", model.empIdentityPlace));
                     sc.Parameters.Add(
