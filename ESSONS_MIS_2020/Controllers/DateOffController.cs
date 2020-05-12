@@ -45,6 +45,8 @@ namespace ESSONS_MIS_2020.Controllers
                         em.dateoffID = sdr["dateoffID"].ToString();
                         em.dateoffStart = sdr["dateoffStart"].ToString();
                         em.dateoffEnd = sdr["dateoffEnd"].ToString();
+                        em.dateoffStartTime = sdr["dateoffStartTime"].ToString();
+                        em.dateoffEndTime = sdr["dateoffEndTime"].ToString();
                         em.dateoffNumber = Double.Parse(sdr["dateoffNumber"].ToString());
                         switch (sdr["dateoffType"].ToString())
                         {
@@ -52,7 +54,8 @@ namespace ESSONS_MIS_2020.Controllers
                             case "2": em.dateoffType = "Nghỉ ốm đau (BHXH)"; break;
                             case "3": em.dateoffType = "Nghỉ thai sản (BHXH)"; break;
                             case "4": em.dateoffType = "Việc riêng"; break;
-                            case "5": em.dateoffType = "Nghỉ việc"; break;
+                            case "5": em.dateoffType = "Đi trễ"; break;
+                            case "6": em.dateoffType = "Về sớm"; break;
                         }
                         em.username = sdr["username"].ToString();
                         lem.Add(em);
@@ -82,37 +85,22 @@ namespace ESSONS_MIS_2020.Controllers
                     result = new SqlParameter("@phepnamdadung", SqlDbType.Decimal);
                     result.Direction = ParameterDirection.Output;
                     sc.Parameters.Add(result);
+                    result = new SqlParameter("@BHXH", SqlDbType.Decimal);
+                    result.Direction = ParameterDirection.Output;
+                    sc.Parameters.Add(result);
                     result = new SqlParameter("@pheprieng", SqlDbType.Decimal);
                     result.Direction = ParameterDirection.Output;
                     sc.Parameters.Add(result);
                     result = new SqlParameter("@khongphep", SqlDbType.Decimal);
                     result.Direction = ParameterDirection.Output;
                     sc.Parameters.Add(result);
-                    result = new SqlParameter("@BHXH", SqlDbType.Decimal);
-                    result.Direction = ParameterDirection.Output;
-                    sc.Parameters.Add(result);
                     sc.ExecuteNonQuery();
 
-                    if (sc.Parameters["@pheprieng"].Value.ToString() == "")
-                        em.pheprieng = 0;
-                    else
-                        em.pheprieng = double.Parse(sc.Parameters["@pheprieng"].Value.ToString());
-                    if (sc.Parameters["@phepnam"].Value.ToString() == "")
-                        em.phepnam = 0;
-                    else
-                        em.phepnam = double.Parse(sc.Parameters["@phepnam"].Value.ToString());
-                    if (sc.Parameters["@phepnamdadung"].Value.ToString() == "")
-                        em.phepnamdadung = 0;
-                    else
-                        em.phepnamdadung = double.Parse(sc.Parameters["@phepnamdadung"].Value.ToString());
-                    if (sc.Parameters["@BHXH"].Value.ToString() == "")
-                        em.BHXH = 0;
-                    else
-                        em.BHXH = double.Parse(sc.Parameters["@BHXH"].Value.ToString());
-                    if (sc.Parameters["@khongphep"].Value.ToString() == "")
-                        em.khongphep = 0;
-                    else
-                        em.khongphep = double.Parse(sc.Parameters["@khongphep"].Value.ToString());
+                    em.pheprieng = double.Parse(sc.Parameters["@pheprieng"].Value.ToString());
+                    em.phepnam = double.Parse(sc.Parameters["@phepnam"].Value.ToString());
+                    em.phepnamdadung = double.Parse(sc.Parameters["@phepnamdadung"].Value.ToString());
+                    em.BHXH = double.Parse(sc.Parameters["@BHXH"].Value.ToString());
+                    em.khongphep = double.Parse(sc.Parameters["@khongphep"].Value.ToString());
                 }
                 return em;
             }

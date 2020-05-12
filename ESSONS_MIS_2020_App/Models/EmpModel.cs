@@ -58,6 +58,7 @@ namespace ESSONS_MIS_2020_App.Models
 
         public string depchildID { get; set; }
         public string positionName { get; set; }
+        public string depchildName { get; set; }
 
     }
 }

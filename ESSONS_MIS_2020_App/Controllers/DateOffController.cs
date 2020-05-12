@@ -41,13 +41,7 @@ namespace ESSONS_MIS_2020_App.Controllers
 
             double number = 0;
             if (um.dateoffStart == um.dateoffEnd)
-            {
-                if(um.dateoffStartTime is null || um.dateoffStartTime is null)
-                {
-                    ViewBag.Error = "Chưa chọn giờ nghỉ";
-                    return View();
-                }
-                   
+            {                  
                 string timestart = um.dateoffStartTime;
                 string timeend = um.dateoffEndTime;
                 TimeSpan timeS = new TimeSpan(int.Parse(timestart.Substring(0,2)), int.Parse(timestart.Substring(3, 2)), 0);

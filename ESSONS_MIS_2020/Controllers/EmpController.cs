@@ -57,6 +57,8 @@ namespace ESSONS_MIS_2020.Controllers
                         em.positionID = sdr["positionName"].ToString();
                         em.empImage = sdr["empImage"].ToString();
 
+                        em.depchildName = sdr["depchildName"].ToString();
+                        em.positionName = sdr["positionName"].ToString();
                         em.depchildID = sdr["depchildName"].ToString();
                         em.empAddressTemp = sdr["empAddressTemp"].ToString();
                         em.empBankNo = sdr["empBankNo"].ToString();
@@ -116,6 +118,42 @@ namespace ESSONS_MIS_2020.Controllers
             }
         }
 
+        [HttpGet("{empID}")]
+        public PositionDepEmpModel GetPositionDepEmp(string empid)
+        {
+            PositionDepEmpModel dm = new PositionDepEmpModel();
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_positiondepemp", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                       new SqlParameter("@empid", empid));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Select"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        dm.empID = sdr["empID"].ToString();
+                        dm.positionID = sdr["positionID"].ToString();
+                        dm.positionName = sdr["positionName"].ToString();
+                        dm.depID = sdr["depID"].ToString();
+                        dm.depchildID = sdr["depchildID"].ToString();
+                        dm.depchildName = sdr["depchildName"].ToString();
+                        dm.comment = sdr["comment"].ToString();
+                        dm.confirmDate = sdr["confirmDate"].ToString();
+                        dm.status = int.Parse(sdr["status"].ToString());
+                        dm.typeName = sdr["typeName"].ToString();
+                        dm.username = sdr["username"].ToString();
+                    }
+                }
+            }
+            return dm;
+        }
+
         [HttpGet]
         public List<DepartmentModel> GetDepartment()
         {
@@ -128,6 +166,37 @@ namespace ESSONS_MIS_2020.Controllers
                 {
                     sql.Open();
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Select"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        DepartmentModel dm = new DepartmentModel();
+                        dm.depID = sdr["depID"].ToString();
+                        dm.depName = sdr["depName"].ToString();
+                        ldm.Add(dm);
+                    }
+                }
+            }
+            return ldm;
+        }
+
+        [HttpGet]
+        public List<DepartmentModel> GetDepartmentID(string depID)
+        {
+            List<DepartmentModel> ldm = new List<DepartmentModel>();
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_department", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                       new SqlParameter("@depID", depID));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "GetDepID"));
                     SqlDataReader sdr = sc.ExecuteReader();
                     while (sdr.Read())
                     {
@@ -219,7 +288,7 @@ namespace ESSONS_MIS_2020.Controllers
                     sc.Parameters.Add(
                         new SqlParameter("@empIdentityCard", model.empIdentityCard));
                     sc.Parameters.Add(
-                        new SqlParameter("@empDepno", model.depID));
+                        new SqlParameter("@depID", model.depID));
                     sc.Parameters.Add(
                         new SqlParameter("@empAddress", model.empAddress));
                     sc.Parameters.Add(
@@ -249,6 +318,10 @@ namespace ESSONS_MIS_2020.Controllers
                     sc.Parameters.Add(
                         new SqlParameter("@empYearOff", model.empYearOff));
 
+                    sc.Parameters.Add(
+                        new SqlParameter("@depchildID", model.depchildID));
+                    sc.Parameters.Add(
+                       new SqlParameter("@depchildName", model.depchildName));
                     sc.Parameters.Add(
                        new SqlParameter("@positionName", model.positionName));
                     sc.Parameters.Add(
@@ -312,11 +385,19 @@ namespace ESSONS_MIS_2020.Controllers
                     sc.Parameters.Add(
                         new SqlParameter("@empID", value.empID));
                     sc.Parameters.Add(
+                        new SqlParameter("@empIDTemp", value.empIDTemp));
+                    sc.Parameters.Add(
                         new SqlParameter("@empName", value.empName));
                     sc.Parameters.Add(
                         new SqlParameter("@empIdentityCard", value.empIdentityCard));
                     sc.Parameters.Add(
-                        new SqlParameter("@empDepno", value.depID));
+                        new SqlParameter("@depID", value.depID));
+                    sc.Parameters.Add(
+                       new SqlParameter("@depchildID", value.depchildID));
+                    sc.Parameters.Add(
+                      new SqlParameter("@depchildName", value.depchildName));
+                    sc.Parameters.Add(
+                       new SqlParameter("@positionName", value.positionName));
                     sc.Parameters.Add(
                         new SqlParameter("@empAddress", value.empAddress));
                     sc.Parameters.Add(
@@ -332,9 +413,13 @@ namespace ESSONS_MIS_2020.Controllers
                     sc.Parameters.Add(
                         new SqlParameter("@empInDate", value.empInDate));
                     sc.Parameters.Add(
+                        new SqlParameter("@empStandardDate", value.empStandardDate));
+                    sc.Parameters.Add(
                         new SqlParameter("@positionID", value.positionID));
                     sc.Parameters.Add(
                         new SqlParameter("@empImage", value.empImage));
+                    sc.Parameters.Add(
+                       new SqlParameter("@indat", value.indat));
                     sc.Parameters.Add(
                         new SqlParameter("@username", value.username));
                     sc.Parameters.Add(

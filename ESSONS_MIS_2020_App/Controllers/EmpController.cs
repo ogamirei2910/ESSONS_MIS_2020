@@ -131,17 +131,48 @@ namespace ESSONS_MIS_2020_App.Controllers
             else
                 HttpContext.Session.SetString("empImage", um.empImage);
 
-            EmpModel em = new EmpModel();
-            res = await hc.GetAsync("api/emp/GetPositionDepartment/");
+            List<DepartmentModel> em = new List<DepartmentModel>();
+            hc = _api.Initial();
+            res = await hc.GetAsync("api/emp/GetDepartment");
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
-                em = JsonConvert.DeserializeObject<EmpModel>(results);
+                em = JsonConvert.DeserializeObject<List<DepartmentModel>>(results);
             }
+            ViewBag.departmentList = em;
 
+
+            PositionDepEmpModel pm = new PositionDepEmpModel();
+            hc = _api.Initial();
+            res = await hc.GetAsync($"api/emp/GetPositionDepEmp/{empID}");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                pm = JsonConvert.DeserializeObject<PositionDepEmpModel>(results);
+            }
+            ViewBag.positiondepList = pm;
+
+            List<DepartmentChildModel> dtm = new List<DepartmentChildModel>();
+            hc = _api.Initial();
+            res = await hc.GetAsync($"api/emp/GetDepartmentChild?depID={pm.depID}");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                dtm = JsonConvert.DeserializeObject<List<DepartmentChildModel>>(results);
+            }
+            ViewBag.departmentchildList = dtm;
+
+            List<PositionModel> ptm = new List<PositionModel>();
+            hc = _api.Initial();
+            res = await hc.GetAsync($"api/emp/GetPosition?depchildID={pm.depchildID}");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                ptm = JsonConvert.DeserializeObject<List<PositionModel>>(results);
+            }
+            ViewBag.positionList = ptm;
 
             getRole();
-
             return View(um);
         }
 
@@ -168,6 +199,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             if (um.empImage == null)
                 um.empImage = HttpContext.Session.GetString("empImage");
             um.username = HttpContext.Session.GetString("username");
+            um.indat = DateTime.Now.ToString("dd-MM-yyyy");
             um.status = 1;
             var res = hc.PostAsJsonAsync<EmpModel>("api/emp/Update", um);
             res.Wait();

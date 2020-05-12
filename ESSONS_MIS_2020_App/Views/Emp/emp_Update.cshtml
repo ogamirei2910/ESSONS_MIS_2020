@@ -1,6 +1,6 @@
 ﻿@model ESSONS_MIS_2020_App.Models.EmpModel
 @{
-    ViewData["Title"] = "emp_Update";
+    ViewData["Title"] = "Cập nhật nhân viên";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,7 +11,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Thêm mới nhân viên</h3>
+                        <h3 class="card-title">Cập nhật nhân viên</h3>
                     </div>
                     <!-- /.card-header -->
                     <form method="post" asp-action="emp_Update" enctype="multipart/form-data">
@@ -21,34 +21,36 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Số thẻ</label>
                                         <div class="col-3">
-                                            <input asp-for="empID" type="text" class="form-control" readonly placeholder="Số thẻ" value="@Model.empID">
+                                            <input asp-for="empID" readonly type="text" maxlength="5" class="form-control" placeholder="Số thẻ" value="@Model.empID">
                                         </div>
                                         <div class="col-3">
-                                            <input asp-for="empIDTemp" type="text" class="form-control" placeholder="Số thời vụ" value="@Model.empIDTemp">
+                                            <input asp-for="empIDTemp" type="text" maxlength="10" class="form-control" placeholder="Số thời vụ" value="@Model.empIDTemp">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Họ tên</label>
                                         <div class="col-5">
-                                            <input asp-for="empName" type="text" class="form-control" placeholder="Họ tên" value="@Model.empName">
+                                            <input asp-for="empName" maxlength="30" type="text" class="form-control" placeholder="Họ tên" value="@Model.empName">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">CMND</label>
-                                        <div class="col-5">
-                                            <input asp-for="empIdentityCard" type="text" class="form-control" placeholder="CMND" value="@Model.empIdentityCard">
+                                        <label class="col-sm-3 col-form-label">Điện Thoại</label>
+                                        <div class="col-4">
+                                            <input asp-for="empTel" maxlength="15" type="text" class="form-control" placeholder="Số điện thoại" value="@Model.empTel">
                                         </div>
                                     </div>
-
+                                </td>
+                                <td>
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Địa chỉ</label>
-                                        <div class="col-7">
-                                            <input asp-for="empAddress" class="form-control" type="text" placeholder="Địa chỉ" value="@Model.empAddress">
-                                        </div>
+                                        <label class="col-sm-3 col-form-label">Giới tính</label>
+                                        <label>&nbsp;</label>
+                                        <select asp-for="empSex" id="empSex" class="custom-select col-sm-3">
+                                            <option value="Nam">Nam</option>
+                                            <option value="Nữ">Nữ</option>
+                                        </select>
                                     </div>
-
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Ngày sinh</label>
                                         <div class="col-5">
@@ -58,71 +60,389 @@
                                             </div>
                                         </div>
                                     </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Ngày làm</label>
+                                        <label class="col-sm-3 col-form-label">Nhóm B.phận</label>
+                                        <select id="dep" asp-for="depID" class="custom-select col-sm-4 dep"
+                                                asp-items="@(new SelectList(ViewBag.departmentList,"depID","depName"))">
+                                        </select>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Bộ phận</label>
+                                        <select id="depchild" asp-for="depchildID" class="custom-select col-sm-4"
+                                                asp-items="@(new SelectList(""))">
+                                            @foreach (var item in ViewBag.departmentchildList)
+                                            {
+                                                if (item.DepChildName == Model.depchildName)
+                                                {
+                                                    <option value="@item.DepChildID" selected>@item.DepChildName</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.DepChildID">@item.DepChildName</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <input type="hidden" asp-for="depchildName" id="depchildName" value="@ViewBag.positiondepList.depchildName" />
+                                </td>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Chức vụ</label>
+                                        <select id="position" asp-for="positionID" class="custom-select col-sm-4">
+                                            @foreach (var item in ViewBag.positionList)
+                                            {
+                                                if (item.positionName == Model.positionName)
+                                                {
+                                                    <option value="@item.positionID" selected>@item.positionName</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.positionID">@item.positionName</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <input type="hidden" asp-for="positionName" id="positionName" value="@ViewBag.positiondepList.positionName" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Dân tộc</label>
+                                        <div class="col-3">
+                                            <input asp-for="empNation" maxlength="20" class="form-control" type="text" placeholder="Dân tộc" value="@Model.empNation">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Tôn giáo</label>
+                                        <div class="col-3">
+                                            <input asp-for="empReligion" maxlength="20" class="form-control" type="text" placeholder="Tôn giáo" value="@Model.empReligion">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Nơi sinh</label>
+                                        <select asp-for="empBorn" class="custom-select col-sm-4" id="empBorn">
+                                            <option value="An Giang">An Giang</option>
+                                            <option value="Bà Rịa - Vũng Tàu">Bà Rịa - Vũng Tàu</option>
+                                            <option value="Bắc Giang">Bắc Giang</option>
+                                            <option value="Bắc Kạn">Bắc Kạn</option>
+                                            <option value="Bạc Liêu">Bạc Liêu</option>
+                                            <option value="Bắc Ninh">Bắc Ninh</option>
+                                            <option value="Bến Tre">Bến Tre</option>
+                                            <option value="Bình Định">Bình Định</option>
+                                            <option value="Bình Dương">Bình Dương</option>
+                                            <option value="Bình Phước">Bình Phước</option>
+                                            <option value="Bình Thuận">Bình Thuận</option>
+                                            <option value="Cà Mau">Cà Mau</option>
+                                            <option value="Cao Bằng">Cao Bằng</option>
+                                            <option value="Đắk Lắk">Đắk Lắk</option>
+                                            <option value="Đắk Nông">Đắk Nông</option>
+                                            <option value="Điện Biên">Điện Biên</option>
+                                            <option value="Đồng Nai">Đồng Nai</option>
+                                            <option value="Đồng Tháp">Đồng Tháp</option>
+                                            <option value="Gia Lai">Gia Lai</option>
+                                            <option value="Hà Giang">Hà Giang</option>
+                                            <option value="Hà Nam">Hà Nam</option>
+                                            <option value="Hà Tĩnh">Hà Tĩnh</option>
+                                            <option value="Hải Dương">Hải Dương</option>
+                                            <option value="Hậu Giang">Hậu Giang</option>
+                                            <option value="Hòa Bình">Hòa Bình</option>
+                                            <option value="Hưng Yên">Hưng Yên</option>
+                                            <option value="Khánh Hòa">Khánh Hòa</option>
+                                            <option value="Kiên Giang">Kiên Giang</option>
+                                            <option value="Kon Tum">Kon Tum</option>
+                                            <option value="Lai Châu">Lai Châu</option>
+                                            <option value="Lâm Đồng">Lâm Đồng</option>
+                                            <option value="Lạng Sơn">Lạng Sơn</option>
+                                            <option value="Lào Cai">Lào Cai</option>
+                                            <option value="Long An">Long An</option>
+                                            <option value="Nam Định">Nam Định</option>
+                                            <option value="Nghệ An">Nghệ An</option>
+                                            <option value="Ninh Bình">Ninh Bình</option>
+                                            <option value="Ninh Thuận">Ninh Thuận</option>
+                                            <option value="Phú Thọ">Phú Thọ</option>
+                                            <option value="Quảng Bình">Quảng Bình</option>
+                                            <option value="Quảng Ngãi">Quảng Ngãi</option>
+                                            <option value="Quảng Ninh">Quảng Ninh</option>
+                                            <option value="Quảng Trị">Quảng Trị</option>
+                                            <option value="Sóc Trăng">Sóc Trăng</option>
+                                            <option value="Sơn La">Sơn La</option>
+                                            <option value="Tây Ninh">Tây Ninh</option>
+                                            <option value="Thái Bình">Thái Bình</option>
+                                            <option value="Thái Nguyên">Thái Nguyên</option>
+                                            <option value="Thanh Hóa">Thanh Hóa</option>
+                                            <option value="Thừa Thiên Huế">Thừa Thiên Huế</option>
+                                            <option value="Tiền Giang">Tiền Giang</option>
+                                            <option value="Trà Vinh">Trà Vinh</option>
+                                            <option value="Tuyên Quang">Tuyên Quang</option>
+                                            <option value="Vĩnh Long">Vĩnh Long</option>
+                                            <option value="Vĩnh Phúc">Vĩnh Phúc</option>
+                                            <option value="Yên Bái">Yên Bái</option>
+                                            <option value="Phú Yên">Phú Yên</option>
+                                            <option value="Tp.Cần Thơ">Tp.Cần Thơ</option>
+                                            <option value="Tp.Đà Nẵng">Tp.Đà Nẵng</option>
+                                            <option value="Tp.Hải Phòng">Tp.Hải Phòng</option>
+                                            <option value="Tp.Hà Nội">Tp.Hà Nội</option>
+                                            <option value="TP  HCM">TP HCM</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Nguyên quán</label>
+                                        <select asp-for="empDomicile" class="custom-select col-sm-4" id="empDomicile">
+                                            <option value="An Giang">An Giang</option>
+                                            <option value="Bà Rịa - Vũng Tàu">Bà Rịa - Vũng Tàu</option>
+                                            <option value="Bắc Giang">Bắc Giang</option>
+                                            <option value="Bắc Kạn">Bắc Kạn</option>
+                                            <option value="Bạc Liêu">Bạc Liêu</option>
+                                            <option value="Bắc Ninh">Bắc Ninh</option>
+                                            <option value="Bến Tre">Bến Tre</option>
+                                            <option value="Bình Định">Bình Định</option>
+                                            <option value="Bình Dương">Bình Dương</option>
+                                            <option value="Bình Phước">Bình Phước</option>
+                                            <option value="Bình Thuận">Bình Thuận</option>
+                                            <option value="Cà Mau">Cà Mau</option>
+                                            <option value="Cao Bằng">Cao Bằng</option>
+                                            <option value="Đắk Lắk">Đắk Lắk</option>
+                                            <option value="Đắk Nông">Đắk Nông</option>
+                                            <option value="Điện Biên">Điện Biên</option>
+                                            <option value="Đồng Nai">Đồng Nai</option>
+                                            <option value="Đồng Tháp">Đồng Tháp</option>
+                                            <option value="Gia Lai">Gia Lai</option>
+                                            <option value="Hà Giang">Hà Giang</option>
+                                            <option value="Hà Nam">Hà Nam</option>
+                                            <option value="Hà Tĩnh">Hà Tĩnh</option>
+                                            <option value="Hải Dương">Hải Dương</option>
+                                            <option value="Hậu Giang">Hậu Giang</option>
+                                            <option value="Hòa Bình">Hòa Bình</option>
+                                            <option value="Hưng Yên">Hưng Yên</option>
+                                            <option value="Khánh Hòa">Khánh Hòa</option>
+                                            <option value="Kiên Giang">Kiên Giang</option>
+                                            <option value="Kon Tum">Kon Tum</option>
+                                            <option value="Lai Châu">Lai Châu</option>
+                                            <option value="Lâm Đồng">Lâm Đồng</option>
+                                            <option value="Lạng Sơn">Lạng Sơn</option>
+                                            <option value="Lào Cai">Lào Cai</option>
+                                            <option value="Long An">Long An</option>
+                                            <option value="Nam Định">Nam Định</option>
+                                            <option value="Nghệ An">Nghệ An</option>
+                                            <option value="Ninh Bình">Ninh Bình</option>
+                                            <option value="Ninh Thuận">Ninh Thuận</option>
+                                            <option value="Phú Thọ">Phú Thọ</option>
+                                            <option value="Quảng Bình">Quảng Bình</option>
+                                            <option value="Quảng Ngãi">Quảng Ngãi</option>
+                                            <option value="Quảng Ninh">Quảng Ninh</option>
+                                            <option value="Quảng Trị">Quảng Trị</option>
+                                            <option value="Sóc Trăng">Sóc Trăng</option>
+                                            <option value="Sơn La">Sơn La</option>
+                                            <option value="Tây Ninh">Tây Ninh</option>
+                                            <option value="Thái Bình">Thái Bình</option>
+                                            <option value="Thái Nguyên">Thái Nguyên</option>
+                                            <option value="Thanh Hóa">Thanh Hóa</option>
+                                            <option value="Thừa Thiên Huế">Thừa Thiên Huế</option>
+                                            <option value="Tiền Giang">Tiền Giang</option>
+                                            <option value="Trà Vinh">Trà Vinh</option>
+                                            <option value="Tuyên Quang">Tuyên Quang</option>
+                                            <option value="Vĩnh Long">Vĩnh Long</option>
+                                            <option value="Vĩnh Phúc">Vĩnh Phúc</option>
+                                            <option value="Yên Bái">Yên Bái</option>
+                                            <option value="Phú Yên">Phú Yên</option>
+                                            <option value="Tp.Cần Thơ">Tp.Cần Thơ</option>
+                                            <option value="Tp.Đà Nẵng">Tp.Đà Nẵng</option>
+                                            <option value="Tp.Hải Phòng">Tp.Hải Phòng</option>
+                                            <option value="Tp.Hà Nội">Tp.Hà Nội</option>
+                                            <option value="TP  HCM">TP HCM</option>
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Thường trú</label>
+                                        <div class="col-8">
+                                            <input asp-for="empAddress" maxlength="100" class="form-control" type="text" placeholder="Thường trú" value="@Model.empAddress">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Tạm trú</label>
+                                        <div class="col-8">
+                                            <input asp-for="empAddressTemp" maxlength="100" class="form-control" type="text" placeholder="Tạm trú" value="@Model.empAddressTemp">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">CMND/Căn cước</label>
                                         <div class="col-5">
+                                            <input asp-for="empIdentityCard" type="text" maxlength="12" class="form-control" placeholder="CMND/Căn cước" value="@Model.empIdentityCard">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Nơi cấp</label>
+                                        <div class="col-5">
+                                            <input asp-for="empIdentityPlace" type="text" maxlength="12" class="form-control" placeholder="Nơi cấp" value="@Model.empIdentityPlace">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3  col-form-label">Ngày cấp</label>
+                                        <div class="col-5">
+                                            <div class="datepicker date input-group p-0 shadow-sm">
+                                                <input asp-for="empIdentityDate" type="text" class="form-control" id="reservationDate" value="@Model.empIdentityDate">
+                                                <div class="input-group-append"><span class="input-group-text"></span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Văn hóa</label>
+                                        <div class="col-3">
+                                            <input asp-for="empCultural" class="form-control" type="number" placeholder="0" value="@Model.empCultural">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Trình độ</label>
+                                        <div class="col-6">
+                                            <input asp-for="empEdu" maxlength="30" type="text" class="form-control" placeholder="Trình độ" value="@Model.empEdu">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Trình độ tin học</label>
+                                        <div class="col-6">
+                                            <input asp-for="empComputer" maxlength="20" class="form-control" type="text" placeholder="Trình độ tin học" value="@Model.empComputer">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Trình độ ngoại ngữ</label>
+                                        <div class="col-6">
+                                            <input asp-for="empLanguage" maxlength="20" class="form-control" type="text" placeholder="Trình độ ngoại ngữ" value="@Model.empLanguage">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Hôn nhân</label>
+                                        <select asp-for="empMarriage" id="empMarriage" class="custom-select col-3">
+                                            <option value="Độc thân">Độc thân</option>
+                                            <option value="Kết hôn">Kết hôn</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Số con</label>
+                                        <div class="col-3">
+                                            <input asp-for="empChild" class="form-control" type="number" value="@Model.empChild">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Chủ hộ khẩu</label>
+                                        <div class="col-6">
+                                            <input asp-for="empHouseHoldOwn" maxlength="30" class="form-control" type="text" placeholder="Chủ hộ khẩu" value="@Model.empHouseHoldOwn">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Số hộ khẩu</label>
+                                        <div class="col-6">
+                                            <input asp-for="empHouseHold" maxlength="20" class="form-control" type="text" placeholder="Số hộ khẩu" value="@Model.empHouseHold">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Giấy khai sinh</label>
+                                        <select asp-for="empBirthCertificate" id="empBirthCertificate" class="custom-select col-3">
+                                            <option value="1">Có</option>
+                                            <option value="0">Không</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">HK ngoại tỉnh</label>
+                                        <select asp-for="empProvince" class="custom-select col-3" id="empProvince">
+                                            <option value="1">Có</option>
+                                            <option value="0">Không</option>
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3  col-form-label">Ngày làm</label>
+                                        <div class="col-8">
                                             <div class="datepicker date input-group p-0 shadow-sm">
                                                 <input asp-for="empInDate" type="text" class="form-control" id="reservationDate" value="@Model.empInDate">
                                                 <div class="input-group-append"><span class="input-group-text"></span></div>
                                             </div>
                                         </div>
                                     </div>
+                                </td>
+                                <td>
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Điện Thoại</label>
-                                        <div class="col-4">
-                                            <input asp-for="empTel" type="text" class="form-control" placeholder="Số điện thoại" value="@Model.empTel">
+                                        <label class="col-sm-3  col-form-label">Ngày chính thức</label>
+                                        <div class="col-8">
+                                            <div class="datepicker date input-group p-0 shadow-sm">
+                                                <input asp-for="empStandardDate" type="text" class="form-control" id="reservationDate" value="@Model.empStandardDate">
+                                                <div class="input-group-append"><span class="input-group-text"></span></div>
+                                            </div>
                                         </div>
                                     </div>
-
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Hình thẻ</label>
-                                        <div class="custom-file col-6">
-                                            <input asp-for="ProfileImage" class="custom-file-input" id="customFile" type="file">
-                                            <label class="custom-file-label" for="customFile">Chọn hình</label>
+                                        <label class="col-sm-3 col-form-label">Số thẻ</label>
+                                        <div class="col-7">
+                                            <input asp-for="empBankNo" maxlength="20" class="form-control" type="text" placeholder="Số thẻ" value="@Model.empBankNo">
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Giới tính</label>
-                                        <select asp-for="empSex" class="custom-select col-sm-3">
-                                            <option selected="@(Model.empSex == "Nam")">Nam</option>
-                                            <option selected="@(Model.empSex == "Nữ")">Nữ</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Hôn nhân</label>
-                                        <select asp-for="empMarriage" class="custom-select col-3">
-                                            <option selected="@(Model.empMarriage == "Độc thân")">Độc thân</option>
-                                            <option selected="@(Model.empMarriage == "Kết hôn")">Kết hôn</option>
-                                            <option selected="@(Model.empMarriage == "Ly dị")">Ly dị</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Trình độ</label>
-                                        <select asp-for="empEdu" class="custom-select col-sm-4">
-                                            <option selected="@(Model.empEdu == "Phổ thông")">Phổ thông</option>
-                                            <option selected="@(Model.empEdu == "Trung cấp")">Trung cấp</option>
-                                            <option selected="@(Model.empEdu == "Cao đẳng")">Cao đẳng</option>
-                                            <option selected="@(Model.empEdu == "Đại học")">Đại học</option>
-                                            <option selected="@(Model.empEdu == "Thạc sĩ")">Thạc sĩ</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Chức vụ</label>
-                                        <select asp-for="positionID" class="custom-select col-sm-4"
-                                                asp-items="@(new SelectList(ViewBag.positionList,"positionID","positionName"))">
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Bộ phận</label>
-                                        <select asp-for="depID" class="custom-select col-sm-4"
-                                                asp-items="@(new SelectList(ViewBag.departmentList,"depID","depName"))">
-                                        </select>
+                                        <label class="col-sm-3 col-form-label">Tên NH</label>
+                                        <div class="col-4">
+                                            <input asp-for="empBankName" maxlength="50" class="form-control" type="text" placeholder="Tên ngân hàng" value="@Model.empBankName">
+                                        </div>
                                     </div>
                                 </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Hình thẻ</label>
+                                        <div class="custom-file col-8">
+                                            <input asp-for="ProfileImage" class="custom-file-input" id="customFile" type="file">
+                                            <label class="custom-file-label" for="customFile">Chọn hình</label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
                             </tr>
                         </table>
 
@@ -146,6 +466,58 @@
 
 @section scripts{
     <script type="text/javascript">
+        $(document).ready(function () {
+            var depID = $("#dep");
+            var position = $("#position");
+            var depchild = $("#depchild");
+            debugger
+            depID.change(function () {
+                var depvalue = $(this).val();
+                $.ajax({
+                    type: "GET",
+                    url: "/Emp/DepartmentChild?depid=" + depvalue,
+                    contentType: "html",
+                    success: function (data) {
+                        debugger
+                        depchild.empty();
+                        position.empty();
+                        depchild.append(data);
+                    }
+                })
+
+            })
+            depchild.change(function () {
+                var depchildvalue = $(this).val();
+                var depchildtext = $("#depchild option:selected").text();
+                $("#depchildName").val(depchildtext);
+                $.ajax({
+                    type: "GET",
+                    url: "/Emp/Position?depchildid=" + depchildvalue,
+                    contentType: "html",
+                    success: function (data) {
+                        debugger
+                        position.empty();
+                        position.append(data);
+                    }
+                })
+
+            })
+            position.change(function () {
+                var positionvalue = $("#position option:selected").text();
+                $("#positionName").val(positionvalue);
+            })
+        })
+
+        $("#dep").val('@ViewBag.positiondepList.depID').change();
+        $("#depchild").val('@ViewBag.positiondepList.depchildID').change();
+        
+        $("#empSex").val('@Model.empSex').change();
+        $("#empDomicile").text = '@Model.empDomicile';
+        $("#empBorn").text = '@Model.empBorn';
+        $("#empSex").val('@Model.empSex').change();
+        $("#empMarriage").text = '@Model.empMarriage';
+        $("#empProvince").val('@Model.empProvince').change();
+        $("#empBirthCertificate").val('@Model.empBirthCertificate').change();
 
         // Add the following code if you want the name of the file appear on select
         $(".custom-file-input").on("change", function () {

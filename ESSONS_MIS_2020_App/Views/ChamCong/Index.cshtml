@@ -1,0 +1,115 @@
+﻿@model IEnumerable<ESSONS_MIS_2020_App.Models.ChamCongModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Theo dõi giờ công, ngày công</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form role="form">
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Chọn ngày tháng</label>
+                                <div class="col-3">
+                                    <div class="datepicker date input-group p-0 shadow-sm">
+                                        <input type="text" class="form-control" id="reservationDate">
+                                        <div class="input-group-append"><span class="input-group-text"></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-primary" id="btDay" href="#">
+                                    Theo ngày
+                                </button>
+                                <button class="btn btn-primary" id="btMonth" href="#">
+                                    Theo tháng
+                                </button>
+                            </div>
+                        </form>
+                        <br />
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Mã nhân viên</th>
+                                    <th>Tên nhân viên</th>
+                                    <th>Phòng ban</th>
+                                    <th>Loại công</th>
+                                    <th>Giờ công</th>
+                                    <th>Tăng ca</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.empID</td>
+                                        <td>
+                                            @item.empName
+                                        </td>
+                                        <td>@item.depName</td>
+                                        <td>@item.datework</td>
+                                        <td>
+                                            @item.hours
+                                        </td>
+                                        <td>@item.OT</td>
+                                    </tr>
+                                }
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            // INITIALIZE DATEPICKER PLUGIN
+            $('.datepicker').datepicker({
+                clearBtn: true,
+                format: "yyyy/mm/dd"
+            });
+
+
+            // FOR DEMO PURPOSE
+            $('#reservationDate').on('change', function () {
+                var pickedDate = $('input').val();
+                $('#pickedDate').html(pickedDate);
+            });
+        })
+
+        $("#btDay").click(function () {
+            var pickedDate = $('input').val();
+            $.ajax({
+                type: "GET",
+                url: "/Chamcong/chamcong_theongay?date=" + pickedDate,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+            });
+        });
+
+        $("#btMonth").click(function () {
+            var pickedDate = $('input').val();
+            $.ajax({
+                type: "GET",
+                url: "/Chamcong/chamcong_theothang?date=" + pickedDate,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+            });
+        });
+    </script>
+}

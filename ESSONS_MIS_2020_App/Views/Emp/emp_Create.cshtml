@@ -74,8 +74,9 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Bộ phận</label>
                                         <select id="depchild" asp-for="depchildID" class="custom-select col-sm-4"
-                                            asp-items="@(new SelectList(""))">
+                                                asp-items="@(new SelectList(""))">
                                         </select>
+                                        <input type="hidden" asp-for="depchildName" id="depchildName" />
                                     </div>
                                 </td>
                                 <td>
@@ -458,6 +459,8 @@
             })
             depchild.change(function () {
                 var depchildvalue = $(this).val();
+                var depchildtext = $("#depchild option:selected").text();
+                $("#depchildName").val(depchildtext);
                 $.ajax({
                     type: "GET",
                     url: "/Emp/Position?depchildid=" + depchildvalue,
@@ -472,7 +475,7 @@
 
             })
             position.change(function () {
-                var positionvalue = $(this).val();
+                var positionvalue = $("#position option:selected").text();
                 $("#positionName").val(positionvalue);
             })
         })
