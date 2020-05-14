@@ -1,6 +1,4 @@
-﻿@model IEnumerable<ESSONS_MIS_2020_App.Models.ChamCongModel>
-
-@{
+﻿@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -16,25 +14,26 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <form role="form">
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Chọn ngày tháng</label>
-                                <div class="col-3">
-                                    <div class="datepicker date input-group p-0 shadow-sm">
-                                        <input type="text" class="form-control" id="reservationDate">
-                                        <div class="input-group-append"><span class="input-group-text"></span></div>
-                                    </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Chọn ngày tháng</label>
+                            <div class="col-3">
+                                <div class="datepicker date input-group p-0 shadow-sm">
+                                    <input type="text" class="form-control" id="reservationDate">
+                                    <div class="input-group-append"><span class="input-group-text"></span></div>
                                 </div>
                             </div>
-                            <div class="card-footer">
-                                <button class="btn btn-primary" id="btDay" href="#">
-                                    Theo ngày
-                                </button>
-                                <button class="btn btn-primary" id="btMonth" href="#">
-                                    Theo tháng
-                                </button>
-                            </div>
-                        </form>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary" id="btDay">
+                                Theo ngày
+                            </button>
+                            <button class="btn btn-primary" id="btMonth">
+                                Theo tháng
+                            </button>
+                            <button class="btn btn-primary" id="btSumMonth">
+                                Theo tổng tháng
+                            </button>
+                        </div>
                         <br />
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
@@ -48,7 +47,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model)
+                                @foreach (var item in ViewBag.chamcongList)
                                 {
                                     <tr>
                                         <td>@item.empID</td>
@@ -63,20 +62,38 @@
                                         <td>@item.OT</td>
                                     </tr>
                                 }
+                            </tbody>
                         </table>
                     </div>
-                    <!-- /.card-body -->
                 </div>
-                <!-- /.card -->
+                <!-- /.card-body -->
             </div>
-            <!-- /.col -->
+            <!-- /.card -->
         </div>
+        <!-- /.col -->
         <!-- /.row -->
     </section>
     <!-- /.content -->
 </div>
 @section scripts{
     <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btDay").click(function () {
+                var pickedDate = $('input').val();
+                window.location.href = "/chamcong/index?date=" + pickedDate + "&&type=Day";
+            });
+
+            $("#btMonth").click(function () {
+                var pickedDate = $('input').val();
+                window.location.href = "/chamcong/index?date=" + pickedDate + "&&type=All";
+            });
+
+            $("#btSumMonth").click(function () {
+                var pickedDate = $('input').val();
+                window.location.href = "/chamcong/index?date=" + pickedDate + "&&type=SumMonth";
+            });
+        })
+
         $(function () {
             // INITIALIZE DATEPICKER PLUGIN
             $('.datepicker').datepicker({
@@ -92,24 +109,5 @@
             });
         })
 
-        $("#btDay").click(function () {
-            var pickedDate = $('input').val();
-            $.ajax({
-                type: "GET",
-                url: "/Chamcong/chamcong_theongay?date=" + pickedDate,
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-            });
-        });
-
-        $("#btMonth").click(function () {
-            var pickedDate = $('input').val();
-            $.ajax({
-                type: "GET",
-                url: "/Chamcong/chamcong_theothang?date=" + pickedDate,
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-            });
-        });
     </script>
 }

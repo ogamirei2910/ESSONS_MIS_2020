@@ -1,0 +1,16 @@
+﻿
+    @foreach (var item in ViewBag.chamcongList)
+    {
+        <tr>
+            <td>@item.empID</td>
+            <td>
+                @item.empName
+            </td>
+            <td>@item.depName</td>
+            <td>@item.datework</td>
+            <td>
+                @item.hours
+            </td>
+            <td>@item.OT</td>
+        </tr>
+    }

@@ -179,6 +179,134 @@ namespace ESSONS_MIS_2020.Controllers
             }
         }
 
+        public List<DateOffExceptionModel> DateOffException()
+        {
+            List<DateOffExceptionModel> lem = new List<DateOffExceptionModel>();
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_dateoffexception", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Select"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        DateOffExceptionModel em = new DateOffExceptionModel();
+                        em.empid = sdr["empID"].ToString();
+                        em.datework = sdr["datework"].ToString();
+                        em.dateoffExName = sdr["dateoffExName"].ToString();
+                        em.comment = sdr["comment"].ToString();
+                        em.status = int.Parse(sdr["status"].ToString());
+
+                        lem.Add(em);
+                    }
+                }
+                return lem;
+            }
+        }
+
+        public DateOffExceptionModel DateOffExceptionID(string empid, string workdate)
+        {
+            DateOffExceptionModel em = new DateOffExceptionModel();
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_dateoffexception", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                       new SqlParameter("@empid", empid));
+                    sc.Parameters.Add(
+                       new SqlParameter("@workdate", workdate));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Get"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {                      
+                        em.empid = sdr["empID"].ToString();
+                        em.datework = sdr["datework"].ToString();
+                        em.dateoffExName = sdr["dateoffExName"].ToString();
+                        em.comment = sdr["comment"].ToString();
+                        em.status = int.Parse(sdr["status"].ToString());
+                    }
+                }
+                return em;
+            }
+        }
+
+        public List<TimeWorkModel> GetTimeWork(string empid, string workdate)
+        {
+            List<TimeWorkModel> lem = new List<TimeWorkModel>();
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_timework", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                       new SqlParameter("@empid", empid));
+                    sc.Parameters.Add(
+                       new SqlParameter("@datework", workdate));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        TimeWorkModel em = new TimeWorkModel();
+                        em.depID = sdr["depID"].ToString();
+                        em.shiftName = sdr["ShiftName"].ToString();
+                        em.timestart = sdr["timestart"].ToString();
+                        em.timeend = sdr["timeend"].ToString();
+                        lem.Add(em);
+                    }
+                }
+                return lem;
+            }
+        }
+
+        [HttpPost]
+        public IActionResult BuPhep([FromBody]DateOffModel model)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_BuPhep", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@empID", model.empID));
+                    sc.Parameters.Add(
+                        new SqlParameter("@dateoffStart", model.dateoffStart));
+                    sc.Parameters.Add(
+                        new SqlParameter("@dateoffEnd", model.dateoffEnd));
+                    sc.Parameters.Add(
+                       new SqlParameter("@dateoffStartTime", model.dateoffStartTime));
+                    sc.Parameters.Add(
+                        new SqlParameter("@dateoffEndTime", model.dateoffEndTime));
+                    sc.Parameters.Add(
+                        new SqlParameter("@dateoffNumber", model.dateoffNumber));
+                    sc.Parameters.Add(
+                        new SqlParameter("@dateoffType", model.dateoffType));
+                    sc.Parameters.Add(
+                        new SqlParameter("@username", model.username));
+
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.RecordsAffected > 0)
+                        return Ok();
+                    else return NotFound();
+
+                }
+            }
+        }
+
         [HttpPost]
         public IActionResult Create([FromBody]DateOffModel model)
         {

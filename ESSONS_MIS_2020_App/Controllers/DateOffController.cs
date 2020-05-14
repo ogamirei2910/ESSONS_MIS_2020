@@ -18,6 +18,9 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public void getRole()
         {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+                RedirectToAction("User", "Login");
+
             var role = HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList");
             ViewBag.message = role.First().empName.ToString();
             ViewBag.empid = role.First().empID.ToString();

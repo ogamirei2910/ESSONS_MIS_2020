@@ -18,6 +18,9 @@ namespace ESSONS_MIS_2020_App.Controllers
         EssonsApi _api = new EssonsApi();
         public void getRole()
         {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+                RedirectToAction("User", "Login");
+
             var role = HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList");
             ViewBag.message = role.First().empName.ToString();
             ViewBag.roleID = role.First().roleID.ToString();
@@ -237,7 +240,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 em = JsonConvert.DeserializeObject<List<DepartmentChildModel>>(results);
             }
             ViewBag.DepartmentCList = em;
-            return PartialView("DisplayDepartmentChild");
+            return PartialView("DisplayChamCong");
         }
 
 

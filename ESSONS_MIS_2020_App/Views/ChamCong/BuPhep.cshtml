@@ -1,0 +1,179 @@
+﻿@model ESSONS_MIS_2020_App.Models.DateOffModel
+
+@{
+    ViewData["Title"] = "BuPhep";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Xử lý phép</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form method="post" asp-action="BuPhep">
+                            <table class="table">
+                                <tr>
+                                    <td>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Số thẻ</label>
+                                            <div class="col-4">
+                                                <input asp-for="empID" type="text" class="form-control" readonly value="@ViewBag.buphep.empid">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row mySelect">
+                                            <label class="col-sm-3 col-form-label">Loại xin phép</label>
+                                            <label>&nbsp;&nbsp;</label>
+                                            <select asp-for="dateoffType" class="custom-select col-5 selectpicker" id="loainghiphep">
+                                                <option disabled>Chọn loại nghỉ</option>
+                                                <option value="4">Việc riêng</option>
+                                                <option value="5">Đi trễ</option>
+                                                <option value="6">Về sớm</option>
+                                                <option value="7">Quên bấm vân tay</option>
+                                                <option value="8">Không phép</option>
+                                                <option value="1">Phép năm</option>
+                                                <option value="2">Nghỉ ốm đau (BHXH)</option>
+                                                <option value="3">Nghỉ thai sản (BHXH)</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Ngày làm</label>
+                                            <div class="col-4">
+                                                <input type="text" class="form-control" readonly value="@ViewBag.buphep.datework">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Tên lỗi</label>
+                                            <div class="col-6">
+                                                <input type="text" class="form-control" readonly value="@ViewBag.buphep.dateoffExName">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Nội dung</label>
+                                            <div class="col-6">
+                                                <input type="text" class="form-control" readonly value="@ViewBag.buphep.comment">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Ngày nghỉ</label>
+                                            <div class="col-5">
+                                                <div class="datepicker date input-group p-0 shadow-sm">
+                                                    <input asp-for="dateoffStart" type="text" class="form-control" id="reservationDate">
+                                                    <div class="input-group-append"><span class="input-group-text"></span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Ngày kết thúc</label>
+                                            <div class="col-5">
+                                                <div class="datepicker date input-group p-0 shadow-sm">
+                                                    <input asp-for="dateoffEnd" type="text" class="form-control" id="reservationDate">
+                                                    <div class="input-group-append"><span class="input-group-text"></span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bootstrap-timepicker">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Từ giờ</label>
+                                                <div class="input-group date col-4" id="timepicker" data-target-input="nearest">
+                                                    <input asp-for="dateoffStartTime" type="text" class="form-control datetimepicker-input" data-target="#timepicker" />
+                                                    <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+                                                        <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bootstrap-timepicker">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Đến giờ</label>
+                                                <div class="input-group date col-4" id="timepicker2" data-target-input="nearest">
+                                                    <input asp-for="dateoffEndTime" type="text" class="form-control datetimepicker-input" data-target="#timepicker" />
+                                                    <div class="input-group-append" data-target="#timepicker2" data-toggle="datetimepicker">
+                                                        <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">
+                                    Xử lý
+                                </button>
+                            </div>
+                        </form>
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Bộ phận</th>
+                                    <th>Loại ca</th>
+                                    <th>Giờ làm</th>
+                                    <th>Giờ về</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ViewBag.timework)
+                                {
+                                    <tr>
+                                        <td>@item.depID</td>
+                                        <td>@item.shiftName</td>
+                                        <td>@item.timestart</td>
+                                        <td>@item.timeend</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <!-- /.card-body -->
+                    </div>                  
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+
+            // INITIALIZE DATEPICKER PLUGIN
+            $('.datepicker').datepicker({
+                clearBtn: true,
+                format: "dd/mm/yyyy"
+            });
+
+
+            // FOR DEMO PURPOSE
+            $('#reservationDate').on('change', function () {
+                var pickedDate = $('input').val();
+                $('#pickedDate').html(pickedDate);
+            });
+        })
+
+        //Timepicker
+        $('#timepicker').datetimepicker({
+            format: 'HH:mm'
+        })
+
+        $('#timepicker2').datetimepicker({
+            format: 'HH:mm'
+        })
+
+
+    </script>
+}
