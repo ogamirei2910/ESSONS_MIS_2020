@@ -98,7 +98,7 @@
                                             <div class="form-group row">
                                                 <label class="col-sm-3 col-form-label">Đến giờ</label>
                                                 <div class="input-group date col-4" id="timepicker2" data-target-input="nearest">
-                                                    <input asp-for="dateoffEndTime" type="text" class="form-control datetimepicker-input" data-target="#timepicker" />
+                                                    <input asp-for="dateoffEndTime" type="text" class="form-control datetimepicker-input" data-target="#timepicker2" />
                                                     <div class="input-group-append" data-target="#timepicker2" data-toggle="datetimepicker">
                                                         <div class="input-group-text"><i class="far fa-clock"></i></div>
                                                     </div>
@@ -157,8 +157,6 @@
                 format: "dd/mm/yyyy"
             });
 
-
-            // FOR DEMO PURPOSE
             $('#reservationDate').on('change', function () {
                 var pickedDate = $('input').val();
                 $('#pickedDate').html(pickedDate);

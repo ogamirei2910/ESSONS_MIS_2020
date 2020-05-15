@@ -44,13 +44,26 @@ namespace ESSONS_MIS_2020_App.Controllers
 
             double number = 0;
             if (um.dateoffStart == um.dateoffEnd)
-            {                  
-                string timestart = um.dateoffStartTime;
-                string timeend = um.dateoffEndTime;
-                TimeSpan timeS = new TimeSpan(int.Parse(timestart.Substring(0,2)), int.Parse(timestart.Substring(3, 2)), 0);
-                TimeSpan timeE = new TimeSpan(int.Parse(timeend.Substring(0, 2)), int.Parse(timeend.Substring(3, 2)), 0);
-                TimeSpan Total = timeE - timeS;
-                number = Total.TotalHours;
+            {
+                if (um.dateoffEndTime != null && um.dateoffStartTime != null)
+                {
+                    int yearS = int.Parse(um.dateoffStart.Substring(6, 2));
+                    int monthS = int.Parse(um.dateoffStart.Substring(3, 2));
+                    int dayS = int.Parse(um.dateoffStart.Substring(0, 2));
+                    int hourS = int.Parse(um.dateoffStartTime.Substring(0, 2));
+                    int minuteS = int.Parse(um.dateoffStartTime.Substring(3, 2));
+                    DateTime dtStart = new DateTime(yearS, monthS, dayS, hourS, minuteS, 0);
+
+                    int yearE = int.Parse(um.dateoffEnd.Substring(6, 2));
+                    int monthE = int.Parse(um.dateoffEnd.Substring(3, 2));
+                    int dayE = int.Parse(um.dateoffEnd.Substring(0, 2));
+                    int hourE = int.Parse(um.dateoffEndTime.Substring(0, 2));
+                    int minuteE = int.Parse(um.dateoffEndTime.Substring(3, 2));
+                    DateTime dtEnd = new DateTime(yearE, monthE, dayE, hourE, minuteE, 0);
+
+                    TimeSpan Total = dtEnd - dtStart;
+                    number = Math.Ceiling(Total.TotalHours / 2) * 2;
+                }
             }
             else
             {

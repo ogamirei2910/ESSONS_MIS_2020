@@ -32,11 +32,11 @@ namespace ESSONS_MIS_2020_App.Controllers
             HttpClient hc = _api.Initial();
             //var date = DateTime.Now.ToString("yyyy/MM/dd");
             HttpResponseMessage res = new HttpResponseMessage();
-            if (type=="All")
+            if (type == "All")
                 res = await hc.GetAsync($"api/chamcong/GetChamCong?date={date}");
-            if (type=="Day")
+            if (type == "Day")
                 res = await hc.GetAsync($"api/chamcong/GetChamCongTheoNgay?date={date}");
-            if (type=="SumMonth")
+            if (type == "SumMonth")
                 res = await hc.GetAsync($"api/chamcong/GetChamCongTheoThang?date={date}");
             if (res.IsSuccessStatusCode)
             {
@@ -85,7 +85,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             if (res.IsSuccessStatusCode)
             {
                 var results = res2.Content.ReadAsStringAsync().Result;
-                em = JsonConvert.DeserializeObject <List<TimeWorkModel>>(results);
+                em = JsonConvert.DeserializeObject<List<TimeWorkModel>>(results);
             }
 
             ViewBag.buphep = um;
@@ -100,17 +100,25 @@ namespace ESSONS_MIS_2020_App.Controllers
             HttpClient hc = _api.Initial();
 
             double number = 0;
-            if (um.dateoffStart == um.dateoffEnd)
+            if (um.dateoffEndTime != null && um.dateoffStartTime != null)
             {
-                string timestart = um.dateoffStartTime;
-                string timeend = um.dateoffEndTime;
-                if (timestart != null && timeend != null)
-                {
-                    TimeSpan timeS = new TimeSpan(int.Parse(timestart.Substring(0, 2)), int.Parse(timestart.Substring(3, 2)), 0);
-                    TimeSpan timeE = new TimeSpan(int.Parse(timeend.Substring(0, 2)), int.Parse(timeend.Substring(3, 2)), 0);
-                    TimeSpan Total = timeE - timeS;
-                    number = Total.TotalHours;
-                }      
+                int yearS = int.Parse(um.dateoffStart.Substring(6, 4));
+                int monthS = int.Parse(um.dateoffStart.Substring(3, 2));
+                int dayS = int.Parse(um.dateoffStart.Substring(0, 2));
+                int hourS = int.Parse(um.dateoffStartTime.Substring(0, 2));
+                int minuteS = int.Parse(um.dateoffStartTime.Substring(3, 2));
+                DateTime dtStart = new DateTime(yearS, monthS, dayS, hourS, minuteS, 0);
+
+                int yearE = int.Parse(um.dateoffEnd.Substring(6, 4));
+                int monthE = int.Parse(um.dateoffEnd.Substring(3, 2));
+                int dayE = int.Parse(um.dateoffEnd.Substring(0, 2));
+                int hourE = int.Parse(um.dateoffEndTime.Substring(0, 2));
+                int minuteE = int.Parse(um.dateoffEndTime.Substring(3, 2));
+                DateTime dtEnd = new DateTime(yearE, monthE, dayE, hourE, minuteE, 0);
+
+                TimeSpan Total = dtEnd - dtStart;
+                number = Math.Floor(Total.TotalMinutes / 30) / 2;
+
             }
             else
             {
