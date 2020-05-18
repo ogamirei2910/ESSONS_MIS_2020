@@ -24,6 +24,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             var role = HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList");
             ViewBag.message = role.First().empName.ToString();
             ViewBag.roleID = role.First().roleID.ToString();
+            ViewBag.empid = role.First().empID.ToString();
             var DistinctItems = role.Select(x => x.folderID).Distinct().ToList();
             ViewBag.folder = DistinctItems;
             ViewBag.folderList = role;
@@ -165,16 +166,18 @@ namespace ESSONS_MIS_2020_App.Controllers
             }
             ViewBag.departmentchildList = dtm;
 
-            List<PositionModel> ptm = new List<PositionModel>();
-            hc = _api.Initial();
-            res = await hc.GetAsync($"api/emp/GetPosition?depchildID={pm.depchildID}");
-            if (res.IsSuccessStatusCode)
+            if (pm.depchildID != null && pm.depchildID != "")
             {
-                var results = res.Content.ReadAsStringAsync().Result;
-                ptm = JsonConvert.DeserializeObject<List<PositionModel>>(results);
+                List<PositionModel> ptm = new List<PositionModel>();
+                hc = _api.Initial();
+                res = await hc.GetAsync($"api/emp/GetPosition?depchildID={pm.depchildID}");
+                if (res.IsSuccessStatusCode)
+                {
+                    var results = res.Content.ReadAsStringAsync().Result;
+                    ptm = JsonConvert.DeserializeObject<List<PositionModel>>(results);
+                }
+                ViewBag.positionList = ptm;
             }
-            ViewBag.positionList = ptm;
-
             getRole();
             return View(um);
         }
@@ -240,11 +243,11 @@ namespace ESSONS_MIS_2020_App.Controllers
                 em = JsonConvert.DeserializeObject<List<DepartmentChildModel>>(results);
             }
             ViewBag.DepartmentCList = em;
-            return PartialView("DisplayChamCong");
+            return PartialView("DisplayDEpartmentChild");
         }
 
 
-        public async Task<IActionResult> Position (string depchildID)
+        public async Task<IActionResult> Position(string depchildID)
         {
             List<PositionModel> em = new List<PositionModel>();
             HttpClient hc = _api.Initial();

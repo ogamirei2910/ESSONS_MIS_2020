@@ -134,25 +134,24 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View();
         }
 
-        public async Task<IActionResult> dateoff_Detail_Emp(string empID)
+        public async Task<IActionResult> dateoff_Detail_Emp()
         {
+            getRole();
             List<DateOffModel> um = new List<DateOffModel>();
             HttpClient hc = _api.Initial();
-            HttpResponseMessage res = await hc.GetAsync($"api/dateoff/GetEmpID/{empID}");
+            HttpResponseMessage res = await hc.GetAsync($"api/dateoff/GetEmpID/{ViewBag.empid}");
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
                 um = JsonConvert.DeserializeObject<List<DateOffModel>>(results);
             }
-            res = await hc.GetAsync($"api/dateoff/GetDateOffInfo/{empID}");
+            res = await hc.GetAsync($"api/dateoff/GetDateOffInfo/{ViewBag.empid}");
 
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
                 ViewBag.InfoList = JsonConvert.DeserializeObject<DateOffInfoModel>(results);
             }
-
-            getRole();
             return View(um);
         }
     }

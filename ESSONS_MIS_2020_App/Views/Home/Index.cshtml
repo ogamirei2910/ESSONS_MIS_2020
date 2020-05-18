@@ -22,3 +22,29 @@
     </section>
     <!-- /.content -->
 </div>
+
+@section scripts{
+    <script type="text/javascript">
+        var a = '@ViewBag.notice';
+        if (a != '') {
+            let dia = bs4pop.dialog({
+
+                title: 'Đăng nhập thành công',
+                content: 'Người dùng ' + '@ViewBag.notice' + ' đã đăng nhập hệ thống thành công.',
+
+                closeBtn: true,
+                backdrop: 'static',
+                btns: [
+                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                ],
+                onDragStart: function () {
+                    console.log('onDragStart');
+                },
+                onDrag: function () {
+                    console.log('onDrag');
+                }
+
+            });
+        }
+    </script>
+}

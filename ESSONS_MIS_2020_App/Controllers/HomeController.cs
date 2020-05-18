@@ -30,6 +30,8 @@ namespace ESSONS_MIS_2020_App.Controllers
             }
 
             //Role
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
             ViewBag.message = um.First().empName.ToString();
             ViewBag.roleID = um.First().roleID.ToString();
             ViewBag.empid = um.First().empID.ToString();

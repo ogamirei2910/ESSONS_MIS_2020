@@ -6,6 +6,7 @@
     <title>@ViewData["Title"]</title>
 
     <!-- Font Awesome -->
+    <link href="~/Assets/popup/bs4.pop.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/Assets/plugins/fontawesome-free/css/all.min.css">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="~/Assets/dist/css/adminlte.min.css">
@@ -172,7 +173,7 @@
                                 </a>
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
-                                        <a href="/DateOff/dateoff_Detail_Emp?empid=@ViewBag.empid" class="nav-link">
+                                        <a href="/DateOff/dateoff_Detail_Emp" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Theo dõi nghỉ phép</p>
                                         </a>
@@ -275,10 +276,17 @@
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
+
                                     <li class="nav-item">
                                         <a href="/ChamCong/Index?date=2020/02/03&&type=All" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Theo dõi chấm công</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/ChamCong/DateOffException" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Đi trễ, về sớm</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
@@ -293,12 +301,7 @@
                                             <p>Duyệt tăng ca</p>
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a href="/ChamCong/DateOffException" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Đi trễ, về sớm</p>
-                                        </a>
-                                    </li>
+
                                 </ul>
                             </li>
                             <li class="nav-item has-treeview">
@@ -832,7 +835,7 @@
                                                     @if (folderChild.folderChildID == 0)
                                                     {
                                                         <li class="nav-item">
-                                                            <a href="/DateOff/dateoff_Detail_Emp?empid=@ViewBag.empid" class="nav-link">
+                                                            <a href="/DateOff/dateoff_Detail_Emp" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Theo dõi nghỉ phép</p>
                                                             </a>
@@ -856,7 +859,7 @@
                                                         {
 
                                                             <li class="nav-item">
-                                                                <a href="/DateOff/dateoff_Detail_Emp?empid=@ViewBag.empid" class="nav-link">
+                                                                <a href="/DateOff/dateoff_Detail_Emp" class="nav-link">
                                                                     <i class="far fa-circle nav-icon"></i>
                                                                     <p>Theo dõi nghỉ phép</p>
                                                                 </a>
@@ -879,6 +882,44 @@
                                                                 </a>
                                                             </li>
                                                         }
+                                                    }
+
+                                                }
+
+
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                                @if (thumuc == 3)
+                                {
+                                    <li class="nav-item has-treeview">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon fas fa-th"></i>
+                                            <p>
+                                                Chấm công
+                                                <i class="right fas fa-angle-left"></i>
+                                            </p>
+                                        </a>
+                                        <ul class="nav nav-treeview">
+                                            @foreach (var folderChild in ViewBag.folderList)
+                                            {
+                                                @if (folderChild.folderID == thumuc)
+                                                {
+                                                    @if (folderChild.folderChildID == 0)
+                                                    {
+                                                        <li class="nav-item">
+                                                            <a href="/ChamCong/Index?date=2020/02/03&&type=All" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Theo dõi chấm công</p>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a href="/ChamCong/DateOffException" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Đi trễ, về sớm</p>
+                                                            </a>
+                                                        </li>
                                                     }
 
                                                 }
@@ -948,6 +989,7 @@
     <script src="~/Assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="~/Assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="~/Assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/Assets/popup/bs4.pop.js"></script>
     <script>
         $(function () {
             $("#example1").DataTable({

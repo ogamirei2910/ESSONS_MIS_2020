@@ -37,6 +37,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
+                HttpContext.Session.SetString("notice", um.username);
                 HttpContext.Session.SetString("username", um.username);
                 return RedirectToAction("Index", "Home");
             }

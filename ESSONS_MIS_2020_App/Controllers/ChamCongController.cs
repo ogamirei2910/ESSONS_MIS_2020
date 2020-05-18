@@ -22,6 +22,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             var role = HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList");
             ViewBag.message = role.First().empName.ToString();
             ViewBag.roleID = role.First().roleID.ToString();
+            ViewBag.empid = role.First().empID.ToString();
             var DistinctItems = role.Select(x => x.folderID).Distinct().ToList();
             ViewBag.folder = DistinctItems;
             ViewBag.folderList = role;

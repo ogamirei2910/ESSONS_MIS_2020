@@ -74,17 +74,21 @@
                                         <label class="col-sm-3 col-form-label">Bộ phận</label>
                                         <select id="depchild" asp-for="depchildID" class="custom-select col-sm-4"
                                                 asp-items="@(new SelectList(""))">
-                                            @foreach (var item in ViewBag.departmentchildList)
+                                            @if (ViewBag.departmentchildList != null)
                                             {
-                                                if (item.DepChildName == Model.depchildName)
+                                                @foreach (var item in ViewBag.departmentchildList)
                                                 {
-                                                    <option value="@item.DepChildID" selected>@item.DepChildName</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="@item.DepChildID">@item.DepChildName</option>
+                                                    if (item.DepChildName == Model.depchildName)
+                                                    {
+                                                        <option value="@item.DepChildID" selected>@item.DepChildName</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.DepChildID">@item.DepChildName</option>
+                                                    }
                                                 }
                                             }
+
                                         </select>
                                     </div>
                                     <input type="hidden" asp-for="depchildName" id="depchildName" value="@ViewBag.positiondepList.depchildName" />
@@ -93,17 +97,21 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Chức vụ</label>
                                         <select id="position" asp-for="positionID" class="custom-select col-sm-4">
-                                            @foreach (var item in ViewBag.positionList)
+                                            @if (ViewBag.positionList != null)
                                             {
-                                                if (item.positionName == Model.positionName)
+                                                @foreach (var item in ViewBag.positionList)
                                                 {
-                                                    <option value="@item.positionID" selected>@item.positionName</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="@item.positionID">@item.positionName</option>
+                                                    if (item.positionName == Model.positionName)
+                                                    {
+                                                        <option value="@item.positionID" selected>@item.positionName</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.positionID">@item.positionName</option>
+                                                    }
                                                 }
                                             }
+
                                         </select>
                                     </div>
                                     <input type="hidden" asp-for="positionName" id="positionName" value="@ViewBag.positiondepList.positionName" />
@@ -484,7 +492,6 @@
                         depchild.append(data);
                     }
                 })
-
             })
             depchild.change(function () {
                 var depchildvalue = $(this).val();
