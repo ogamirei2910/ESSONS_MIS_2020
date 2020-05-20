@@ -43,7 +43,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             HttpClient hc = _api.Initial();
 
             double number = 0;
-            if (um.dateoffStart == um.dateoffEnd)
+            if (um.dateoffStart == um.dateoffEnd && (um.dateoffType == "5" || um.dateoffType == "6"))
             {
                 if (um.dateoffEndTime != null && um.dateoffStartTime != null)
                 {

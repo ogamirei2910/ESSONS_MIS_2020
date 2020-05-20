@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -9,7 +10,11 @@ using ESSONS_MIS_2020_App.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
+using OfficeOpenXml;
+using QRCoder;
+
 
 namespace ESSONS_MIS_2020_App.Controllers
 {
@@ -42,7 +47,6 @@ namespace ESSONS_MIS_2020_App.Controllers
             //Role
             getRole();
             //-----------------------------------
-
             return View(um);
         }
 
@@ -81,6 +85,34 @@ namespace ESSONS_MIS_2020_App.Controllers
         public IActionResult emp_Create(EmpModel um)
         {
             HttpClient hc = _api.Initial();
+
+            //Create QRcode
+            QRCodeGenerator _qrCode = new QRCodeGenerator();
+            QRCodeData _qrCodeData = _qrCode.CreateQrCode(um.empID, QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(_qrCodeData);
+            Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.Black, Color.White, (Bitmap)Bitmap.FromFile("wwwroot\\images\\Logo.png"), 40);
+
+            var filePath2 = Path.Combine("wwwroot/images/NhanVien", um.empID + "_QR.png");
+            qrCodeImage.Save(filePath2, System.Drawing.Imaging.ImageFormat.Png);
+            //-----------------------------------------------------
+
+            //string folder = "wwwroot/images/NhanVien";
+            //string excelName = $"UserList-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+            //FileInfo file = new FileInfo(Path.Combine(folder, excelName));
+            //if (file.Exists)
+            //{
+            //    file.Delete();
+            //    file = new FileInfo(Path.Combine(folder, excelName));
+            //}
+
+            //// query data from database  
+            //using (var package = new ExcelPackage(file))
+            //{
+            //    var workSheet = package.Workbook.Worksheets.Add("Sheet1");
+                
+            //    package.Save();
+            //}
+
             var image = um.ProfileImage;
             if (image != null)
             {
@@ -100,7 +132,7 @@ namespace ESSONS_MIS_2020_App.Controllers
 
             um.username = HttpContext.Session.GetString("username");
             um.status = 1;
-            um.indat = DateTime.Now.ToString("dd/MM/yyyy");
+            um.indat = DateTime.Now.ToString("dd-mm-yyyy");
             um.intime = DateTime.Now.ToString("HH:mm:ss");
 
             var res = hc.PostAsJsonAsync<EmpModel>("api/emp/Create", um);
@@ -260,5 +292,6 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.PositionList = em;
             return PartialView("DisplayPosition");
         }
+
     }
 }

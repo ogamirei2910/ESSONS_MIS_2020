@@ -6,10 +6,22 @@
     <title>@ViewData["Title"]</title>
 
     <!-- Font Awesome -->
+    <link href="~/Assets/popup/bs4.pop.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/Assets/plugins/fontawesome-free/css/all.min.css">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="~/Assets/dist/css/adminlte.min.css">
-    <link href="~/Assets/plugins/pace-progress/themes/black/pace-theme-flat-top.css" rel="stylesheet">
+    <link href="~/Assets/plugins/datepicker/bootstrap-datepicker.css" rel="stylesheet" />
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="~/Assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Tempusdominus Bbootstrap 4 -->
+    <link rel="stylesheet" href="~/Assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="~/Assets/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="~/Assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <!-- Bootstrap4 Duallistbox -->
+    <link rel="stylesheet" href="~/Assets/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/Assets/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="~/Assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="~/Assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 </head>
@@ -23,7 +35,7 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a class="nav-link" href="CongNhan/Index">Trang chủ</a>
+                    <a class="nav-link" href="Index">Trang chủ</a>
                 </li>
             </ul>
 
@@ -33,7 +45,7 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="CongNhan/Index" class="brand-link">
+            <a href="Index" class="brand-link">
                 <center><span class="brand-text font-weight-light">ESSONS MIS</span></center>
             </a>
 
@@ -43,15 +55,22 @@
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="info">
                         <img class="img-circle elevation-2" alt="User Image" height="160" width="160" src="~/Assets/dist/img/cong-ty-tnhh-cong-nghiep-toan-cau-essons.png">
-                        <a>@ViewBag.EmpInfo.empName</a>
+                        <a>@ViewBag.EmpName</a>
                     </div>
                 </div>
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class
-                        with font-awesome or any other icon font library -->
+                        <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
+                        <li class="nav-item">
+                            <a href="/CongNhan/dateoff_Detail_Emp" class="nav-link">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>
+                                    Thông tin
+                                </p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="/CongNhan/dateoff_Request" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
@@ -61,7 +80,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/CongNhan/Index"" class="nav-link">
+                            <a href="/CongNhan/Index" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>
                                     Đăng xuất
@@ -94,15 +113,28 @@
     <script src="~/Assets/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="~/Assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/Assets/plugins/select2/js/select2.full.min.js"></script>
+    <!-- Bootstrap4 Duallistbox -->
+    <script src="~/Assets/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+    <!-- InputMask -->
+    <script src="~/Assets/plugins/moment/moment.min.js"></script>
+    <script src="~/Assets/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
+
+    <script src="~/Assets/plugins/datepicker/bootstrap-datepicker.min.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="~/Assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Bootstrap Switch -->
+    <script src="~/Assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
     <!-- AdminLTE App -->
     <script src="~/Assets/dist/js/adminlte.min.js"></script>
-    <script src="~/Assets/plugins/pace-progress/pace.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="~/Assets/dist/js/demo.js"></script>
     <script src="~/Assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="~/Assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="~/Assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="~/Assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/Assets/popup/bs4.pop.js"></script>
     <script>
         $(function () {
             $("#example1").DataTable({

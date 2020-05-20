@@ -12,7 +12,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Chi tiết công nhân</h3>
+                        <h3 class="card-title">Thông tin nghỉ phép chi tiết</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -21,12 +21,12 @@
                                 <td style="width: 480px">
                                     <div class="form-group row">
                                         <b class="col-sm-3 col-form-label">Số thẻ</b>
-                                        <a class="col-sm-3 col-form-label">@ViewBag.empinfo.empID</a>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.EmpID</a>
                                     </div>
 
                                     <div class="form-group row">
                                         <b class="col-sm-3 col-form-label">Họ tên</b>
-                                        <a class="col-sm-5 col-form-label">@ViewBag.empinfo.empName</a>
+                                        <a class="col-sm-5 col-form-label">@ViewBag.EmpName</a>
                                     </div>
 
                                     <div class="form-group row">
@@ -42,17 +42,17 @@
 
                                     <div class="form-group row">
                                         <b class="col-sm-3 col-form-label">Phép VR</b>
-                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.pheprieng giờ</a>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.pheprieng ngày</a>
                                     </div>
 
                                     <div class="form-group row">
                                         <b class="col-sm-3 col-form-label">Không phép</b>
-                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.khongphep giờ</a>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.khongphep ngày</a>
                                     </div>
 
                                     <div class="form-group row">
                                         <b class="col-sm-3 col-form-label">Nghỉ BHXH</b>
-                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.BHXH giờ</a>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.BHXH ngày</a>
                                     </div>
                                 </td>
                             </tr>
@@ -88,8 +88,7 @@
                                             @Html.ActionLink("Hủy", "dateoff_Delete", "CongNhan", new { dateoffID = item.dateoffID },
                                                                                                 new
                                                                                                 {
-                                                                                                    @class = "btn btn-danger btn-sm",
-                                                                                                    onclick = "return confirm('Bạn có muốn hủy yêu cầu này ?')"
+                                                                                                    @class = "btn btn-danger btn-sm"
                                                                                                 })
                                         </td>
                                     </tr>
@@ -106,3 +105,25 @@
     </section>
 </div>
 
+@section scripts{
+    <script type="text/javascript">
+        function idleTimer() {
+            var t;
+            window.onmousemove = resetTimer; // catches mouse movements
+            window.onmousedown = resetTimer; // catches mouse movements
+            window.onclick = resetTimer;     // catches mouse clicks
+            window.onscroll = resetTimer;    // catches scrolling
+            window.onkeypress = resetTimer;  //catches keyboard actions
+
+            function logout() {
+                window.location.href = '/CongNhan/Index';  //Adapt to actual logout script
+            }
+
+            function resetTimer() {
+                clearTimeout(t);
+                t = setTimeout(logout, 20000);  // time is in milliseconds (1000 is 1 second)
+            }
+        }
+        idleTimer();
+    </script>
+}

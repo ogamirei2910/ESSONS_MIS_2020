@@ -41,6 +41,8 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public IActionResult dateoff_Request()
         {
+            ViewBag.EmpName = HttpContext.Session.GetString("EmpName");
+            ViewBag.EmpID = HttpContext.Session.GetString("empid");
             return View();
         }
 
@@ -48,9 +50,9 @@ namespace ESSONS_MIS_2020_App.Controllers
         public IActionResult dateoff_Request(DateOffModel um)
         {
             HttpClient hc = _api.Initial();
-
+           
             double number = 0;
-            if (um.dateoffStart == um.dateoffEnd)
+            if (um.dateoffStart == um.dateoffEnd && (um.dateoffType == "5" || um.dateoffType == "6"))
             {
                 if (um.dateoffStartTime is null || um.dateoffStartTime is null)
                 {
@@ -58,12 +60,22 @@ namespace ESSONS_MIS_2020_App.Controllers
                     return View();
                 }
 
-                string timestart = um.dateoffStartTime;
-                string timeend = um.dateoffEndTime;
-                TimeSpan timeS = new TimeSpan(int.Parse(timestart.Substring(0, 2)), int.Parse(timestart.Substring(3, 2)), 0);
-                TimeSpan timeE = new TimeSpan(int.Parse(timeend.Substring(0, 2)), int.Parse(timeend.Substring(3, 2)), 0);
-                TimeSpan Total = timeE - timeS;
-                number = Total.TotalHours;
+                int yearS = int.Parse(um.dateoffStart.Substring(6, 2));
+                int monthS = int.Parse(um.dateoffStart.Substring(3, 2));
+                int dayS = int.Parse(um.dateoffStart.Substring(0, 2));
+                int hourS = int.Parse(um.dateoffStartTime.Substring(0, 2));
+                int minuteS = int.Parse(um.dateoffStartTime.Substring(3, 2));
+                DateTime dtStart = new DateTime(yearS, monthS, dayS, hourS, minuteS, 0);
+
+                int yearE = int.Parse(um.dateoffEnd.Substring(6, 2));
+                int monthE = int.Parse(um.dateoffEnd.Substring(3, 2));
+                int dayE = int.Parse(um.dateoffEnd.Substring(0, 2));
+                int hourE = int.Parse(um.dateoffEndTime.Substring(0, 2));
+                int minuteE = int.Parse(um.dateoffEndTime.Substring(3, 2));
+                DateTime dtEnd = new DateTime(yearE, monthE, dayE, hourE, minuteE, 0);
+
+                TimeSpan Total = dtEnd - dtStart;
+                number = Math.Ceiling(Total.TotalHours / 2) * 2;
             }
             else
             {
@@ -125,9 +137,13 @@ namespace ESSONS_MIS_2020_App.Controllers
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
-                ViewBag.EmpInfo = JsonConvert.DeserializeObject<EmpModel>(results);
+                em = JsonConvert.DeserializeObject<EmpModel>(results);
+                ViewBag.EmpInfo = em;
             }
-
+            
+            HttpContext.Session.SetString("EmpName", em.empName);
+            ViewBag.EmpID = em.empID;
+            ViewBag.EmpName = em.empName;
             return View(um);
         }
     }
