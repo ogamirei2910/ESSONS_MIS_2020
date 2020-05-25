@@ -7,8 +7,6 @@ namespace ESSONS_MIS_2020.Models
 {
     public class UserRoleModel
     {
-        public string username { get; set; }
-
         public int roleID { get; set; }
         public int folderID { get; set; }
         public int folderChildID { get; set; }

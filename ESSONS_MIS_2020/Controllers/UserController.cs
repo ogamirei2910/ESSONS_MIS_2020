@@ -60,7 +60,6 @@ namespace ESSONS_MIS_2020.Controllers
                     while (sdr.Read())
                     {
                         UserRoleModel urm = new UserRoleModel();
-                        urm.username = sdr["username"].ToString();
                         urm.empName = sdr["empName"].ToString();
                         urm.empID = sdr["empID"].ToString();
                         urm.roleID = int.Parse(sdr["roleID"].ToString());
@@ -156,7 +155,7 @@ namespace ESSONS_MIS_2020.Controllers
                     sql.Open();
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
                     sc.Parameters.Add(
-                        new SqlParameter("@username", value.username));
+                        new SqlParameter("@empID", value.empID));
                     sc.Parameters.Add(
                         new SqlParameter("@roleID", value.roleID));
                     sc.Parameters.Add(

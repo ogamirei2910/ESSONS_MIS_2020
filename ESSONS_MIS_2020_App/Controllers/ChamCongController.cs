@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using ESSONS_MIS_2020_App.Helper;
 using ESSONS_MIS_2020_App.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -47,12 +48,17 @@ namespace ESSONS_MIS_2020_App.Controllers
             //Role
             getRole();
             //-----------------------------------
+
+            ViewBag.type = type;
             ViewBag.chamcongList = um;
             return View();
         }
 
         public async Task<IActionResult> DateOffException()
         {
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
+
             List<DateOffExceptionModel> um = new List<DateOffExceptionModel>();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.GetAsync($"api/dateoff/DateOffException");
@@ -142,6 +148,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
+                HttpContext.Session.SetString("notice", "Bù phép thành công");
                 return RedirectToAction("DateOffException", "ChamCong");
             }
 

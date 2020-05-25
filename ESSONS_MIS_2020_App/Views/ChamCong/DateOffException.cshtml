@@ -4,50 +4,76 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <div class="content-wrapper">
-        <!-- Main content -->
-        <section class="content">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Theo dõi đi trễ, về sớm</h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <table id="example1" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Mã nhân viên</th>
-                                        <th>Ngày làm</th>
-                                        <th>Loại lỗi</th>
-                                        <th>Nội dung</th>
-                                        <th>Chức năng</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in ViewBag.dateoffList)
-                                    {
-                                        <tr>
-                                            <td>@item.empid</td>
-                                            <td>
-                                                @item.datework
-                                            </td>
-                                            <td>@item.dateoffExName</td>
-                                            <td>@item.comment</td>
-                                            <td> @Html.ActionLink("Xử lý", "BuPhep", "ChamCong", new { empID = item.empid, workdate = item.datework }, new { @class = "btn btn-primary btn-sm" })</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Theo dõi đi trễ, về sớm</h3>
                     </div>
-                    <!-- /.card-body -->
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Mã nhân viên</th>
+                                    <th>Ngày làm</th>
+                                    <th>Loại lỗi</th>
+                                    <th>Nội dung</th>
+                                    <th>Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ViewBag.dateoffList)
+                                {
+                                    <tr>
+                                        <td>@item.empid</td>
+                                        <td>
+                                            @item.datework
+                                        </td>
+                                        <td>@item.dateoffExName</td>
+                                        <td>@item.comment</td>
+                                        <td> @Html.ActionLink("Xử lý", "BuPhep", "ChamCong", new { empID = item.empid, workdate = item.datework }, new { @class = "btn btn-primary btn-sm" })</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <!-- /.card -->
+                <!-- /.card-body -->
             </div>
-            <!-- /.col -->
-            <!-- /.row -->
-        </section>
-        <!-- /.content -->
-    </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        var a = '@ViewBag.notice';
+        if (a != '') {
+            let dia = bs4pop.dialog({
+
+                title: 'Thông báo',
+                content: '@ViewBag.notice',
+
+                closeBtn: true,
+                backdrop: 'static',
+                btns: [
+                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                ],
+                onDragStart: function () {
+                    console.log('onDragStart');
+                },
+                onDrag: function () {
+                    console.log('onDrag');
+                }
+
+            });
+        }
+    </script>
+}

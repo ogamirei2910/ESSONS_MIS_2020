@@ -230,7 +230,10 @@ namespace ESSONS_MIS_2020.Controllers
                     while (sdr.Read())
                     {                      
                         em.empid = sdr["empID"].ToString();
-                        em.datework = sdr["datework"].ToString();
+                        var date = sdr["datework"].ToString();
+                        var parsedDate = DateTime.ParseExact(date, "yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture);
+                        var formattedDate = parsedDate.ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                        em.datework = formattedDate;
                         em.dateoffExName = sdr["dateoffExName"].ToString();
                         em.comment = sdr["comment"].ToString();
                         em.status = int.Parse(sdr["status"].ToString());

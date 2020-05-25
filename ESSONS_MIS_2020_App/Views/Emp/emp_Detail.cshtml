@@ -73,13 +73,13 @@
                                 </div>
                                 <div class="form-group row">
                                     <b class="col-sm-3">Bộ phận</b>
-                                    <a class="col-sm-5">@Html.DisplayFor(model => model.depchildID)</a>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.depchildName)</a>
                                 </div>
                             </td>
                             <td>
                                 <div class="form-group row">
                                     <b class="col-sm-3">Chức vụ</b>
-                                    <a class="col-sm-5">@Html.DisplayFor(model => model.positionID)</a>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.positionName)</a>
                                 </div>
                             </td>
                         </tr>
@@ -267,7 +267,7 @@
         if (a != '') {
             let dia = bs4pop.dialog({
 
-                title: '',
+                title: 'Thông báo',
                 content: '@ViewBag.notice',
 
                 closeBtn: true,

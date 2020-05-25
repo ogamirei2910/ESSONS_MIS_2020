@@ -76,9 +76,8 @@ namespace ESSONS_MIS_2020.Controllers
                         em.empLanguage = sdr["empLanguage"].ToString();
                         em.empNation = sdr["empNation"].ToString();
                         em.empProvince = int.Parse(sdr["empProvince"].ToString());
-                        em.empReligion = sdr["empHouseHoldOwn"].ToString();
+                        em.empReligion = sdr["empReligion"].ToString();
                         //em.empYearOff = int.Parse(sdr["empYearOff"].ToString());
-                        em.empReligion = sdr["empHouseHoldOwn"].ToString();
                     }
                 }
                 return em;

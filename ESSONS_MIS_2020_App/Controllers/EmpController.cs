@@ -148,8 +148,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
-                HttpContext.Session.SetString("Đã thêm nhân viên mới", "");
-                ViewBag.Message = "Đã thêm nhân viên mới";
+                HttpContext.Session.SetString("notice", "Đã thêm nhân viên mới");
                 return RedirectToAction("emp_Detail", "Emp", new { empID = um.empID });
             }
 

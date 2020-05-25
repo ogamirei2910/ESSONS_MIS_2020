@@ -58,6 +58,12 @@ namespace ESSONS_MIS_2020_App.Controllers
                 }
             }
 
+            if (um.username != "nam" || um.password != "P@ssw0rd123")
+            {
+                ViewBag.Message = "Kiểm tra lại tài khoản hoặc mật khẩu";
+                return View();
+            }    
+
             HttpClient hc = _api.Initial();
             var res = hc.PostAsJsonAsync<UserModel>("api/user/login", um);
             res.Wait();
@@ -77,7 +83,7 @@ namespace ESSONS_MIS_2020_App.Controllers
         [HttpPost]
         public IActionResult SetFolder(UserRoleModel urm )
         {
-            if(urm.username == "" || urm.username is null)
+            if(urm.empID == "" || urm.empID is null)
             {
                 ViewBag.Error = "Vui lòng nhập username";
                 return View();
