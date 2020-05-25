@@ -31,7 +31,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             if (results.IsSuccessStatusCode)
             {
                 HttpContext.Session.SetString("empid", em.empID);
-                return RedirectToAction("dateoff_Detail_Emp", "CongNhan",new { empid = em.empID});
+                return RedirectToAction("dateoff_Detail_Emp", "CongNhan");
             }
 
             ViewBag.empID = "";
@@ -113,9 +113,9 @@ namespace ESSONS_MIS_2020_App.Controllers
             return RedirectToAction("dateoff_Detail_Emp", new { empID = HttpContext.Session.GetString("empid") });
         }
 
-        public async Task<IActionResult> dateoff_Detail_Emp(string empID)
+        public async Task<IActionResult> dateoff_Detail_Emp()
         {
-
+            string empID = HttpContext.Session.GetString("empid");
             List<DateOffModel> um = new List<DateOffModel>();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.GetAsync($"api/dateoff/GetEmpID/{empID}");

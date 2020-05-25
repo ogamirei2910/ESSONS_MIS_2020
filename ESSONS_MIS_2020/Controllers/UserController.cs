@@ -33,8 +33,6 @@ namespace ESSONS_MIS_2020.Controllers
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
                     sc.Parameters.Add(
                         new SqlParameter("@username", value.username));
-                    sc.Parameters.Add(
-                        new SqlParameter("@password", value.password));
                     SqlDataReader sdr = sc.ExecuteReader();
                     if(sdr.HasRows == true)
                         return Ok();

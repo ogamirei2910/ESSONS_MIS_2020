@@ -5,259 +5,284 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <div class="content-wrapper">
-        <!-- Main content -->
-        <section class="content">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Chi tiết nhân viên</h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <table class="table">
-                            <tr>
-                                <td>
-                                    <div class="form-group row">
-                                        <img src="~/images/NhanVien/@Model.empImage"
-                                             class="img-rounded col-5"
-                                             height="200" width="150"
-                                             asp-append-version="true" />
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Số thẻ:</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empID)</a>
-                                    </div>
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Chi tiết nhân viên</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <table class="table">
+                        <tr>
+                            <td class="col-7">
+                                <div class="form-group row">
+                                    <img src="~/images/NhanVien/@Model.empImage"
+                                         class="img-rounded col-5"
+                                         height="200" width="150"
+                                         asp-append-version="true" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Số thẻ:</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empID)</a>
+                                </div>
 
-                                    @if (Model.empIDTemp != null && Model.empIDTemp != "")
+                                @if (Model.empIDTemp != null && Model.empIDTemp != "")
+                                {
+                                    <div class="form-group row">
+                                        <b class="col-sm-3">Số thẻ TV:</b>
+                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empIDTemp)</a>
+                                    </div>
+                                }
+
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Họ tên:</b>
+                                    <a class="col-sm-6">@Html.DisplayFor(model => model.empName)</a>
+                                </div>
+
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Điện thoại:</b>
+                                    <a class="col-sm-6">@Html.DisplayFor(model => model.empTel)</a>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Giới tính</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empSex)</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Ngày sinh</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empBirthDay)</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Nhóm B.phận</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.depID)</a>
+                                </div>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Bộ phận</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.depchildID)</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Chức vụ</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.positionID)</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Dân tộc</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empNation)</a>
+                                </div>
+
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Tôn giáo</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empReligion)</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Nơi sinh</b>
+                                    <a class="col-sm-6">@Html.DisplayFor(model => model.empBorn)</a>
+                                </div>
+
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Nguyên quán</b>
+                                    <a class="col-sm-6">@Html.DisplayFor(model => model.empDomicile)</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Thường trú</b>
+                                    <a class="col-sm-6">@Html.DisplayFor(model => model.empAddress)</a>
+                                </div>
+
+                                <div class="form-group row">
+                                    <b class="col-sm-3 col-form-label">Tạm trú</b>
+                                    <a class="col-sm-6">@Html.DisplayFor(model => model.empAddressTemp)</a>
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">CMND/Căn cước</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empIdentityCard)</a>
+                                </div>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Nơi cấp</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empIdentityPlace)</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Ngày cấp</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empIdentityDate)</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Văn hóa</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empCultural)</a>
+                                </div>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Trình độ</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empEdu)</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-5">Trình độ tin học</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empComputer)</a>
+                                </div>
+
+                                <div class="form-group row">
+                                    <b class="col-sm-5">Trình độ ngoại ngữ</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empLanguage)</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Hôn nhân</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empMarriage)</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Số con</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empChild)</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Chủ hộ khẩu</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empHouseHoldOwn)</a>
+                                </div>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Số hộ khẩu</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empHouseHold)</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-5">Giấy khai sinh</b>
+                                    @if (Model.empDomicile == "1")
                                     {
-                                        <div class="form-group row">
-                                            <b class="col-sm-3">Số thẻ TV:</b>
-                                            <a class="col-sm-5">@Html.DisplayFor(model => model.empIDTemp)</a>
-                                        </div>
+                                        <a class="col-sm-5">Có</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="col-sm-5">Không</a>
                                     }
 
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Họ tên:</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empName)</a>
-                                    </div>
 
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Điện thoại:</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empTel)</a>
-                                    </div>
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Giới tính</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empSex)</a>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Ngày sinh</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empBirthDay)</a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Nhóm B.phận</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.depID)</a>
-                                    </div>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Bộ phận</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.depchildID)</a>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Chức vụ</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.positionID)</a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Dân tộc</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empNation)</a>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Tôn giáo</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empReligion)</a>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Nơi sinh</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empBorn)</a>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Nguyên quán</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empDomicile)</a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Thường trú</b>
-                                        <a class="col-sm-8">@Html.DisplayFor(model => model.empAddress)</a>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <b class="col-sm-3 col-form-label">Tạm trú</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empAddressTemp)</a>
-                                    </div>
-                                </td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">CMND/Căn cước</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empIdentityCard)</a>
-                                    </div>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Nơi cấp</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empIdentityPlace)</a>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Ngày cấp</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empIdentityDate)</a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Văn hóa</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empCultural)</a>
-                                    </div>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Trình độ</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empEdu)</a>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-5">Trình độ tin học</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empComputer)</a>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <b class="col-sm-5">Trình độ ngoại ngữ</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empLanguage)</a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Hôn nhân</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empMarriage)</a>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Số con</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empChild)</a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Chủ hộ khẩu</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empHouseHoldOwn)</a>
-                                    </div>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Số hộ khẩu</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empHouseHold)</a>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-5">Giấy khai sinh</b>
-                                        @if (Model.empDomicile == "1")
-                                        {
-                                            <a class="col-sm-5">Có</a>
-                                        }
-                                        else
-                                        {
-                                            <a class="col-sm-5">Không</a>
-                                        }
+                                </div>
+                                <div class="form-group row">
+                                    <b class="col-sm-5">HK ngoại tỉnh</b>
+                                    @if (Model.empProvince == 1)
+                                    {
+                                        <a class="col-sm-5">Có</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="col-sm-5">Không</a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Ngày làm</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empInDate)</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-5">Ngày chính thức</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empStandardDate)</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-3">Số TK</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empBankNo)</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group row">
+                                    <b class="col-sm-5">Tên ngân hàng</b>
+                                    <a class="col-sm-5">@Html.DisplayFor(model => model.empBankName)</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
 
 
-                                    </div>
-                                    <div class="form-group row">
-                                        <b class="col-sm-5">HK ngoại tỉnh</b>
-                                        @if (Model.empProvince == 1)
-                                        {
-                                            <a class="col-sm-5">Có</a>
-                                        }
-                                        else
-                                        {
-                                            <a class="col-sm-5">Không</a>
-                                        }
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-3">Ngày làm</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empInDate)</a>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group row">
-                                        <b class="col-sm-5">Ngày chính thức</b>
-                                        <a class="col-sm-5">@Html.DisplayFor(model => model.empStandardDate)</a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group row">
-                                            <b class="col-sm-3">Số TK</b>
-                                            <a class="col-sm-5">@Html.DisplayFor(model => model.empBankNo)</a>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group row">
-                                            <b class="col-sm-5">Tên ngân hàng</b>
-                                            <a class="col-sm-5">@Html.DisplayFor(model => model.empBankName)</a>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-
-     
-                        <form role="form">
-                            <div class="card-footer">
-                                <a href="/Emp/Index" class="btn btn-secondary">Quay Lại</a>
-                                @Html.ActionLink("Sửa", "emp_Update", "Emp", new { empID = Model.empID }, new { @class = "btn btn-info float-right" })
-                            </div>
-                        </form>
-                    </div>
-                    <!-- /.card -->
+                    <form role="form">
+                        <div class="card-footer">
+                            <a href="/Emp/Index" class="btn btn-secondary">Quay Lại</a>
+                            @Html.ActionLink("Sửa", "emp_Update", "Emp", new { empID = Model.empID }, new { @class = "btn btn-info float-right" })
+                        </div>
+                    </form>
                 </div>
-                <!-- /.col -->
+                <!-- /.card -->
             </div>
-            <!-- /.row -->
-        </section>
-        <!-- /.content -->
-    </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
 
+@section scripts{
+    <script type="text/javascript">
+        var a = '@ViewBag.notice';
+        if (a != '') {
+            let dia = bs4pop.dialog({
+
+                title: '',
+                content: '@ViewBag.notice',
+
+                closeBtn: true,
+                backdrop: 'static',
+                btns: [
+                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                ],
+                onDragStart: function () {
+                    console.log('onDragStart');
+                },
+                onDrag: function () {
+                    console.log('onDrag');
+                }
+
+            });
+        }
+    </script>
+}

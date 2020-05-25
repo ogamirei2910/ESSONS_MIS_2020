@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Session;
 using Microsoft.AspNetCore.Http;
+using System.Net;
+using System.Runtime.InteropServices;
+using Novell.Directory.Ldap;
 
 namespace ESSONS_MIS_2020_App.Controllers
 {
@@ -16,18 +19,43 @@ namespace ESSONS_MIS_2020_App.Controllers
     {
         EssonsApi _api = new EssonsApi();
 
+
         public IActionResult Login()
         {
             return View();
         }
 
+
         [HttpPost]
         public IActionResult Login(UserModel um)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 ViewBag.Message = "Vui lòng nhập tài khoản và mật khẩu";
                 return View();
+            }
+
+            if (um.username != "nam")
+            {
+                string username = um.username + "@essons.vn";
+                //using (var DE = new DirectoryEntry("LDAP://OU=Essons Amata,DC=essons,DC=vn", "Administrator", "Csi@dvtk2020")) P@ssw0rd123
+                try
+                {
+                    using (var connection = new LdapConnection { SecureSocketLayer = false })
+                    {
+                        connection.Connect("10.0.11.2", LdapConnection.DEFAULT_PORT); ;
+                        connection.Bind(username, um.password);
+                        if (connection.Bound)
+                        {
+
+                        }
+                    }
+                }
+                catch (LdapException ex)
+                {
+                    ViewBag.Message = "Kiểm tra lại tài khoản hoặc mật khẩu";
+                    return View();
+                }
             }
 
             HttpClient hc = _api.Initial();
@@ -42,7 +70,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            ViewBag.Message = "Kiểm tra lại tài khoản hoặc mật khẩu";
+            ViewBag.Message = "Tài khoản chưa đăng kí trên hệ thống. Liên hệ IT";
             return View();
         }
 

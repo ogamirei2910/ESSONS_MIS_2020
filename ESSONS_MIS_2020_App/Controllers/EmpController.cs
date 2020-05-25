@@ -36,6 +36,9 @@ namespace ESSONS_MIS_2020_App.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
+
             List<EmpModel> um = new List<EmpModel>();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.GetAsync("api/emp/Get");
@@ -53,6 +56,9 @@ namespace ESSONS_MIS_2020_App.Controllers
         [HttpGet]
         public async Task<IActionResult> emp_Detail(string empID)
         {
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
+
             EmpModel um = new EmpModel();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.GetAsync($"api/emp/GetEmpID/{empID}");
@@ -92,7 +98,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             QRCode qrCode = new QRCode(_qrCodeData);
             Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.Black, Color.White, (Bitmap)Bitmap.FromFile("wwwroot\\images\\Logo.png"), 40);
 
-            var filePath2 = Path.Combine("wwwroot/images/NhanVien", um.empID + "_QR.png");
+            var filePath2 = Path.Combine("wwwroot/images/NhanVien", int.Parse(um.empID).ToString("D5") + "_QR.png");
             qrCodeImage.Save(filePath2, System.Drawing.Imaging.ImageFormat.Png);
             //-----------------------------------------------------
 
@@ -142,6 +148,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
+                HttpContext.Session.SetString("Đã thêm nhân viên mới", "");
                 ViewBag.Message = "Đã thêm nhân viên mới";
                 return RedirectToAction("emp_Detail", "Emp", new { empID = um.empID });
             }
@@ -245,7 +252,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
-                ViewBag.Message = "Đã cập nhật nhân viên";
+                HttpContext.Session.SetString("notice", "Đã cập nhật nhân viên " + um.empID );
                 return RedirectToAction("emp_Detail", "Emp", new { empID = um.empID });
             }
 
@@ -260,7 +267,14 @@ namespace ESSONS_MIS_2020_App.Controllers
             HttpClient hc = _api.Initial();
             var res = hc.PostAsJsonAsync<EmpModel>($"api/emp/Block", em);
             res.Wait();
+            var results = res.Result;
+            if (results.IsSuccessStatusCode)
+            {
+                HttpContext.Session.SetString("notice", "Đã khóa nhân viên " + empID);
+                return RedirectToAction("Index");
+            }
 
+            HttpContext.Session.SetString("notice", "Lỗi chưa khóa nhân viên " + empID);
             return RedirectToAction("Index");
         }
 

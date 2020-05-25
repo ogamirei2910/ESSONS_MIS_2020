@@ -75,28 +75,26 @@
 
 @section scripts{
     <script type="text/javascript">
-        $('#blockBT').on('click', function (e) {
-            e.preventDefault();
-            bs4pop.confirm('Bạn có muốn khóa nhân viên này ?', function (sure) { }, {
-                title = 'Xác nhận',
-                hideRemove = true,
+       var a = '@ViewBag.notice';
+        if (a != '') {
+            let dia = bs4pop.dialog({
+
+                title: '',
+                content: '@ViewBag.notice',
+
+                closeBtn: true,
+                backdrop: 'static',
                 btns: [
-                    {
-                        label: 'Đồng ý',
-                        onClick(cb) {
-                            return location.href = e.target;
-                        }
-                    },
-                    {
-                        label: 'Hủy',
-                        className: 'btn-secondary',
-                        onClick(cb) {
-                            return e.preventDefault();
-                        }
-                    }
-                    
-                ]
-            })
-        })
+                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                ],
+                onDragStart: function () {
+                    console.log('onDragStart');
+                },
+                onDrag: function () {
+                    console.log('onDrag');
+                }
+
+            });
+        }
     </script>
 }
