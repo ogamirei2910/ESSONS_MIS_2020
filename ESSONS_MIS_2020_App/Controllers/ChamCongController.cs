@@ -78,6 +78,7 @@ namespace ESSONS_MIS_2020_App.Controllers
         public async Task<IActionResult> BuPhep(string empid, string workdate)
         {
             getRole();
+            ViewBag.Error = "";
             DateOffExceptionModel um = new DateOffExceptionModel();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.GetAsync($"api/dateoff/DateOffExceptionID?empid={empid}&&workdate={workdate}");
@@ -101,10 +102,22 @@ namespace ESSONS_MIS_2020_App.Controllers
         }
 
         [HttpPost]
-        public IActionResult BuPhep(DateOffModel um)
+        public async Task<IActionResult> BuPhep(DateOffModel um)
         {
             getRole();
             HttpClient hc = _api.Initial();
+
+            if (um.dateoffStart== null)
+            {
+                ViewBag.Error = "Chưa chọn ngày bắt đầu xin phép";
+                return PartialView("DisplayError");
+            }
+
+            if (um.dateoffEnd == null)
+            {
+                ViewBag.Error = "Chưa chọn ngày kết thúc xin phép";
+                return PartialView("DisplayError");
+            }
 
             double number = 0;
             if (um.dateoffEndTime != null && um.dateoffStartTime != null)
@@ -134,26 +147,52 @@ namespace ESSONS_MIS_2020_App.Controllers
                 string dateend = um.dateoffEnd;
                 if (datestart != null && dateend != null)
                 {
-                    TimeSpan Total = DateTime.ParseExact(dateend, "dd/MM/yyyy", provider) - DateTime.ParseExact(datestart, "dd/MM/yyyy", provider);
+                    TimeSpan Total = DateTime.ParseExact(dateend, "dd-MM-yyyy", provider) - DateTime.ParseExact(datestart, "dd-MM-yyyy", provider);
                     number = (Total.TotalDays + 1) * 8;
                 }
             }
 
             um.dateoffNumber = number;
-
-            um.empName = ViewBag.message;
-            var res = hc.PostAsJsonAsync<DateOffModel>("api/DateOff/BuPhep", um);
-            res.Wait();
-
-            var results = res.Result;
-            if (results.IsSuccessStatusCode)
+            var res = await hc.PostAsJsonAsync<DateOffModel>("api/DateOff/BuPhep", um);
+ 
+            if (res.IsSuccessStatusCode)
             {
-                HttpContext.Session.SetString("notice", "Bù phép thành công");
-                return RedirectToAction("DateOffException", "ChamCong");
+                var results = res.Content.ReadAsStringAsync().Result;
+                um = JsonConvert.DeserializeObject<DateOffModel>(results);
+
+                if (um.result == "OK")
+                     HttpContext.Session.SetString("notice", "Bù phép thành công");
+              
+                ViewBag.Error = um.result;
+                return PartialView("DisplayError");
             }
 
-            ViewBag.Error = "Lỗi kết nối hệ thống. Liên hệ IT";
-            return View("BuPhep", um);
+            ViewBag.Error = "Lỗi kết nối. Gọi IT";
+            return PartialView("DisplayError");
+        }
+
+        public async Task<IActionResult> LayLieuChamCong(string date)
+        {
+            HttpClient hc = _api.Initial();
+            var res = await hc.GetAsync($"api/ChamCong/LayLieuChamCong?date={date}");
+
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                if (results == "OK")
+                {
+                    ViewBag.Error = "Lấy dữ liệu thành công";
+                    return PartialView("DisplayError");
+                }
+                else
+                {
+                    ViewBag.Error = results;
+                    return PartialView("DisplayError");
+                }
+            }
+
+            ViewBag.Error = "Lỗi kết nối. Gọi IT";
+            return PartialView("DisplayError");
         }
     }
 }

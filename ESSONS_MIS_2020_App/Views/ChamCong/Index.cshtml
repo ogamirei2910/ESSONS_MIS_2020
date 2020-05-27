@@ -24,6 +24,9 @@
                             </div>
                         </div>
                         <div class="card-footer">
+                            <button class="btn btn-primary" id="btGetData">
+                                Lấy dữ liệu
+                            </button>
                             <button class="btn btn-primary" id="btDay">
                                 Theo ngày
                             </button>
@@ -43,7 +46,8 @@
                                         <th>Mã nhân viên</th>
                                         <th>Tên nhân viên</th>
                                         <th>Phòng ban</th>
-                                        <th>Loại công</th>
+                                        <th>Ngày công</th>
+                                        <th>Ca làm</th>
                                         <th>Giờ vào</th>
                                         <th>Giờ ra</th>
                                         <th>Giờ công</th>
@@ -60,6 +64,7 @@
                                         </td>
                                         <td>@item.depName</td>
                                         <td>@item.datework</td>
+                                        <td>@item.shiftname</td>
                                         <td>@item.intime</td>
                                         <td>@item.outtime</td>
                                         <td>
@@ -77,7 +82,7 @@
                                         <th>Mã nhân viên</th>
                                         <th>Tên nhân viên</th>
                                         <th>Phòng ban</th>
-                                        <th>Loại công</th>
+                                        <th>Tháng công</th>
                                         <th>Giờ công</th>
                                         <th>Tăng ca</th>
                                     </tr>
@@ -115,6 +120,37 @@
 @section scripts{
     <script type="text/javascript">
         $(document).ready(function () {
+            $("#btGetData").click(function (e) {
+                var pickedDate = $('input').val();
+                $.ajax({
+                    type: "GET",
+                    url: "/ChamCong/LayLieuChamCong?date=" + pickedDate,
+                    contentType: "html",
+                    success: function (response) {
+                        debugger
+                        let dia = bs4pop.dialog({
+
+                            title: 'Thông báo',
+                            content: response,
+
+                            closeBtn: true,
+                            backdrop: 'static',
+                            btns: [
+                                { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                            ],
+                            onDragStart: function () {
+                                console.log('onDragStart');
+                            },
+                            onDrag: function () {
+                                console.log('onDrag');
+                            }
+
+                        });
+                    }
+                });
+                e.preventDefault();
+            });
+
             $("#btDay").click(function () {
                 var pickedDate = $('input').val();
                 window.location.href = "/chamcong/index?date=" + pickedDate + "&&type=Day";
@@ -135,7 +171,7 @@
             // INITIALIZE DATEPICKER PLUGIN
             $('.datepicker').datepicker({
                 clearBtn: true,
-                format: "yyyy/mm/dd"
+                format: "dd-mm-yyyy"
             });
 
 

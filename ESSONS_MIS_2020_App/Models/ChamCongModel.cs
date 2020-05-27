@@ -12,8 +12,9 @@ namespace ESSONS_MIS_2020_App.Models
         public string depName { get; set; }
         public string datework { get; set; }
         public string intime { get; set; }
-
         public string outtime { get; set; }
+
+        public string shiftname { get; set; }
         public double hours { get; set; }
         public double OT { get; set; }
     }

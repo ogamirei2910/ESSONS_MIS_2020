@@ -197,7 +197,10 @@ namespace ESSONS_MIS_2020.Controllers
                     {
                         DateOffExceptionModel em = new DateOffExceptionModel();
                         em.empid = sdr["empID"].ToString();
-                        em.datework = sdr["datework"].ToString();
+                        var date = sdr["datework"].ToString();
+                        var parsedDate = DateTime.ParseExact(date, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                        var formattedDate = parsedDate.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                        em.datework = formattedDate;
                         em.dateoffExName = sdr["dateoffExName"].ToString();
                         em.comment = sdr["comment"].ToString();
                         em.status = int.Parse(sdr["status"].ToString());
@@ -231,8 +234,8 @@ namespace ESSONS_MIS_2020.Controllers
                     {                      
                         em.empid = sdr["empID"].ToString();
                         var date = sdr["datework"].ToString();
-                        var parsedDate = DateTime.ParseExact(date, "yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture);
-                        var formattedDate = parsedDate.ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                        var parsedDate = DateTime.ParseExact(date, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                        var formattedDate = parsedDate.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
                         em.datework = formattedDate;
                         em.dateoffExName = sdr["dateoffExName"].ToString();
                         em.comment = sdr["comment"].ToString();
@@ -274,7 +277,7 @@ namespace ESSONS_MIS_2020.Controllers
         }
 
         [HttpPost]
-        public IActionResult BuPhep([FromBody]DateOffModel model)
+        public DateOffModel BuPhep([FromBody]DateOffModel model)
         {
             string connection = _configuration.GetConnectionString("DefaultConnection");
 
@@ -300,12 +303,13 @@ namespace ESSONS_MIS_2020.Controllers
                         new SqlParameter("@dateoffType", model.dateoffType));
                     sc.Parameters.Add(
                         new SqlParameter("@username", model.username));
+                    SqlParameter result = new SqlParameter("@result", SqlDbType.NVarChar,50);
+                    result.Direction = ParameterDirection.Output;
+                    sc.Parameters.Add(result);
 
-                    SqlDataReader sdr = sc.ExecuteReader();
-                    if (sdr.RecordsAffected > 0)
-                        return Ok();
-                    else return NotFound();
-
+                    sc.ExecuteNonQuery();
+                    model.result = sc.Parameters["@result"].Value.ToString();
+                    return model;
                 }
             }
         }

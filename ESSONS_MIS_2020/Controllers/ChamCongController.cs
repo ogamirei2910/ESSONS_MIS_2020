@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Threading.Tasks;
 using ESSONS_MIS_2020.Models;
@@ -45,6 +47,7 @@ namespace ESSONS_MIS_2020.Controllers
                         em.datework = sdr["datework"].ToString();
                         em.intime = sdr["intime"].ToString();
                         em.outtime = sdr["outtime"].ToString();
+                        em.shiftname = sdr["shiftName"].ToString();
                         em.hours = double.Parse(sdr["giocong"].ToString());
                         em.OT = double.Parse(sdr["OT"].ToString());
                         lem.Add(em);
@@ -53,6 +56,35 @@ namespace ESSONS_MIS_2020.Controllers
                 return lem;
             }
         }
+
+        [HttpGet]
+        public string LayLieuChamCong(string date)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection2");
+            string resultGet = "";
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_GetDataChamCong", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@date", date));
+                    SqlParameter result = new SqlParameter("@result", SqlDbType.NVarChar, 50);
+                    result.Direction = ParameterDirection.Output;
+                    sc.Parameters.Add(result);
+
+                    sc.ExecuteNonQuery();
+                    resultGet = sc.Parameters["@result"].Value.ToString();
+
+                    return resultGet;
+
+                }
+            }
+            return resultGet;
+        }
+
         [HttpGet]
         public List<ChamCongModel> GetChamCongTheoNgay(string date)
         {

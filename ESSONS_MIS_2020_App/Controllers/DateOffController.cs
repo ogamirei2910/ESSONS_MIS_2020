@@ -70,7 +70,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 CultureInfo provider = CultureInfo.InvariantCulture;
                 string datestart = um.dateoffStart;
                 string dateend = um.dateoffEnd;
-                TimeSpan Total = DateTime.ParseExact(dateend, "dd/MM/yyyy", provider) - DateTime.ParseExact(datestart, "dd/MM/yyyy", provider);
+                TimeSpan Total = DateTime.ParseExact(dateend, "dd-MM-yyyy", provider) - DateTime.ParseExact(datestart, "dd-MM-yyyy", provider);
                 number = (Total.TotalDays + 1)* 8;
             }
             um.dateoffNumber = number;

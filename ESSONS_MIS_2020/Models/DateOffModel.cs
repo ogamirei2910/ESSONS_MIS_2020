@@ -22,5 +22,6 @@ namespace ESSONS_MIS_2020.Models
         public string empName { get; set; }
         public string depName { get; set; }
         public string depID { get; set; }
+        public string result { get; set; }
     }
 }

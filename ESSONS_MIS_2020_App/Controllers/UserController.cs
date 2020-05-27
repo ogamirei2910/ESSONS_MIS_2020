@@ -43,7 +43,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 {
                     using (var connection = new LdapConnection { SecureSocketLayer = false })
                     {
-                        connection.Connect("10.0.11.2", LdapConnection.DEFAULT_PORT); ;
+                        connection.Connect("10.0.11.2", LdapConnection.DEFAULT_PORT); 
                         connection.Bind(username, um.password);
                         if (connection.Bound)
                         {
@@ -58,7 +58,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 }
             }
 
-            if (um.username != "nam" || um.password != "P@ssw0rd123")
+            if (um.username == "nam" && um.password != "P@ssw0rd123")
             {
                 ViewBag.Message = "Kiểm tra lại tài khoản hoặc mật khẩu";
                 return View();

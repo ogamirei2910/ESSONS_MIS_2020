@@ -24,5 +24,6 @@ namespace ESSONS_MIS_2020_App.Models
         public string depName { get; set; }
         public string positionID { get; set; }
         public string depID { get; set; }
+        public string result { get; set; }
     }
 }

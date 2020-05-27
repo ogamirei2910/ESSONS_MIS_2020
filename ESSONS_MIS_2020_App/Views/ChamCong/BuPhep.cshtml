@@ -16,7 +16,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <form method="post" asp-action="BuPhep">
+                        <form id="formPhep" method="post">
                             <table class="table">
                                 <tr>
                                     <td>
@@ -37,6 +37,7 @@
                                                 <option value="6">Về sớm</option>
                                                 <option value="7">Lỗi quét vân tay</option>
                                                 <option value="8">Không phép</option>
+                                                <option value="9">Nghỉ nửa tiếng (Nữ)</option>
                                                 <option value="1">Phép năm</option>
                                                 <option value="2">Nghỉ ốm đau (BHXH)</option>
                                                 <option value="3">Nghỉ thai sản (BHXH)</option>
@@ -109,7 +110,7 @@
                                 </tr>
                             </table>
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">
+                                <button id="btSend" type="submit" class="btn btn-primary">
                                     Xử lý
                                 </button>
                             </div>
@@ -136,7 +137,7 @@
                             </tbody>
                         </table>
                         <!-- /.card-body -->
-                    </div>                  
+                    </div>
                 </div>
                 <!-- /.card -->
             </div>
@@ -149,12 +150,49 @@
 
 @section scripts{
     <script type="text/javascript">
+        $(document).ready(function () {
+            $("#formPhep").submit(function (e) {
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: '@Url.Action("BuPhep", "ChamCong")',
+                    data: $("#formPhep").serialize(),
+                    success: function (result) {
+                        debugger
+                        if (result != '\r\nOK\r\n') {
+                            let dia = bs4pop.dialog({
+
+                                title: 'Thông báo',
+                                content: result,
+
+                                closeBtn: true,
+                                backdrop: 'static',
+                                btns: [
+                                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                                ],
+                                onDragStart: function () {
+                                    console.log('onDragStart');
+                                },
+                                onDrag: function () {
+                                    console.log('onDrag');
+                                }
+                            });
+                        }
+                        else {
+                            window.location.href = "/ChamCong/DateOffException";
+                        }
+                    }
+                })
+                e.preventDefault();
+            });
+        });
+
         $(function () {
 
             // INITIALIZE DATEPICKER PLUGIN
             $('.datepicker').datepicker({
                 clearBtn: true,
-                format: "dd/mm/yyyy"
+                format: "dd-mm-yyyy"
             });
 
             $('#reservationDate').on('change', function () {
