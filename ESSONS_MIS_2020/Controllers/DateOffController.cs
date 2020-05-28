@@ -288,7 +288,7 @@ namespace ESSONS_MIS_2020.Controllers
                     sql.Open();
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
                     sc.Parameters.Add(
-                        new SqlParameter("@empID", model.empID));
+                        new SqlParameter("@empID", model.empID)); 
                     sc.Parameters.Add(
                         new SqlParameter("@dateoffStart", model.dateoffStart));
                     sc.Parameters.Add(

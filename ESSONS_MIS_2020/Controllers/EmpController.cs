@@ -84,6 +84,29 @@ namespace ESSONS_MIS_2020.Controllers
             }
         }
 
+        public string GetEmpSTT()
+        {
+            string empID = "";
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_employee", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "GetEmpSTT"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        empID = sdr["STT"].ToString();
+                    }
+                }
+                return empID;
+            }
+        }
+
         [HttpGet]
         [Route("")]
         public List<EmpModel> Get()
@@ -279,7 +302,7 @@ namespace ESSONS_MIS_2020.Controllers
                     sql.Open();
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
                     sc.Parameters.Add(
-                        new SqlParameter("@empID", int.Parse(model.empID).ToString("D5")));
+                        new SqlParameter("@empID", model.empID));
                     sc.Parameters.Add(
                         new SqlParameter("@empIDTemp", model.empIDTemp));
                     sc.Parameters.Add(

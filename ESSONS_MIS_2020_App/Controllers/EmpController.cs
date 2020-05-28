@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -81,27 +84,84 @@ namespace ESSONS_MIS_2020_App.Controllers
                 var results = res.Content.ReadAsStringAsync().Result;
                 em = JsonConvert.DeserializeObject<List<DepartmentModel>>(results);
             }
+
+            string empid = "";
+            res = await hc.GetAsync("api/emp/GetEmpSTT");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                empid = JsonConvert.DeserializeObject<string>(results);
+                ViewBag.STT = (int.Parse(empid) +1).ToString("D5");
+            }
+
             ViewBag.departmentList = em;
             getRole();
 
             return View();
         }
 
+        public static Image ResizeImage(Image imgToResize, Size size)
+        {
+            return (Image)(new Bitmap(imgToResize, size));
+        }
+
         [HttpPost]
         public IActionResult emp_Create(EmpModel um)
         {
             HttpClient hc = _api.Initial();
+            um.empID = int.Parse(um.empID).ToString("D5");
+            var image = um.ProfileImage;
+            if (image != null)
+            {
+                string[] NameAndType = new string[2];
+                //Saving Image on Server
+                if (image.Length > 0)
+                {
+                    NameAndType = image.FileName.Split(".");
+                    var filePath = Path.Combine("wwwroot/images/NhanVien", um.empID + "." + NameAndType[1]);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        image.CopyTo(fileStream);
+                    }
+                }
 
-            //Create QRcode
-            QRCodeGenerator _qrCode = new QRCodeGenerator();
-            QRCodeData _qrCodeData = _qrCode.CreateQrCode(um.empID, QRCodeGenerator.ECCLevel.Q);
-            QRCode qrCode = new QRCode(_qrCodeData);
-            Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.Black, Color.White, (Bitmap)Bitmap.FromFile("wwwroot\\images\\Logo.png"), 40);
+                um.empImage = um.empID + "." + NameAndType[1];
+                um.ProfileImage = null;
 
-            var filePath2 = Path.Combine("wwwroot/images/NhanVien", int.Parse(um.empID).ToString("D5") + "_QR.png");
-            qrCodeImage.Save(filePath2, System.Drawing.Imaging.ImageFormat.Png);
-            //-----------------------------------------------------
+                Image img = Image.FromFile("wwwroot\\images\\layout.jpg");
+                Graphics g = Graphics.FromImage(img);
 
+                Image imageHinhThe = Image.FromFile("wwwroot\\images\\NhanVien\\" + um.empID + "." + NameAndType[1]);
+                Bitmap bmDatabaseImage = (Bitmap)imageHinhThe;
+                g.DrawImage(bmDatabaseImage, 20, 20, 319, 480);
+
+                Rectangle rect1 = new Rectangle(340, 332, 460, 50);
+                Rectangle rect2 = new Rectangle(340, 390, 460, 50);
+
+                StringFormat stringFormat = new StringFormat();
+                stringFormat.Alignment = StringAlignment.Center;
+                stringFormat.LineAlignment = StringAlignment.Center;
+
+                // Draw the text and the surrounding rectangle.
+                g.DrawString(um.empName, new Font("Calibri", 9, FontStyle.Bold), new SolidBrush(Color.Black), rect1, stringFormat);
+                g.DrawString(um.depchildName, new Font("Calibri", 8, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
+                g.DrawString("Số hiệu: " + um.empID, new Font("Calibri", 8, FontStyle.Bold), new SolidBrush(Color.Black), new Point(65, 510));
+
+                //Create QRcode
+                QRCodeGenerator _qrCode = new QRCodeGenerator();
+                QRCodeData _qrCodeData = _qrCode.CreateQrCode(um.empID, QRCodeGenerator.ECCLevel.Q);
+                QRCode qrCode = new QRCode(_qrCodeData);
+                Bitmap qrCodeImage = qrCode.GetGraphic(20);
+
+                //var filePath2 = Path.Combine("wwwroot/images/NhanVien", int.Parse(um.empID).ToString("D5") + "_QR.png");
+                //qrCodeImage.Save(filePath2, System.Drawing.Imaging.ImageFormat.Png);
+                //-----------------------------------------------------
+                g.DrawImage(qrCodeImage, 790, 300, 220, 220);
+
+                img.Save($"wwwroot/images/NhanVien/Card_{um.empImage}");
+            }
+          
+            //Save excel file
             //string folder = "wwwroot/images/NhanVien";
             //string excelName = $"UserList-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
             //FileInfo file = new FileInfo(Path.Combine(folder, excelName));
@@ -119,22 +179,8 @@ namespace ESSONS_MIS_2020_App.Controllers
             //    package.Save();
             //}
 
-            var image = um.ProfileImage;
-            if (image != null)
-            {
-                //Saving Image on Server
-                if (image.Length > 0)
-                {
-                    var filePath = Path.Combine("wwwroot/images/NhanVien", image.FileName);
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        image.CopyTo(fileStream);
-                    }
-                }
-
-                um.empImage = um.ProfileImage.FileName;
-                um.ProfileImage = null;
-            }
+           
+            
 
             um.username = HttpContext.Session.GetString("username");
             um.status = 1;
@@ -228,16 +274,50 @@ namespace ESSONS_MIS_2020_App.Controllers
             //Saving Image on Server
             if (image != null)
             {
+                string[] NameAndType = new string[2];
                 if (image.Length > 0)
                 {
-                    var filePath = Path.Combine("wwwroot/images/NhanVien", image.FileName);
+                    NameAndType = image.FileName.Split(".");
+                    var filePath = Path.Combine("wwwroot/images/NhanVien", um.empID + "." + NameAndType[1]);
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         image.CopyTo(fileStream);
                     }
                 }
-                um.empImage = um.ProfileImage.FileName;
+                um.empImage = um.empID + "." + NameAndType[1];
                 um.ProfileImage = null;
+
+                Image img = Image.FromFile("wwwroot\\images\\layout.jpg");
+                Graphics g = Graphics.FromImage(img);
+
+                Image imageHinhThe = Image.FromFile("wwwroot\\images\\NhanVien\\" + um.empID + "." + NameAndType[1]);
+                Bitmap bmDatabaseImage = (Bitmap)imageHinhThe;
+                g.DrawImage(bmDatabaseImage, 20, 20, 319, 480);
+
+                Rectangle rect1 = new Rectangle(340, 332, 410, 50);
+                Rectangle rect2 = new Rectangle(340, 390, 410, 50);
+
+                StringFormat stringFormat = new StringFormat();
+                stringFormat.Alignment = StringAlignment.Center;
+                stringFormat.LineAlignment = StringAlignment.Center;
+
+                // Draw the text and the surrounding rectangle.
+                g.DrawString(um.empName, new Font("Calibri", 9, FontStyle.Bold), new SolidBrush(Color.Black), rect1, stringFormat);
+                g.DrawString(um.depchildName, new Font("Calibri", 8, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
+                g.DrawString("Số hiệu: " + um.empID, new Font("Calibri", 8, FontStyle.Bold), new SolidBrush(Color.Black), new Point(65, 510));
+
+                //Create QRcode
+                QRCodeGenerator _qrCode = new QRCodeGenerator();
+                QRCodeData _qrCodeData = _qrCode.CreateQrCode(um.empID, QRCodeGenerator.ECCLevel.Q);
+                QRCode qrCode = new QRCode(_qrCodeData);
+                Bitmap qrCodeImage = qrCode.GetGraphic(20);
+
+                //var filePath2 = Path.Combine("wwwroot/images/NhanVien", int.Parse(um.empID).ToString("D5") + "_QR.png");
+                //qrCodeImage.Save(filePath2, System.Drawing.Imaging.ImageFormat.Png);
+                //-----------------------------------------------------
+                g.DrawImage(qrCodeImage, 760, 300, 220, 220);
+
+                img.Save($"wwwroot/images/NhanVien/Card_{um.empImage}");
             }
 
             if (um.empImage == null)

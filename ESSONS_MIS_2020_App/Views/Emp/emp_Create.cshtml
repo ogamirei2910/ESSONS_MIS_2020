@@ -21,7 +21,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Số thẻ</label>
                                         <div class="col-3">
-                                            <input asp-for="empID" type="text" maxlength="6" class="form-control" placeholder="Số thẻ" value="">
+                                            <input asp-for="empID" type="text" maxlength="5" readonly class="form-control" placeholder="Số thẻ" value="@ViewBag.STT">
                                         </div>
                                         <div class="col-3">
                                             <input asp-for="empIDTemp" type="text" maxlength="10" class="form-control" placeholder="Số thời vụ" value="">
@@ -30,7 +30,7 @@
 
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Họ tên</label>
-                                        <div class="col-5">
+                                        <div class="col-7">
                                             <input asp-for="empName" maxlength="30" type="text" class="form-control" placeholder="Họ tên" value="">
                                         </div>
                                     </div>
