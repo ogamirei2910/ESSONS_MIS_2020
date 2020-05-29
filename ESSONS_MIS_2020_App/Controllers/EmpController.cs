@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -12,10 +9,7 @@ using ESSONS_MIS_2020_App.Helper;
 using ESSONS_MIS_2020_App.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
-using OfficeOpenXml;
 using QRCoder;
 
 
@@ -33,6 +27,10 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.message = role.First().empName.ToString();
             ViewBag.roleID = role.First().roleID.ToString();
             ViewBag.empid = role.First().empID.ToString();
+            if (role.First().empImage != null)
+                ViewBag.empImage = role.First().empImage.ToString();
+            else
+                ViewBag.empImage = "";
             var DistinctItems = role.Select(x => x.folderID).Distinct().ToList();
             ViewBag.folder = DistinctItems;
             ViewBag.folderList = role;
@@ -133,7 +131,7 @@ namespace ESSONS_MIS_2020_App.Controllers
 
                 Image imageHinhThe = Image.FromFile("wwwroot\\images\\NhanVien\\" + um.empID + "." + NameAndType[1]);
                 Bitmap bmDatabaseImage = (Bitmap)imageHinhThe;
-                g.DrawImage(bmDatabaseImage, 20, 20, 319, 480);
+                g.DrawImage(bmDatabaseImage, 20, 20, 319, 470);
 
                 Rectangle rect1 = new Rectangle(340, 332, 460, 50);
                 Rectangle rect2 = new Rectangle(340, 390, 460, 50);
@@ -143,9 +141,17 @@ namespace ESSONS_MIS_2020_App.Controllers
                 stringFormat.LineAlignment = StringAlignment.Center;
 
                 // Draw the text and the surrounding rectangle.
-                g.DrawString(um.empName, new Font("Calibri", 9, FontStyle.Bold), new SolidBrush(Color.Black), rect1, stringFormat);
-                g.DrawString(um.depchildName, new Font("Calibri", 8, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
-                g.DrawString("Số hiệu: " + um.empID, new Font("Calibri", 8, FontStyle.Bold), new SolidBrush(Color.Black), new Point(65, 510));
+                if (um.empName.Length < 20)
+                {
+                    g.DrawString(um.empName, new Font("Calibri", 10, FontStyle.Bold), new SolidBrush(Color.Black), rect1, stringFormat);
+                    g.DrawString(um.depchildName, new Font("Calibri", 9, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
+                }
+                else
+                {
+                    g.DrawString(um.empName, new Font("Calibri", 9, FontStyle.Bold), new SolidBrush(Color.Black), rect1, stringFormat);
+                    g.DrawString(um.depchildName, new Font("Calibri", 8, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
+                }
+                g.DrawString("Số hiệu: " + um.empID, new Font("Calibri", 9, FontStyle.Bold), new SolidBrush(Color.Black), new Point(65, 500));
 
                 //Create QRcode
                 QRCodeGenerator _qrCode = new QRCodeGenerator();
@@ -159,6 +165,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 g.DrawImage(qrCodeImage, 790, 300, 220, 220);
 
                 img.Save($"wwwroot/images/NhanVien/Card_{um.empImage}");
+
             }
           
             //Save excel file
@@ -178,9 +185,6 @@ namespace ESSONS_MIS_2020_App.Controllers
                 
             //    package.Save();
             //}
-
-           
-            
 
             um.username = HttpContext.Session.GetString("username");
             um.status = 1;
@@ -271,10 +275,11 @@ namespace ESSONS_MIS_2020_App.Controllers
         {
             HttpClient hc = _api.Initial();
             var image = um.ProfileImage;
+            string[] NameAndType = new string[2];
             //Saving Image on Server
             if (image != null)
             {
-                string[] NameAndType = new string[2];
+                
                 if (image.Length > 0)
                 {
                     NameAndType = image.FileName.Split(".");
@@ -285,8 +290,15 @@ namespace ESSONS_MIS_2020_App.Controllers
                     }
                 }
                 um.empImage = um.empID + "." + NameAndType[1];
-                um.ProfileImage = null;
+                um.ProfileImage = null;           
+            }
 
+            if (um.empImage == null)
+                um.empImage = HttpContext.Session.GetString("empImage");
+
+            if (um.empImage != null && um.empImage != "")
+            {
+                NameAndType = um.empImage.Split(".");
                 Image img = Image.FromFile("wwwroot\\images\\layout.jpg");
                 Graphics g = Graphics.FromImage(img);
 
@@ -302,9 +314,11 @@ namespace ESSONS_MIS_2020_App.Controllers
                 stringFormat.LineAlignment = StringAlignment.Center;
 
                 // Draw the text and the surrounding rectangle.
-                g.DrawString(um.empName, new Font("Calibri", 9, FontStyle.Bold), new SolidBrush(Color.Black), rect1, stringFormat);
-                g.DrawString(um.depchildName, new Font("Calibri", 8, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
-                g.DrawString("Số hiệu: " + um.empID, new Font("Calibri", 8, FontStyle.Bold), new SolidBrush(Color.Black), new Point(65, 510));
+                g.DrawString(um.empName, new Font("Calibri", 10, FontStyle.Bold), new SolidBrush(Color.Black), rect1, stringFormat);
+                g.DrawString(um.depchildName, new Font("Calibri", 9, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
+
+
+                g.DrawString("Số hiệu: " + um.empID, new Font("Calibri", 9, FontStyle.Bold), new SolidBrush(Color.Black), new Point(65, 500));
 
                 //Create QRcode
                 QRCodeGenerator _qrCode = new QRCodeGenerator();
@@ -319,9 +333,8 @@ namespace ESSONS_MIS_2020_App.Controllers
 
                 img.Save($"wwwroot/images/NhanVien/Card_{um.empImage}");
             }
+           
 
-            if (um.empImage == null)
-                um.empImage = HttpContext.Session.GetString("empImage");
             um.username = HttpContext.Session.GetString("username");
             um.indat = DateTime.Now.ToString("dd-MM-yyyy");
             um.status = 1;

@@ -25,6 +25,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.message = role.First().empName.ToString();
             ViewBag.empid = role.First().empID.ToString();
             ViewBag.roleID = role.First().roleID.ToString();
+            ViewBag.empImage = role.First().empImage.ToString();
             var DistinctItems = role.Select(x => x.folderID).Distinct().ToList();
             ViewBag.folder = DistinctItems;
             ViewBag.folderList = role;

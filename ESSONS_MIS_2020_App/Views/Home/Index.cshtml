@@ -25,12 +25,12 @@
 
 @section scripts{
     <script type="text/javascript">
-        var a = '@ViewBag.notice';
+        var a = '@ViewBag.message';
         if (a != '') {
             let dia = bs4pop.dialog({
 
                 title: 'Đăng nhập thành công',
-                content: 'Người dùng ' + '@ViewBag.notice' + ' đã đăng nhập hệ thống thành công.',
+                content: 'Người dùng ' + '@ViewBag.message' + ' đã đăng nhập hệ thống thành công.',
 
                 closeBtn: true,
                 backdrop: 'static',

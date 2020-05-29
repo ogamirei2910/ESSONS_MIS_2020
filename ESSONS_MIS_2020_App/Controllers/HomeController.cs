@@ -35,6 +35,10 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.message = um.First().empName.ToString();
             ViewBag.roleID = um.First().roleID.ToString();
             ViewBag.empid = um.First().empID.ToString();
+            if (um.First().empImage != null)
+                ViewBag.empImage = um.First().empImage.ToString();
+            else
+                ViewBag.empImage = "";
             var DistinctItems = um.Select(x => x.folderID).Distinct().ToList();
             ViewBag.folder = DistinctItems;
             ViewBag.folderList = um;

@@ -62,6 +62,7 @@ namespace ESSONS_MIS_2020.Controllers
                         UserRoleModel urm = new UserRoleModel();
                         urm.empName = sdr["empName"].ToString();
                         urm.empID = sdr["empID"].ToString();
+                        urm.empImage = sdr["empImage"].ToString();
                         urm.roleID = int.Parse(sdr["roleID"].ToString());
                         urm.folderID = int.Parse(sdr["folderID"].ToString());
                         urm.folderChildID = int.Parse(sdr["folderChildID"].ToString());

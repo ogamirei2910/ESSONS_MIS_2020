@@ -43,6 +43,7 @@ namespace ESSONS_MIS_2020_App.Controllers
         {
             ViewBag.EmpName = HttpContext.Session.GetString("EmpName");
             ViewBag.EmpID = HttpContext.Session.GetString("empid");
+            ViewBag.EmpImage = HttpContext.Session.GetString("EmpImage");
             return View();
         }
 
@@ -116,6 +117,7 @@ namespace ESSONS_MIS_2020_App.Controllers
         public async Task<IActionResult> dateoff_Detail_Emp()
         {
             string empID = HttpContext.Session.GetString("empid");
+
             List<DateOffModel> um = new List<DateOffModel>();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.GetAsync($"api/dateoff/GetEmpID/{empID}");
@@ -142,8 +144,10 @@ namespace ESSONS_MIS_2020_App.Controllers
             }
             
             HttpContext.Session.SetString("EmpName", em.empName);
+            HttpContext.Session.SetString("EmpImage", em.empImage);
             ViewBag.EmpID = em.empID;
             ViewBag.EmpName = em.empName;
+            ViewBag.EmpImage = em.empImage;
             return View(um);
         }
     }

@@ -39,7 +39,6 @@
                 </li>
 
             </ul>
-
             <!-- Right navbar links -->
         </nav>
         <!-- /.navbar -->
@@ -55,7 +54,10 @@
                 <!-- Sidebar user (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="info">
-                        <img class="img-circle elevation-2" alt="User Image" height="160" width="160" src="~/Assets/dist/img/cong-ty-tnhh-cong-nghiep-toan-cau-essons.png">
+                        @if(@ViewBag.empImage != "")
+                        {
+                            <img class="img-circle elevation-2" alt="User Image" height="160" width="160" src="~/images/NhanVien/@ViewBag.empImage">
+                        }                       
                         <a>@ViewBag.message</a>
                     </div>
                 </div>
@@ -921,10 +923,7 @@
                                                             </a>
                                                         </li>
                                                     }
-
                                                 }
-
-
                                             }
                                         </ul>
                                     </li>

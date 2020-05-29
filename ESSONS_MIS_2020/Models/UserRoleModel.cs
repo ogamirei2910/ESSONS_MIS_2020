@@ -12,6 +12,7 @@ namespace ESSONS_MIS_2020.Models
         public int folderChildID { get; set; }
 
         public string empName { get; set; }
+        public string empImage { get; set; }
         public string empID { get; set; }
         public List<FolderModel> folderList { get; set; }
         public List<FolderChildModel> folderchildList { get; set; }

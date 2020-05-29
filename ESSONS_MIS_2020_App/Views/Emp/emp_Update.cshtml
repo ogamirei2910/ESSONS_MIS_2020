@@ -30,7 +30,7 @@
 
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Họ tên</label>
-                                        <div class="col-5">
+                                        <div class="col-7">
                                             <input asp-for="empName" maxlength="30" type="text" class="form-control" placeholder="Họ tên" value="@Model.empName">
                                         </div>
                                     </div>
@@ -274,14 +274,14 @@
                             <tr>
                                 <td>
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Thường trú</label>
+                                        <label class="col-sm-3 col-form-label">Thường trú </label>
                                         <div class="col-8">
                                             <input asp-for="empAddress" maxlength="100" class="form-control" type="text" placeholder="Thường trú" value="@Model.empAddress">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Tạm trú</label>
+                                        <label class="col-sm-3 col-form-label">Tạm trú   </label>
                                         <div class="col-8">
                                             <input asp-for="empAddressTemp" maxlength="100" class="form-control" type="text" placeholder="Tạm trú" value="@Model.empAddressTemp">
                                         </div>
@@ -402,7 +402,7 @@
                                 <td>
                                     <div class="form-group row">
                                         <label class="col-sm-3  col-form-label">Ngày làm</label>
-                                        <div class="col-8">
+                                        <div class="col-5">
                                             <div class="datepicker date input-group p-0 shadow-sm">
                                                 <input asp-for="empInDate" type="text" class="form-control" id="reservationDate" value="@Model.empInDate">
                                                 <div class="input-group-append"><span class="input-group-text"></span></div>
@@ -413,7 +413,7 @@
                                 <td>
                                     <div class="form-group row">
                                         <label class="col-sm-3  col-form-label">Ngày chính thức</label>
-                                        <div class="col-8">
+                                        <div class="col-5">
                                             <div class="datepicker date input-group p-0 shadow-sm">
                                                 <input asp-for="empStandardDate" type="text" class="form-control" id="reservationDate" value="@Model.empStandardDate">
                                                 <div class="input-group-append"><span class="input-group-text"></span></div>
