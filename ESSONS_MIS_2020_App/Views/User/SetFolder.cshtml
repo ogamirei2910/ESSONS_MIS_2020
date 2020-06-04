@@ -1,0 +1,142 @@
+﻿@model ESSONS_MIS_2020_App.Models.UserRoleModel
+@{
+    ViewData["Title"] = "SetFolder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Quyền duyệt phép</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form id="formData" method="post">
+                            <div class="form-group row">
+                                <div class="col-3">
+                                    <input asp-for="empID" id="txtEmpID" type="text" maxlength="5" class="form-control" placeholder="Số thẻ">
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-primary" id="btSet" type="submit">
+                                    Thêm quyền
+                                </button>
+                            </div>
+                        </form>
+                        <br />
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Mã nhân viên</th>
+                                    <th>Tên nhân viên</th>
+                                    <th>Phòng ban</th>
+                                    <th>Duyệt phép</th>
+                                    <th>Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (ViewBag.perList != null || ViewBag.perList.Count > 0)
+                                {
+                                    foreach (var item in ViewBag.perList)
+                                    {
+                                        <tr>
+                                            <td>@item.empID</td>
+                                            <td>
+                                                @item.empName
+                                            </td>
+                                            <td>@item.depName</td>
+                                            <td>Có</td>>
+                                            <td>
+                                                @Html.ActionLink("Khóa", "user_Block", "User", new { empID = item.empID },
+                                                                                    new
+                                                                                         {
+                                                                                             @class = "btn btn-danger btn-sm",
+                                                                                             id = "blockBT"
+                                                                                         })
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+@section scripts{
+    <script type="text/javascript">
+            $(document).ready(function () {
+                 var a = '@ViewBag.notice';
+            if (a != '') {
+                let dia = bs4pop.dialog({
+
+                    title: 'Thông báo',
+                    content: '@ViewBag.notice',
+
+                    closeBtn: true,
+                    backdrop: 'static',
+                    btns: [
+                        { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                    ],
+                    onDragStart: function () {
+                        console.log('onDragStart');
+                    },
+                    onDrag: function () {
+                        console.log('onDrag');
+                    }
+
+                });
+            }
+
+            $("#formData").submit(function (e) {
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: '@Url.Action("SetFolder", "User")',
+                    data: $("#formData").serialize(),
+                    success: function (result) {
+                        debugger
+                        if (result != '\r\nOK\r\n') {
+                            let dia = bs4pop.dialog({
+
+                                title: 'Thông báo',
+                                content: result,
+
+                                closeBtn: true,
+                                backdrop: 'static',
+                                btns: [
+                                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                                ],
+                                onDragStart: function () {
+                                    console.log('onDragStart');
+                                },
+                                onDrag: function () {
+                                    console.log('onDrag');
+                                }
+                            });
+                        }
+                        else {
+                            window.location.href = "/User/SetFolder";
+                        }
+                    }
+                })
+                e.preventDefault();
+            });
+
+        })
+
+    </script>
+}
+
+

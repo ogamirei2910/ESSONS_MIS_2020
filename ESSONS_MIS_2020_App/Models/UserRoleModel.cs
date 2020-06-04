@@ -14,6 +14,8 @@ namespace ESSONS_MIS_2020_App.Models
 
         public string empName { get; set; }
 
+        public string depName { get; set; }
+
         public string empImage { get; set; }
 
         public string empID { get; set; }

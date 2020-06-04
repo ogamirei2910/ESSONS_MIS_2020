@@ -35,7 +35,7 @@
                                     <div class="form-group row mySelect">
                                         <label class="col-sm-3 col-form-label">Loại xin phép</label>
                                         <label>&nbsp;&nbsp;</label>
-                                        <select asp-for="dateoffType" class="custom-select col-5 selectpicker" id="loainghiphep" onchange=" myFunction()">
+                                        <select asp-for="dateoffType" class="custom-select col-6 selectpicker" id="loainghiphep" onchange=" myFunction()">
                                             <option disabled>Chọn loại nghỉ</option>
                                             <option value="4">Việc riêng</option>
                                             <option value="5">Đi trễ</option>
@@ -43,11 +43,11 @@
                                             <option id="tooltip-1" title="" value="1">Phép năm</option>
                                             <option id="tooltip-2" title="" value="2">Nghỉ ốm đau (BHXH)</option>
                                             <option value="3">Nghỉ thai sản (BHXH)</option>
+                                            <option value="10">Vợ sinh, khám, dưỡng</option>
+                                            <option value="11">Cưới, Tang</option>
                                         </select>
                                     </div>
 
-
-  
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Giấy cần có</label>
                                         <textarea id="giaycanco" class="form-control" readonly placeholder="Không" rows="3" cols="1"></textarea>

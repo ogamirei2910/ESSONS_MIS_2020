@@ -43,7 +43,7 @@ namespace ESSONS_MIS_2020.Controllers
                         ChamCongModel em = new ChamCongModel();
                         em.empID = sdr["empID"].ToString();
                         em.empName = sdr["empName"].ToString();
-                        em.depName = sdr["depchildName"].ToString();
+                        em.depName = sdr["depID"].ToString();
                         em.datework = sdr["datework"].ToString();
                         em.intime = sdr["intime"].ToString();
                         em.outtime = sdr["outtime"].ToString();
@@ -107,8 +107,9 @@ namespace ESSONS_MIS_2020.Controllers
                         ChamCongModel em = new ChamCongModel();
                         em.empID = sdr["empID"].ToString();
                         em.empName = sdr["empName"].ToString();
-                        em.depName = sdr["depchildName"].ToString();
+                        em.depName = sdr["depID"].ToString();
                         em.datework = sdr["datework"].ToString();
+                        em.shiftname = sdr["shiftName"].ToString();
                         em.intime = sdr["intime"].ToString();
                         em.outtime = sdr["outtime"].ToString();
                         em.hours = double.Parse(sdr["giocong"].ToString());
@@ -142,7 +143,7 @@ namespace ESSONS_MIS_2020.Controllers
                         ChamCongModel em = new ChamCongModel();
                         em.empID = sdr["empID"].ToString();
                         em.empName = sdr["empName"].ToString();
-                        em.depName = sdr["depchildName"].ToString();
+                        em.depName = sdr["depID"].ToString();
                         em.datework = sdr["loaicong"].ToString();
                         em.hours = double.Parse(sdr["giocong"].ToString());
                         em.OT = double.Parse(sdr["OT"].ToString());

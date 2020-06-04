@@ -339,6 +339,8 @@ namespace ESSONS_MIS_2020.Controllers
                         new SqlParameter("@username", model.username));
                     sc.Parameters.Add(
                         new SqlParameter("@empYearOff", model.empYearOff));
+                    sc.Parameters.Add(
+                        new SqlParameter("@empOffice", model.office));
 
                     sc.Parameters.Add(
                         new SqlParameter("@depchildID", model.depchildID));

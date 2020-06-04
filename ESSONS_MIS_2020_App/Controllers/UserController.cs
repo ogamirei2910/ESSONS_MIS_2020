@@ -12,20 +12,31 @@ using Microsoft.AspNetCore.Http;
 using System.Net;
 using System.Runtime.InteropServices;
 using Novell.Directory.Ldap;
+using Novell.Directory.Ldap.Extensions;
 
 namespace ESSONS_MIS_2020_App.Controllers
 {
     public class UserController : Controller
     {
         EssonsApi _api = new EssonsApi();
+        public void getRole()
+        {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+                RedirectToAction("User", "Login");
 
-
+            var role = HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList");
+            ViewBag.message = role.First().empName.ToString();
+            ViewBag.roleID = role.First().roleID.ToString();
+            ViewBag.empid = role.First().empID.ToString();
+            ViewBag.empImage = role.First().empImage.ToString();
+            var DistinctItems = role.Select(x => x.folderID).Distinct().ToList();
+            ViewBag.folder = DistinctItems;
+            ViewBag.folderList = role;
+        }
         public IActionResult Login()
         {
             return View();
         }
-
-
         [HttpPost]
         public IActionResult Login(UserModel um)
         {
@@ -80,71 +91,71 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult SetFolder(UserRoleModel urm )
+        public async Task<IActionResult> SetFolder()
         {
-            if(urm.empID == "" || urm.empID is null)
-            {
-                ViewBag.Error = "Vui lòng nhập username";
-                return View();
-            }
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
 
+            List<UserRoleModel> um = new List<UserRoleModel>();
             HttpClient hc = _api.Initial();
-            var res = hc.PostAsJsonAsync<UserRoleModel>("api/user/setfolder", urm);
-            res.Wait();
-
-            var results = res.Result;
-            if (results.IsSuccessStatusCode)
-            {
-                ViewBag.Error = "Thêm quyền thành công";
-                return View();
-            }
-
-            ViewBag.Error = "Username không tồn tại";
-            return View();
-        }
-
-        public async Task<IActionResult> CreateUser()
-        {
-            List<UserModel> um = new List<UserModel>();
-            HttpClient hc = _api.Initial();
-            HttpResponseMessage res = await hc.GetAsync("api/user/GetUser");
+            HttpResponseMessage res = await hc.GetAsync($"api/user/GetAllRole");
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
-                um = JsonConvert.DeserializeObject<List<UserModel>>(results);
+                um = JsonConvert.DeserializeObject<List<UserRoleModel>>(results);
+                ViewBag.perList = um;
             }
 
-            return View(um);
-        }
-
-        [HttpPost]
-        public IActionResult CreateUser(UserModel um)
-        {
-            HttpClient hc = _api.Initial();
-            var res = hc.PostAsJsonAsync<UserModel>("api/user/CreateUser", um);
-            res.Wait();
-
-            var results = res.Result;
-            if (results.IsSuccessStatusCode)
-            {
-                ViewBag.Error = "Thêm quyền thành công";
-                return View();
-            }
-
-            ViewBag.Error = "Username không tồn tại";
+            getRole();         
             return View();
         }
 
-        public IActionResult user_Block(string username)
+        [HttpPost]
+        public async Task<IActionResult> SetFolder(UserRoleModel urm)
         {
-            UserModel em = new UserModel();
-            em.username = username;
+            if (urm.empID == null)
+            {
+                ViewBag.Error = "Chưa nhập số thẻ";
+                return PartialView("DisplayError");
+            }
+            
             HttpClient hc = _api.Initial();
-            var res = hc.PostAsJsonAsync<UserModel>($"api/emp/Block", em);
+            var res = await hc.PostAsJsonAsync<UserRoleModel>("api/user/setfolder", urm);
+
+            urm.empID = int.Parse(urm.empID).ToString("D5");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+
+                if (results == "OK")
+                    HttpContext.Session.SetString("notice", "Thêm quyền thành công");
+
+                ViewBag.Error = results;
+                return PartialView("DisplayError");
+            }
+            else
+            {
+                ViewBag.Error = "Lỗi kết nối mạng.";
+                return PartialView("DisplayError");
+            }
+        }
+
+        public IActionResult user_Block(string empid)
+        {
+            ViewBag.Error = "";
+            UserRoleModel em = new UserRoleModel();
+            em.empID = empid;
+            HttpClient hc = _api.Initial();
+            var res = hc.PostAsJsonAsync<UserRoleModel>($"api/user/Block", em);
             res.Wait();
 
-            return RedirectToAction("CreateUser");
+            var result = res.Result;
+            if (result.IsSuccessStatusCode)
+                HttpContext.Session.SetString("notice", "Xóa quyền thành công");
+            else
+                HttpContext.Session.SetString("notice", "Xóa không thành công");
+
+            return RedirectToAction("SetFolder", "User");
         }
     }
 }

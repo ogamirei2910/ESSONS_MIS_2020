@@ -48,14 +48,14 @@ namespace ESSONS_MIS_2020_App.Controllers
             {
                 if (um.dateoffEndTime != null && um.dateoffStartTime != null)
                 {
-                    int yearS = int.Parse(um.dateoffStart.Substring(6, 2));
+                    int yearS = int.Parse(um.dateoffStart.Substring(6, 4));
                     int monthS = int.Parse(um.dateoffStart.Substring(3, 2));
                     int dayS = int.Parse(um.dateoffStart.Substring(0, 2));
                     int hourS = int.Parse(um.dateoffStartTime.Substring(0, 2));
                     int minuteS = int.Parse(um.dateoffStartTime.Substring(3, 2));
                     DateTime dtStart = new DateTime(yearS, monthS, dayS, hourS, minuteS, 0);
 
-                    int yearE = int.Parse(um.dateoffEnd.Substring(6, 2));
+                    int yearE = int.Parse(um.dateoffEnd.Substring(6, 4));
                     int monthE = int.Parse(um.dateoffEnd.Substring(3, 2));
                     int dayE = int.Parse(um.dateoffEnd.Substring(0, 2));
                     int hourE = int.Parse(um.dateoffEndTime.Substring(0, 2));

@@ -44,7 +44,26 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.EmpName = HttpContext.Session.GetString("EmpName");
             ViewBag.EmpID = HttpContext.Session.GetString("empid");
             ViewBag.EmpImage = HttpContext.Session.GetString("EmpImage");
+            ViewBag.EmpRole = HttpContext.Session.GetString("EmpRole");
             return View();
+        }
+
+        public async Task<IActionResult> dateoff_Confirm()
+        {
+            ViewBag.EmpID = HttpContext.Session.GetString("empid");
+            List<DateOffModel> um = new List<DateOffModel>();
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.GetAsync($"api/dateoff/GetEmpConfirm/{ViewBag.EmpID}");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                um = JsonConvert.DeserializeObject<List<DateOffModel>>(results);
+            }
+
+            ViewBag.EmpName = HttpContext.Session.GetString("EmpName");
+            ViewBag.EmpImage = HttpContext.Session.GetString("EmpImage");
+            ViewBag.EmpRole = HttpContext.Session.GetString("EmpRole");
+            return View(um);
         }
 
         [HttpPost]
@@ -114,6 +133,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return RedirectToAction("dateoff_Detail_Emp", new { empID = HttpContext.Session.GetString("empid") });
         }
 
+
         public async Task<IActionResult> dateoff_Detail_Emp()
         {
             string empID = HttpContext.Session.GetString("empid");
@@ -142,9 +162,20 @@ namespace ESSONS_MIS_2020_App.Controllers
                 em = JsonConvert.DeserializeObject<EmpModel>(results);
                 ViewBag.EmpInfo = em;
             }
-            
+
+            List<UserRoleModel> urm = new List<UserRoleModel>();
+            res = await hc.GetAsync($"api/user/GetRole/{empID}");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                urm = JsonConvert.DeserializeObject<List<UserRoleModel>>(results);
+            }
+
             HttpContext.Session.SetString("EmpName", em.empName);
             HttpContext.Session.SetString("EmpImage", em.empImage);
+            HttpContext.Session.SetObjectAsJson("EmpRole", urm.Find(x => x.folderChildID == 2));
+
+            ViewBag.EmpRole = urm.Find(x => x.folderChildID == 2);
             ViewBag.EmpID = em.empID;
             ViewBag.EmpName = em.empName;
             ViewBag.EmpImage = em.empImage;

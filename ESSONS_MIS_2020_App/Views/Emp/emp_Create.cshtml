@@ -41,6 +41,14 @@
                                             <input asp-for="empTel" maxlength="15" type="text" class="form-control" placeholder="Số điện thoại" value="">
                                         </div>
                                     </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Văn phòng</label>
+                                        <select id="dep" asp-for="office" class="custom-select col-sm-4">
+                                            <option value="0" selected>Không</option>
+                                            <option value="1">Có</option>
+                                        </select>
+                                    </div>
                                 </td>
                                 <td>
                                     <div class="form-group row">

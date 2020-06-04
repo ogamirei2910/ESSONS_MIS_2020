@@ -33,7 +33,6 @@ namespace ESSONS_MIS_2020_App.Controllers
         {
             List<ChamCongModel> um = new List<ChamCongModel>();
             HttpClient hc = _api.Initial();
-            //var date = DateTime.Now.ToString("yyyy/MM/dd");
             HttpResponseMessage res = new HttpResponseMessage();
             if (type == "All")
                 res = await hc.GetAsync($"api/chamcong/GetChamCong?date={date}");
@@ -46,6 +45,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 var results = res.Content.ReadAsStringAsync().Result;
                 um = JsonConvert.DeserializeObject<List<ChamCongModel>>(results);
             }
+
             //Role
             getRole();
             //-----------------------------------
@@ -53,6 +53,20 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.type = type;
             ViewBag.chamcongList = um;
             return View();
+        }
+
+        public async Task<IActionResult> GetDate(string date)
+        {
+            List<ChamCongModel> em = new List<ChamCongModel>();
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.GetAsync($"api/chamcong/GetChamCongTheoNgay?date={date}");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                em = JsonConvert.DeserializeObject<List<ChamCongModel>>(results);
+            }
+            ViewBag.chamcongList = em;
+            return PartialView("DisplayChamCong");
         }
 
         public async Task<IActionResult> DateOffException()
@@ -108,7 +122,13 @@ namespace ESSONS_MIS_2020_App.Controllers
             getRole();
             HttpClient hc = _api.Initial();
 
-            if (um.dateoffStart== null)
+            if (um.dateoffType == null)
+            {
+                ViewBag.Error = "Chưa chọn loại bù phép";
+                return PartialView("DisplayError");
+            }
+
+            if (um.dateoffStart == null)
             {
                 ViewBag.Error = "Chưa chọn ngày bắt đầu xin phép";
                 return PartialView("DisplayError");
@@ -119,6 +139,8 @@ namespace ESSONS_MIS_2020_App.Controllers
                 ViewBag.Error = "Chưa chọn ngày kết thúc xin phép";
                 return PartialView("DisplayError");
             }
+
+            um.username = ViewBag.empid;
 
             double number = 0;
             if (um.dateoffEndTime != null && um.dateoffStartTime != null)
@@ -155,15 +177,15 @@ namespace ESSONS_MIS_2020_App.Controllers
 
             um.dateoffNumber = number;
             var res = await hc.PostAsJsonAsync<DateOffModel>("api/DateOff/BuPhep", um);
- 
+
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
                 um = JsonConvert.DeserializeObject<DateOffModel>(results);
 
                 if (um.result == "OK")
-                     HttpContext.Session.SetString("notice", "Bù phép thành công");
-              
+                    HttpContext.Session.SetString("notice", "Bù phép thành công");
+
                 ViewBag.Error = um.result;
                 return PartialView("DisplayError");
             }
@@ -191,6 +213,38 @@ namespace ESSONS_MIS_2020_App.Controllers
                     return PartialView("DisplayError");
                 }
             }
+
+            //DateTime dt;
+            //DateTime.TryParseExact(date,
+            //                "dd-MM-yyyy",
+            //                CultureInfo.InvariantCulture,
+            //                DateTimeStyles.None, out dt);
+
+            //if (dt > DateTime.Now)
+            //{
+            //    HttpClient hc = _api.Initial();
+            //    var res = await hc.GetAsync($"api/ChamCong/LayLieuChamCong?date={date}");
+
+            //    if (res.IsSuccessStatusCode)
+            //    {
+            //        var results = res.Content.ReadAsStringAsync().Result;
+            //        if (results == "OK")
+            //        {
+            //            ViewBag.Error = "Lấy dữ liệu thành công";
+            //            return PartialView("DisplayError");
+            //        }
+            //        else
+            //        {
+            //            ViewBag.Error = results;
+            //            return PartialView("DisplayError");
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    ViewBag.Error = "Ngày làm việc chưa kết thúc";
+            //    return PartialView("DisplayError");
+            //}
 
             ViewBag.Error = "Lỗi kết nối. Gọi IT";
             return PartialView("DisplayError");

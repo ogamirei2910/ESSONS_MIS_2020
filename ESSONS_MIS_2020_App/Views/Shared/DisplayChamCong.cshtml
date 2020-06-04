@@ -1,16 +1,69 @@
-﻿
-    @foreach (var item in ViewBag.chamcongList)
+﻿<table id="example1" class="table table-bordered table-striped">
+    @if (ViewBag.type != "SumMonth")
     {
-        <tr>
-            <td>@item.empID</td>
-            <td>
-                @item.empName
-            </td>
-            <td>@item.depName</td>
-            <td>@item.datework</td>
-            <td>
-                @item.hours
-            </td>
-            <td>@item.OT</td>
-        </tr>
+        <thead>
+            <tr>
+                <th>Mã nhân viên</th>
+                <th>Tên nhân viên</th>
+                <th>Phòng ban</th>
+                <th>Ngày công</th>
+                <th>Ca làm</th>
+                <th>Giờ vào</th>
+                <th>Giờ ra</th>
+                <th>Giờ công</th>
+                <th>Tăng ca</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.chamcongList)
+            {
+                <tr>
+                    <td>@item.empID</td>
+                    <td>
+                        @item.empName
+                    </td>
+                    <td>@item.depName</td>
+                    <td>@item.datework</td>
+                    <td>@item.shiftname</td>
+                    <td>@item.intime</td>
+                    <td>@item.outtime</td>
+                    <td>
+                        @item.hours
+                    </td>
+                    <td>@item.OT</td>
+                </tr>
+            }
+        </tbody>
     }
+    else
+    {
+        <thead>
+            <tr>
+                <th>Mã nhân viên</th>
+                <th>Tên nhân viên</th>
+                <th>Phòng ban</th>
+                <th>Tháng công</th>
+                <th>Giờ công</th>
+                <th>Tăng ca</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.chamcongList)
+            {
+                <tr>
+                    <td>@item.empID</td>
+                    <td>
+                        @item.empName
+                    </td>
+                    <td>@item.depName</td>
+                    <td>@item.datework</td>
+                    <td>
+                        @item.hours
+                    </td>
+                    <td>@item.OT</td>
+                </tr>
+            }
+        </tbody>
+    }
+</table>
+    
