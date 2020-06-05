@@ -125,5 +125,27 @@
             }
         }
         idleTimer();
+
+        var a = '@ViewBag.notice';
+        if (a != '') {
+            let dia = bs4pop.dialog({
+
+                title: 'Thông báo',
+                content: '@ViewBag.notice',
+
+                closeBtn: true,
+                backdrop: 'static',
+                btns: [
+                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                ],
+                onDragStart: function () {
+                    console.log('onDragStart');
+                },
+                onDrag: function () {
+                    console.log('onDrag');
+                }
+
+            });
+        }
     </script>
 }

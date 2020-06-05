@@ -106,6 +106,7 @@ namespace ESSONS_MIS_2020_App.Controllers
         [HttpPost]
         public IActionResult emp_Create(EmpModel um)
         {
+            getRole();
             HttpClient hc = _api.Initial();
             um.empID = int.Parse(um.empID).ToString("D5");
             var image = um.ProfileImage;
@@ -167,7 +168,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 img.Save($"wwwroot/images/NhanVien/Card_{um.empImage}");
 
             }
-          
+
             //Save excel file
             //string folder = "wwwroot/images/NhanVien";
             //string excelName = $"UserList-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
@@ -182,11 +183,11 @@ namespace ESSONS_MIS_2020_App.Controllers
             //using (var package = new ExcelPackage(file))
             //{
             //    var workSheet = package.Workbook.Worksheets.Add("Sheet1");
-                
+
             //    package.Save();
             //}
 
-            um.username = HttpContext.Session.GetString("username");
+            um.username = ViewBag.empid;
             um.status = 1;
             um.indat = DateTime.Now.ToString("dd-mm-yyyy");
             um.intime = DateTime.Now.ToString("HH:mm:ss");
@@ -273,13 +274,13 @@ namespace ESSONS_MIS_2020_App.Controllers
         [HttpPost]
         public IActionResult emp_Update(EmpModel um)
         {
+            getRole();
             HttpClient hc = _api.Initial();
             var image = um.ProfileImage;
             string[] NameAndType = new string[2];
             //Saving Image on Server
             if (image != null)
-            {
-                
+            {           
                 if (image.Length > 0)
                 {
                     NameAndType = image.FileName.Split(".");
@@ -314,10 +315,16 @@ namespace ESSONS_MIS_2020_App.Controllers
                 stringFormat.LineAlignment = StringAlignment.Center;
 
                 // Draw the text and the surrounding rectangle.
-                g.DrawString(um.empName, new Font("Calibri", 10, FontStyle.Bold), new SolidBrush(Color.Black), rect1, stringFormat);
-                g.DrawString(um.depchildName, new Font("Calibri", 9, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
-
-
+                if (um.empName.Length < 20)
+                {
+                    g.DrawString(um.empName, new Font("Calibri", 10, FontStyle.Bold), new SolidBrush(Color.Black), rect1, stringFormat);
+                    g.DrawString(um.depchildName, new Font("Calibri", 9, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
+                }
+                else
+                {
+                    g.DrawString(um.empName, new Font("Calibri", 9, FontStyle.Bold), new SolidBrush(Color.Black), rect1, stringFormat);
+                    g.DrawString(um.depchildName, new Font("Calibri", 8, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
+                }
                 g.DrawString("Số hiệu: " + um.empID, new Font("Calibri", 9, FontStyle.Bold), new SolidBrush(Color.Black), new Point(65, 500));
 
                 //Create QRcode
@@ -335,7 +342,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             }
            
 
-            um.username = HttpContext.Session.GetString("username");
+            um.username = ViewBag.empid;
             um.indat = DateTime.Now.ToString("dd-MM-yyyy");
             um.status = 1;
             var res = hc.PostAsJsonAsync<EmpModel>("api/emp/Update", um);

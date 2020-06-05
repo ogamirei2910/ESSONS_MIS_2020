@@ -83,17 +83,17 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div class="form-group row" id="dtDenNgay">
                                             <label class="col-sm-3 col-form-label">Ngày kết thúc</label>
                                             <div class="col-5">
                                                 <div class="datepicker date input-group p-0 shadow-sm">
-                                                    <input asp-for="dateoffEnd" type="text" class="form-control" id="reservationDate">
+                                                    <input asp-for="dateoffEnd" type="text" class="form-control" id="reservationDate2">
                                                     <div class="input-group-append"><span class="input-group-text"></span></div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="bootstrap-timepicker">
-                                            <div class="form-group row">
+                                            <div class="form-group row" id="tpTuGio">
                                                 <label class="col-sm-3 col-form-label">Từ giờ</label>
                                                 <div class="input-group date col-4" id="timepicker" data-target-input="nearest">
                                                     <input asp-for="dateoffStartTime" type="text" class="form-control datetimepicker-input" data-target="#timepicker" />
@@ -104,7 +104,7 @@
                                             </div>
                                         </div>
                                         <div class="bootstrap-timepicker">
-                                            <div class="form-group row">
+                                            <div class="form-group row" id="tpDenGio">
                                                 <label class="col-sm-3 col-form-label">Đến giờ</label>
                                                 <div class="input-group date col-4" id="timepicker2" data-target-input="nearest">
                                                     <input asp-for="dateoffEndTime" type="text" class="form-control datetimepicker-input" data-target="#timepicker2" />
@@ -195,6 +195,8 @@
             });
         });
 
+
+
         $(function () {
 
             // INITIALIZE DATEPICKER PLUGIN
@@ -204,6 +206,11 @@
             });
 
             $('#reservationDate').on('change', function () {
+                var pickedDate = $('input').val();
+                $('#pickedDate').html(pickedDate);
+            });
+
+            $('#reservationDate2').on('change', function () {
                 var pickedDate = $('input').val();
                 $('#pickedDate').html(pickedDate);
             });
@@ -218,6 +225,23 @@
             format: 'HH:mm'
         })
 
-
+        function myFunction() {
+            var x = document.getElementById("loainghiphep").value;
+            var dtDenNgay = $('#dtDenNgay');
+            var tpTuGio = $('#tpTuGio');
+            var tpDenGio = $('#tpDenGio');
+            if (x == '2' || x == '3' || x == '8' || x == '1' || x == '4') {
+                dtDenNgay.prop('hidden', false);
+                tpTuGio.prop('hidden', true);
+                tpDenGio.prop('hidden', true);
+            }
+            else {
+                if (x == '5' || x == '6' || x == '7' || x == '9') {
+                    dtDenNgay.prop('hidden', true);
+                    tpTuGio.prop('hidden', false);
+                    tpDenGio.prop('hidden', false);
+                }
+            }
+        }
     </script>
 }

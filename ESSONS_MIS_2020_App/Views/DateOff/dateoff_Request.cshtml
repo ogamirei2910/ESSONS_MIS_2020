@@ -15,7 +15,7 @@
                         <h3 class="card-title">Phép VR - Phép năm - Nghỉ BHXH</h3>
                     </div>
                     <!-- /.card-header -->
-                    <form method="post" asp-action="dateoff_Request">
+                    <form method="post" id="formPhep" asp-action="dateoff_Request">
                         <table class="table">
                             <tr>
                                 <td>
@@ -36,15 +36,15 @@
                                         <label class="col-sm-3 col-form-label">Loại xin phép</label>
                                         <label>&nbsp;&nbsp;</label>
                                         <select asp-for="dateoffType" class="custom-select col-6 selectpicker" id="loainghiphep" onchange=" myFunction()">
-                                            <option disabled>Chọn loại nghỉ</option>
-                                            <option value="4">Việc riêng</option>
+                                            <option disabled selected>Chọn loại nghỉ</option>
+                                            <option value="4" title="Việc riêng là phép dùng để nghỉ nhưng sẽ không được tính công ngày nghỉ đó" >Việc riêng</option>
                                             <option value="5">Đi trễ</option>
                                             <option value="6">Về sớm</option>
-                                            <option id="tooltip-1" title="" value="1">Phép năm</option>
-                                            <option id="tooltip-2" title="" value="2">Nghỉ ốm đau (BHXH)</option>
-                                            <option value="3">Nghỉ thai sản (BHXH)</option>
-                                            <option value="10">Vợ sinh, khám, dưỡng</option>
-                                            <option value="11">Cưới, Tang</option>
+                                            <option value="1" title="Phép năm là phép được cộng vào mỗi đầu tháng. Khi dùng phép năm để nghỉ sẽ được tính lương như bình thường">Phép năm</option>
+                                            <option value="2" title="Nghỉ ốm đau là phép nghỉ sẽ được BHXH thanh toán tiền lương" >Nghỉ ốm đau (BHXH)</option>
+                                            <option value="3" title="Nghỉ thai sản là phép nghỉ sẽ được BHXH thanh toán tiền lương" >Nghỉ thai sản (BHXH)</option>
+                                            <option value="10" title="Nghỉ vợ sinh/khám/dưỡng là phép nghỉ sẽ được công ty thanh toán theo quy định công ty">Vợ sinh, khám, dưỡng</option>
+                                            <option value="11" title="Nghỉ cưới/tang là phép nghỉ sẽ được công ty thanh toán theo quy định công ty">Cưới, Tang</option>
                                         </select>
                                     </div>
 
@@ -64,17 +64,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                    <div class="form-group row" id="dtDenNgay">
                                         <label class="col-sm-3 col-form-label">Ngày kết thúc</label>
                                         <div class="col-5">
                                             <div class="datepicker date input-group p-0 shadow-sm">
-                                                <input asp-for="dateoffEnd" type="text" class="form-control" id="reservationDate">
+                                                <input asp-for="dateoffEnd" type="text" class="form-control" id="reservationDate2">
                                                 <div class="input-group-append"><span class="input-group-text"></span></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="bootstrap-timepicker">
-                                        <div class="form-group row">
+                                        <div class="form-group row" id="tpTuGio">
                                             <label class="col-sm-3 col-form-label">Từ giờ</label>
                                             <div class="input-group date col-4" id="timepicker" data-target-input="nearest">
                                                 <input asp-for="dateoffStartTime" type="text" class="form-control datetimepicker-input" data-target="#timepicker" />
@@ -85,7 +85,7 @@
                                         </div>
                                     </div>
                                     <div class="bootstrap-timepicker">
-                                        <div class="form-group row">
+                                        <div class="form-group row" id="tpDenGio">
                                             <label class="col-sm-3 col-form-label">Đến giờ</label>
                                             <div class="input-group date col-4" id="timepicker2" data-target-input="nearest">
                                                 <input asp-for="dateoffEndTime" type="text" class="form-control datetimepicker-input" data-target="#timepicker2" />
@@ -117,11 +117,36 @@
 
 @section scripts{
     <script type="text/javascript">
+        $(document).ready(function () {
+            $("#formPhep").submit(function (e) {
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: '@Url.Action("dateoff_Request", "DateOff")',
+                    data: $("#formPhep").serialize(),
+                    success: function (result) {
+                        debugger
+                            let dia = bs4pop.dialog({
 
-        // Add the following code if you want the name of the file appear on select
-        $(".custom-file-input").on("change", function () {
-            var fileName = $(this).val().split("\\").pop();
-            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                                title: 'Thông báo',
+                                content: result,
+
+                                closeBtn: true,
+                                backdrop: 'static',
+                                btns: [
+                                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                                ],
+                                onDragStart: function () {
+                                    console.log('onDragStart');
+                                },
+                                onDrag: function () {
+                                    console.log('onDrag');
+                                }
+                            });
+                    }
+                })
+                e.preventDefault();
+            });
         });
 
         $(function () {
@@ -138,6 +163,11 @@
                 var pickedDate = $('input').val();
                 $('#pickedDate').html(pickedDate);
             });
+
+            $('#reservationDate2').on('change', function () {
+                var pickedDate = $('input').val();
+                $('#pickedDate').html(pickedDate);
+            });
         })
 
         //Timepicker
@@ -151,15 +181,32 @@
 
         function myFunction() {
             var x = document.getElementById("loainghiphep").value;
-            if (x == '2' || x == '3')
-                document.getElementById("giaycanco").innerHTML = 'Cần giấy nghỉ bệnh';
+            var dtDenNgay = $('#dtDenNgay');
+            var tpTuGio = $('#tpTuGio');
+            var tpDenGio = $('#tpDenGio');
+            if (x == '2' || x == '3' || x == '10' || x == '11') {
+                document.getElementById("giaycanco").innerHTML = 'Cần giấy nghỉ bệnh của bệnh viện xác nhận';
+                dtDenNgay.prop('hidden', false);
+                tpTuGio.prop('hidden', true);
+                tpDenGio.prop('hidden', true);
+            }
             else
             {
-                if (x != '5')
-                    document.getElementById("giaycanco").innerHTML = 'Không';
+                document.getElementById("giaycanco").innerHTML = 'Không';
+                if (x == '5' || x == '6') {
+                    dtDenNgay.prop('hidden', true);
+                    tpTuGio.prop('hidden', false);
+                    tpDenGio.prop('hidden', false);
+                }
+
+                if (x == '1' || x == '4') {
+                    dtDenNgay.prop('hidden', false);
+                    tpTuGio.prop('hidden', true);
+                    tpDenGio.prop('hidden', true);
+                }
             }
-                
         }
+
         $(".selectpicker").selectpicker()
         var title = [];
         $('#loainghiphept option').each(function () {

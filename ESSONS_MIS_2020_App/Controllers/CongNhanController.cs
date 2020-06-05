@@ -70,39 +70,55 @@ namespace ESSONS_MIS_2020_App.Controllers
         public IActionResult dateoff_Request(DateOffModel um)
         {
             HttpClient hc = _api.Initial();
-           
-            double number = 0;
-            if (um.dateoffStart == um.dateoffEnd && (um.dateoffType == "5" || um.dateoffType == "6"))
+
+            if (um.dateoffStart == null)
             {
-                if (um.dateoffStartTime is null || um.dateoffStartTime is null)
+                ViewBag.Error = "Chưa chọn ngày nghỉ";
+                return PartialView("DisplayError");
+            }
+
+            double number = 0;
+            if (um.dateoffType == "5" || um.dateoffType == "6")
+            {
+                um.dateoffEnd = um.dateoffStart;
+
+                if (um.dateoffEndTime != null && um.dateoffStartTime != null)
                 {
-                    ViewBag.Error = "Chưa chọn giờ nghỉ";
-                    return View();
+                    int yearS = int.Parse(um.dateoffStart.Substring(6, 4));
+                    int monthS = int.Parse(um.dateoffStart.Substring(3, 2));
+                    int dayS = int.Parse(um.dateoffStart.Substring(0, 2));
+                    int hourS = int.Parse(um.dateoffStartTime.Substring(0, 2));
+                    int minuteS = int.Parse(um.dateoffStartTime.Substring(3, 2));
+                    DateTime dtStart = new DateTime(yearS, monthS, dayS, hourS, minuteS, 0);
+
+                    int yearE = int.Parse(um.dateoffEnd.Substring(6, 4));
+                    int monthE = int.Parse(um.dateoffEnd.Substring(3, 2));
+                    int dayE = int.Parse(um.dateoffEnd.Substring(0, 2));
+                    int hourE = int.Parse(um.dateoffEndTime.Substring(0, 2));
+                    int minuteE = int.Parse(um.dateoffEndTime.Substring(3, 2));
+                    DateTime dtEnd = new DateTime(yearE, monthE, dayE, hourE, minuteE, 0);
+
+                    TimeSpan Total = dtEnd - dtStart;
+                    number = Math.Ceiling(Total.TotalHours / 2) * 2;
                 }
-
-                int yearS = int.Parse(um.dateoffStart.Substring(6, 2));
-                int monthS = int.Parse(um.dateoffStart.Substring(3, 2));
-                int dayS = int.Parse(um.dateoffStart.Substring(0, 2));
-                int hourS = int.Parse(um.dateoffStartTime.Substring(0, 2));
-                int minuteS = int.Parse(um.dateoffStartTime.Substring(3, 2));
-                DateTime dtStart = new DateTime(yearS, monthS, dayS, hourS, minuteS, 0);
-
-                int yearE = int.Parse(um.dateoffEnd.Substring(6, 2));
-                int monthE = int.Parse(um.dateoffEnd.Substring(3, 2));
-                int dayE = int.Parse(um.dateoffEnd.Substring(0, 2));
-                int hourE = int.Parse(um.dateoffEndTime.Substring(0, 2));
-                int minuteE = int.Parse(um.dateoffEndTime.Substring(3, 2));
-                DateTime dtEnd = new DateTime(yearE, monthE, dayE, hourE, minuteE, 0);
-
-                TimeSpan Total = dtEnd - dtStart;
-                number = Math.Ceiling(Total.TotalHours / 2) * 2;
+                else
+                {
+                    ViewBag.Error = "Kiểm tra lại giờ xin nghỉ";
+                    return PartialView("DisplayError");
+                }
             }
             else
             {
+                if (um.dateoffEnd == null)
+                {
+                    ViewBag.Error = "Chưa chọn ngày kết thúc nghỉ";
+                    return PartialView("DisplayError");
+                }
+
                 CultureInfo provider = CultureInfo.InvariantCulture;
                 string datestart = um.dateoffStart;
                 string dateend = um.dateoffEnd;
-                TimeSpan Total = DateTime.ParseExact(dateend, "dd/MM/yyyy", provider) - DateTime.ParseExact(datestart, "dd/MM/yyyy", provider);
+                TimeSpan Total = DateTime.ParseExact(dateend, "dd-MM-yyyy", provider) - DateTime.ParseExact(datestart, "dd-MM-yyyy", provider);
                 number = (Total.TotalDays + 1) * 8;
             }
             um.dateoffNumber = number;
@@ -114,11 +130,12 @@ namespace ESSONS_MIS_2020_App.Controllers
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
-                return RedirectToAction("dateoff_Detail_Emp", "CongNhan", new { empID = um.empID });
+                HttpContext.Session.SetString("notice", "Đăng kí phép thành công");
+                return RedirectToAction("dateoff_Detail_Emp", "CongNhan");
             }
 
             ViewBag.Error = "Lỗi kết nối hệ thống. Liên hệ IT";
-            return View();
+            return PartialView("DisplayError");
         }
 
         public IActionResult dateoff_Delete(string dateoffID)
@@ -137,6 +154,8 @@ namespace ESSONS_MIS_2020_App.Controllers
         public async Task<IActionResult> dateoff_Detail_Emp()
         {
             string empID = HttpContext.Session.GetString("empid");
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
 
             List<DateOffModel> um = new List<DateOffModel>();
             HttpClient hc = _api.Initial();

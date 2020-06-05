@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using ESSONS_MIS_2020_App.Helper;
 using ESSONS_MIS_2020_App.Models;
@@ -40,12 +42,31 @@ namespace ESSONS_MIS_2020_App.Controllers
         [HttpPost]
         public IActionResult dateoff_Request(DateOffModel um)
         {
+            //SmtpClient client = new SmtpClient("essons.vn");
+            //client.UseDefaultCredentials = false;
+            //client.Credentials = new NetworkCredential("itdev@essons.vn", "P@ssw0rd123");
+
+            //MailMessage mailMessage = new MailMessage();
+            //mailMessage.From = new MailAddress("idev@essons.vn");
+            //mailMessage.To.Add("idev@essons.vn");
+            //mailMessage.Body = "body";
+            //mailMessage.Subject = "subject";
+            //client.Send(mailMessage);
+
             getRole();
             HttpClient hc = _api.Initial();
 
+            if (um.dateoffStart == null)
+            { 
+                ViewBag.Error = "Chưa chọn ngày nghỉ";
+                return PartialView("DisplayError");
+            }
+
             double number = 0;
-            if (um.dateoffStart == um.dateoffEnd && (um.dateoffType == "5" || um.dateoffType == "6"))
+            if (um.dateoffType == "5" || um.dateoffType == "6")
             {
+                um.dateoffEnd = um.dateoffStart;
+
                 if (um.dateoffEndTime != null && um.dateoffStartTime != null)
                 {
                     int yearS = int.Parse(um.dateoffStart.Substring(6, 4));
@@ -65,9 +86,20 @@ namespace ESSONS_MIS_2020_App.Controllers
                     TimeSpan Total = dtEnd - dtStart;
                     number = Math.Ceiling(Total.TotalHours / 2) * 2;
                 }
+                else
+                {
+                    ViewBag.Error = "Kiểm tra lại giờ xin nghỉ";
+                    return PartialView("DisplayError");
+                }
             }
             else
             {
+                if (um.dateoffEnd == null)
+                {
+                    ViewBag.Error = "Chưa chọn ngày kết thúc nghỉ";
+                    return PartialView("DisplayError");
+                }
+
                 CultureInfo provider = CultureInfo.InvariantCulture;
                 string datestart = um.dateoffStart;
                 string dateend = um.dateoffEnd;
@@ -83,11 +115,12 @@ namespace ESSONS_MIS_2020_App.Controllers
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
+                HttpContext.Session.SetString("notice", "Đăng kí phép thành công");
                 return RedirectToAction("dateoff_Detail_Emp", "DateOff", new { empID = um.empID });
             }
            
             ViewBag.Error = "Lỗi kết nối hệ thống. Liên hệ IT";
-            return View();
+            return PartialView("DisplayError");
         }
 
         public async Task<IActionResult> dateoff_Confirm()
@@ -138,6 +171,9 @@ namespace ESSONS_MIS_2020_App.Controllers
         public async Task<IActionResult> dateoff_Detail_Emp()
         {
             getRole();
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
+
             List<DateOffModel> um = new List<DateOffModel>();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.GetAsync($"api/dateoff/GetEmpID/{ViewBag.empid}");

@@ -134,11 +134,6 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return PartialView("DisplayError");
             }
 
-            if (um.dateoffEnd == null)
-            {
-                ViewBag.Error = "Chưa chọn ngày kết thúc xin phép";
-                return PartialView("DisplayError");
-            }
 
             um.username = ViewBag.empid;
 
