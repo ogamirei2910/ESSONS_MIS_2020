@@ -1,31 +1,115 @@
-﻿@{
+﻿@model IEnumerable<ESSONS_MIS_2020_App.Models.DateOffModel>
+@{
     ViewData["Title"] = "Trang chính";
 }
 
 <div class="content-wrapper">
-
     <!-- Main content -->
     <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Thông tin cá nhân</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table class="table">
+                            <tr>
+                                <td>
+                                    <div class="form-group row">
+                                        <b class="col-sm-3 col-form-label">Số thẻ</b>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.EmpID</a>
+                                    </div>
 
-        <!-- Default box -->
-        <div class="card">
-            <div class="card-body">
-                <center>
-                    <img src="~/Assets/dist/img/cong-ty-tnhh-cong-nghiep-toan-cau-essons.png" width="320px" height="280px" />
-                </center>
+                                    <div class="form-group row">
+                                        <b class="col-sm-3 col-form-label">Họ tên</b>
+                                        <a class="col-sm-5 col-form-label">@ViewBag.message</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3 col-form-label">Tổng phép năm</b>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.phepnam ngày</a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group row">
+                                        <b class="col-sm-3 col-form-label">Đã dùng phép năm</b>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.phepnamdadung ngày</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3 col-form-label">Phép VR</b>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.pheprieng ngày</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3 col-form-label">Không phép</b>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.khongphep ngày</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-3 col-form-label">Nghỉ BHXH</b>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.BHXH ngày</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <br />
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Mã nghỉ</th>
+                                    <th>Loại phép</th>
+                                    <th>Từ ngày</th>
+                                    <th>Đến ngày</th>
+                                    <th>Từ giờ</th>
+                                    <th>Đến giờ</th>
+                                    <th>Số giờ</th>
+                                    <th>Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@Html.DisplayFor(modelItem => item.dateoffID)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.dateoffType)</td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.dateoffStart)
+                                            </td>
+                                            <td>@Html.DisplayFor(modelItem => item.dateoffEnd)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.dateoffStartTime)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.dateoffEndTime)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.dateoffNumber)</td>
+                                            <td>
+                                                @Html.ActionLink("Hủy", "dateoff_Delete", "CongNhan", new { dateoffID = item.dateoffID },
+                                                                                                    new
+                                                                                                    {
+                                                                                                        @class = "btn btn-danger btn-sm"
+                                                                                                    })
+                                            </td>
+                                        </tr>
+                                    }
+
+                                }
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
             </div>
-            <!-- /.card-body -->
-            <!-- /.card-footer-->
+            <!-- /.col -->
         </div>
-        <!-- /.card -->
-
+        <!-- /.row -->
     </section>
-    <!-- /.content -->
 </div>
 
 @section scripts{
     <script type="text/javascript">
-        var a = '@ViewBag.message';
+        var a = '@ViewBag.notice';
         if (a != '') {
             let dia = bs4pop.dialog({
 

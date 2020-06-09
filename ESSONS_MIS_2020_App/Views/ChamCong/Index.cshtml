@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ESSONS_MIS_2020_App.Models.OverTimeModel
+@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -14,15 +15,32 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Chọn ngày tháng</label>
-                            <div class="col-3">
-                                <div class="datepicker date input-group p-0 shadow-sm">
-                                    <input type="text" class="form-control" id="reservationDate">
-                                    <div class="input-group-append"><span class="input-group-text"></span></div>
-                                </div>
-                            </div>
-                        </div>
+                        <form method="post" id="formData">
+                            <table class="table">
+                                <tr>
+                                    <td>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Chọn ngày tháng</label>
+                                            <div class="col-2">
+                                                <div class="datepicker date input-group p-0 shadow-sm">
+                                                    <input type="text" class="form-control" id="reservationDate" asp-for="datework">
+                                                    <div class="input-group-append"><span class="input-group-text"></span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Loại tăng ca</label>
+                                            <select asp-for="overtimeID" class="custom-select col-2 selectpicker" id="slOverTime">
+                                                <option disabled selected>Loại tăng ca</option>
+                                                <option value="1">Thường</option>
+                                                <option value="2">Chủ nhật</option>
+                                                <option value="3">Lễ</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
                         <div class="card-footer">
                             <button class="btn btn-primary" id="btGetData">
                                 Lấy dữ liệu
@@ -36,6 +54,9 @@
                             <button class="btn btn-primary" id="btSumMonth">
                                 Theo tổng tháng
                             </button>
+                            <button class="btn btn-primary" id="btOT">
+                                Cập nhật tăng ca
+                            </button>
                         </div>
                         <br />
                         <table id="example1" class="table table-bordered table-striped">
@@ -47,6 +68,7 @@
                                         <th>Tên nhân viên</th>
                                         <th>Phòng ban</th>
                                         <th>Ngày công</th>
+                                        <th>Loại TC</th>
                                         <th>Ca làm</th>
                                         <th>Giờ vào</th>
                                         <th>Giờ ra</th>
@@ -64,6 +86,7 @@
                                             </td>
                                             <td>@item.depName</td>
                                             <td>@item.datework</td>
+                                            <td>@item.overtimeName</td>
                                             <td>@item.shiftname</td>
                                             <td>@item.intime</td>
                                             <td>@item.outtime</td>
@@ -121,6 +144,27 @@
 @section scripts{
     <script type="text/javascript">
         $(document).ready(function () {
+            var a = '@ViewBag.notice';
+            if (a != '') {
+                let dia = bs4pop.dialog({
+
+                    title: 'Thông báo',
+                    content: '@ViewBag.notice',
+
+                    closeBtn: true,
+                    backdrop: 'static',
+                    btns: [
+                        { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                    ],
+                    onDragStart: function () {
+                        console.log('onDragStart');
+                    },
+                    onDrag: function () {
+                        console.log('onDrag');
+                    }
+
+                });
+            }
 
             $("#btGetData").click(function (e) {
                 var pickedDate = $('input').val();
@@ -157,6 +201,41 @@
             $("#btDay").click(function () {
                 var pickedDate = $('input').val();
                 window.location.href = "/chamcong/index?date=" + pickedDate + "&&type=Day";
+            });
+
+            $("#btOT").click(function (e) {
+                var pickedDate = $('input').val();
+                if (pickedDate == null || pickedDate == '') {
+                    let dia = bs4pop.dialog({
+
+                        title: 'Thông báo',
+                        content: 'Chưa chọn ngày cần cập nhật',
+
+                        closeBtn: true,
+                        backdrop: 'static',
+                        btns: [
+                            { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                        ],
+                        onDragStart: function () {
+                            console.log('onDragStart');
+                        },
+                        onDrag: function () {
+                            console.log('onDrag');
+                        }
+
+                    });
+                    e.preventDefault();
+                }
+                else
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("UpdateOT", "ChamCong")',
+                    data: $("#formData").serialize(),
+                    success: function (response) {
+                        debugger
+                        window.location.href = "/chamcong/index?date=" + pickedDate + "&&type=Day";
+                    }
+                });
             });
 
             $("#btMonth").click(function () {

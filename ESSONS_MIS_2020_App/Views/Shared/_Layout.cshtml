@@ -54,11 +54,11 @@
                 <!-- Sidebar user (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="info">
-                        @if(@ViewBag.empImage != "")
+                        @if (@ViewBag.empImage != "")
                         {
                             <img class="img-circle elevation-2" alt="User Image" height="160" width="250" src="~/images/NhanVien/@ViewBag.empImage">
-                        }                       
-                        <a>@ViewBag.message</a>
+                        }
+                        <a href="/Home/Index">@ViewBag.message</a>
                     </div>
                 </div>
 
@@ -69,7 +69,7 @@
                             <a href="/Home/Index" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
-                                    Trang chính
+                                    Thông tin cá nhân
                                 </p>
                             </a>
                         </li> @*Trang chính*@
@@ -934,16 +934,49 @@
                                         </ul>
                                     </li>
                                 }
+                                @if (thumuc == 4)
+                                {
+                                    <li class="nav-item has-treeview">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon fas fa-th"></i>
+                                            <p>
+                                                Tăng ca
+                                                <i class="right fas fa-angle-left"></i>
+                                            </p>
+                                        </a>
+                                        <ul class="nav nav-treeview">
+                                            @foreach (var folderChild in ViewBag.folderList)
+                                            {
+                                                @if (folderChild.folderID == thumuc)
+                                                {
+                                                    @if (folderChild.folderChildID == 0)
+                                                    {
+                                                        <li class="nav-item">
+                                                            <a href="/DateWork/RequestOT" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Yêu cầu tăng ca</p>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a href="#" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Duyệt tăng ca</p>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                }
+                                            }
+                                        </ul>
+                                    </li>
+                                }
                             }
                         }
                         <!---->
 
                         <li class="nav-item has-treeview">
-                            <a href="/User/Login" class="nav-link">
+                            <a href="/User/Logout" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
-                                <p>
-                                    Đăng xuất
-                                </p>
+                                <p>Đăng xuất</p>
                             </a>
                         </li>
                         @*Đăng xuất*@

@@ -57,6 +57,8 @@ namespace ESSONS_MIS_2020.Controllers
                         em.positionID = sdr["positionName"].ToString();
                         em.empImage = sdr["empImage"].ToString();
 
+                        if(sdr["groupName"] != null)
+                            em.empIDManager = sdr["groupName"].ToString();
                         em.depchildName = sdr["depchildName"].ToString();
                         em.positionName = sdr["positionName"].ToString();
                         em.depchildID = sdr["depchildName"].ToString();
@@ -204,6 +206,65 @@ namespace ESSONS_MIS_2020.Controllers
         }
 
         [HttpGet]
+        public List<EmpModel> GetEmpManager(string depID)
+        {
+            List<EmpModel> ldm = new List<EmpModel>();
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_employee", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                       new SqlParameter("@depID", depID));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "GetEmpManager"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        EmpModel dm = new EmpModel();
+                        dm.empIDManager = sdr["empID"].ToString();
+                        dm.empNameManager = sdr["empName"].ToString();
+                        ldm.Add(dm);
+                    }
+                }
+            }
+            return ldm;
+        }
+
+        [HttpGet]
+        public List<EmpModel> GetEmpInManager(string empid)
+        {
+            List<EmpModel> ldm = new List<EmpModel>();
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_employee", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                       new SqlParameter("@empID", empid));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "GetEmpInManager"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        EmpModel dm = new EmpModel();
+                        dm.empID = sdr["empID"].ToString();
+                        dm.empIDTemp = sdr["empIDTemp"].ToString();
+                        dm.empName = sdr["empName"].ToString();
+                        ldm.Add(dm);
+                    }
+                }
+            }
+            return ldm;
+        }
+
+        [HttpGet]
         public List<DepartmentModel> GetDepartmentID(string depID)
         {
             List<DepartmentModel> ldm = new List<DepartmentModel>();
@@ -340,7 +401,7 @@ namespace ESSONS_MIS_2020.Controllers
                     sc.Parameters.Add(
                         new SqlParameter("@empYearOff", model.empYearOff));
                     sc.Parameters.Add(
-                        new SqlParameter("@empOffice", model.office));
+                       new SqlParameter("@empIDManager", model.empIDManager));
 
                     sc.Parameters.Add(
                         new SqlParameter("@depchildID", model.depchildID));
@@ -448,6 +509,8 @@ namespace ESSONS_MIS_2020.Controllers
                         new SqlParameter("@username", value.username));
                     sc.Parameters.Add(
                         new SqlParameter("@empYearOff", value.empYearOff));
+                    sc.Parameters.Add(
+                        new SqlParameter("@empIDManager", value.empIDManager));
 
                     sc.Parameters.Add(
                        new SqlParameter("@empIdentityPlace", value.empIdentityPlace));

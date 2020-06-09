@@ -46,6 +46,8 @@ namespace ESSONS_MIS_2020_App.Controllers
                 um = JsonConvert.DeserializeObject<List<ChamCongModel>>(results);
             }
 
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
             //Role
             getRole();
             //-----------------------------------
@@ -105,7 +107,7 @@ namespace ESSONS_MIS_2020_App.Controllers
 
             List<TimeWorkModel> em = new List<TimeWorkModel>();
             HttpResponseMessage res2 = await hc.GetAsync($"api/dateoff/GetTimeWork?empid={empid}&&workdate={workdate}");
-            if (res.IsSuccessStatusCode)
+            if (res2.IsSuccessStatusCode)
             {
                 var results = res2.Content.ReadAsStringAsync().Result;
                 em = JsonConvert.DeserializeObject<List<TimeWorkModel>>(results);
@@ -191,15 +193,72 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public async Task<IActionResult> LayLieuChamCong(string date)
         {
+            //HttpClient hc = _api.Initial();
+            //var res = await hc.GetAsync($"api/ChamCong/LayLieuChamCong?date={date}");
+
+            //if (res.IsSuccessStatusCode)
+            //{
+            //    var results = res.Content.ReadAsStringAsync().Result;
+            //    if (results == "OK")
+            //    {
+            //        ViewBag.Error = "Lấy dữ liệu thành công";
+            //        return PartialView("DisplayError");
+            //    }
+            //    else
+            //    {
+            //        ViewBag.Error = results;
+            //        return PartialView("DisplayError");
+            //    }
+            //}
+
+            DateTime dt;
+            DateTime.TryParseExact(date,
+                            "dd-MM-yyyy",
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.None, out dt);
+
+            if (dt < DateTime.Now)
+            {
+                HttpClient hc = _api.Initial();
+                var res = await hc.GetAsync($"api/ChamCong/LayLieuChamCong?date={date}");
+
+                if (res.IsSuccessStatusCode)
+                {
+                    var results = res.Content.ReadAsStringAsync().Result;
+                    if (results == "OK")
+                    {
+                        ViewBag.Error = "Lấy dữ liệu thành công";
+                        return PartialView("DisplayError");
+                    }
+                    else
+                    {
+                        ViewBag.Error = results;
+                        return PartialView("DisplayError");
+                    }
+                }
+            }
+            else
+            {
+                ViewBag.Error = "Ngày làm việc chưa kết thúc";
+                return PartialView("DisplayError");
+            }
+
+            ViewBag.Error = "Lỗi kết nối. Gọi IT";
+            return PartialView("DisplayError");
+        }
+
+        public async Task<IActionResult> UpdateOT(OverTimeModel um)
+        {
             HttpClient hc = _api.Initial();
-            var res = await hc.GetAsync($"api/ChamCong/LayLieuChamCong?date={date}");
+            var res = await hc.PostAsJsonAsync<OverTimeModel>($"api/OverTime/UpdateOT",um);
 
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
                 if (results == "OK")
                 {
-                    ViewBag.Error = "Lấy dữ liệu thành công";
+                    HttpContext.Session.SetString("notice", "Cập nhật loại tăng ca thành công");
+                    ViewBag.Error = "Cập nhật loại tăng ca thành công";
                     return PartialView("DisplayError");
                 }
                 else
@@ -208,38 +267,6 @@ namespace ESSONS_MIS_2020_App.Controllers
                     return PartialView("DisplayError");
                 }
             }
-
-            //DateTime dt;
-            //DateTime.TryParseExact(date,
-            //                "dd-MM-yyyy",
-            //                CultureInfo.InvariantCulture,
-            //                DateTimeStyles.None, out dt);
-
-            //if (dt > DateTime.Now)
-            //{
-            //    HttpClient hc = _api.Initial();
-            //    var res = await hc.GetAsync($"api/ChamCong/LayLieuChamCong?date={date}");
-
-            //    if (res.IsSuccessStatusCode)
-            //    {
-            //        var results = res.Content.ReadAsStringAsync().Result;
-            //        if (results == "OK")
-            //        {
-            //            ViewBag.Error = "Lấy dữ liệu thành công";
-            //            return PartialView("DisplayError");
-            //        }
-            //        else
-            //        {
-            //            ViewBag.Error = results;
-            //            return PartialView("DisplayError");
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    ViewBag.Error = "Ngày làm việc chưa kết thúc";
-            //    return PartialView("DisplayError");
-            //}
 
             ViewBag.Error = "Lỗi kết nối. Gọi IT";
             return PartialView("DisplayError");

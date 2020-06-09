@@ -145,12 +145,12 @@ namespace ESSONS_MIS_2020_App.Controllers
                 if (um.empName.Length < 20)
                 {
                     g.DrawString(um.empName, new Font("Calibri", 10, FontStyle.Bold), new SolidBrush(Color.Black), rect1, stringFormat);
-                    g.DrawString(um.depchildName, new Font("Calibri", 9, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
+                    g.DrawString(um.positionName, new Font("Calibri", 9, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
                 }
                 else
                 {
                     g.DrawString(um.empName, new Font("Calibri", 9, FontStyle.Bold), new SolidBrush(Color.Black), rect1, stringFormat);
-                    g.DrawString(um.depchildName, new Font("Calibri", 8, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
+                    g.DrawString(um.positionName, new Font("Calibri", 8, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
                 }
                 g.DrawString("Số hiệu: " + um.empID, new Font("Calibri", 9, FontStyle.Bold), new SolidBrush(Color.Black), new Point(65, 500));
 
@@ -318,12 +318,12 @@ namespace ESSONS_MIS_2020_App.Controllers
                 if (um.empName.Length < 20)
                 {
                     g.DrawString(um.empName, new Font("Calibri", 10, FontStyle.Bold), new SolidBrush(Color.Black), rect1, stringFormat);
-                    g.DrawString(um.depchildName, new Font("Calibri", 9, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
+                    g.DrawString(um.positionName, new Font("Calibri", 9, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
                 }
                 else
                 {
                     g.DrawString(um.empName, new Font("Calibri", 9, FontStyle.Bold), new SolidBrush(Color.Black), rect1, stringFormat);
-                    g.DrawString(um.depchildName, new Font("Calibri", 8, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
+                    g.DrawString(um.positionName, new Font("Calibri", 8, FontStyle.Regular), new SolidBrush(Color.Black), rect2, stringFormat);
                 }
                 g.DrawString("Số hiệu: " + um.empID, new Font("Calibri", 9, FontStyle.Bold), new SolidBrush(Color.Black), new Point(65, 500));
 
@@ -391,6 +391,19 @@ namespace ESSONS_MIS_2020_App.Controllers
             return PartialView("DisplayDEpartmentChild");
         }
 
+        public async Task<IActionResult> EmpManager(string depID)
+        {
+            List<EmpModel> em = new List<EmpModel>();
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.GetAsync($"api/emp/GetEmpManager?depID={depID}");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                em = JsonConvert.DeserializeObject<List<EmpModel>>(results);
+            }
+            ViewBag.DepartmentCList = em;
+            return PartialView("DisplayEmpManager");
+        }
 
         public async Task<IActionResult> Position(string depchildID)
         {

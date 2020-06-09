@@ -261,6 +261,8 @@ namespace ESSONS_MIS_2020.Controllers
                        new SqlParameter("@empid", empid));
                     sc.Parameters.Add(
                        new SqlParameter("@datework", workdate));
+                    sc.Parameters.Add(
+                       new SqlParameter("@type", "BuPhep"));
                     SqlDataReader sdr = sc.ExecuteReader();
                     while (sdr.Read())
                     {
@@ -276,6 +278,35 @@ namespace ESSONS_MIS_2020.Controllers
             }
         }
 
+        public List<TimeWorkModel> GetTimeWorkRequest(string empid)
+        {
+            List<TimeWorkModel> lem = new List<TimeWorkModel>();
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_timework", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                       new SqlParameter("@empid", empid));
+                    sc.Parameters.Add(
+                       new SqlParameter("@type", "RequestOT"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        TimeWorkModel em = new TimeWorkModel();
+                        em.depID = sdr["depID"].ToString();
+                        em.shiftName = sdr["ShiftName"].ToString();
+                        em.timestart = sdr["timestart"].ToString();
+                        em.timeend = sdr["timeend"].ToString();
+                        lem.Add(em);
+                    }
+                }
+                return lem;
+            }
+        }
         [HttpPost]
         public DateOffModel BuPhep([FromBody]DateOffModel model)
         {

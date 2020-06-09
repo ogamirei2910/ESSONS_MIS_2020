@@ -56,20 +56,16 @@
                                         <a class="col-sm-8">@Html.DisplayFor(model => model.empTel)</a>
                                     </div>
 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
                                     <div class="form-group row">
                                         <b class="col-sm-3">Giới tính</b>
                                         <a class="col-sm-5">@Html.DisplayFor(model => model.empSex)</a>
                                     </div>
-                                </td>
-                                <td>
+
                                     <div class="form-group row">
                                         <b class="col-sm-3">Ngày sinh</b>
                                         <a class="col-sm-5">@Html.DisplayFor(model => model.empBirthDay)</a>
                                     </div>
+
                                 </td>
                             </tr>
                             <tr>
@@ -88,6 +84,13 @@
                                         <b class="col-sm-3">Chức vụ</b>
                                         <a class="col-sm-5">@Html.DisplayFor(model => model.positionName)</a>
                                     </div>
+                                    @if (Model.empIDManager != null && Model.empIDManager != "")
+                                    {
+                                        <div class="form-group row">
+                                            <b class="col-sm-3">Người Q.lý:</b>
+                                            <a class="col-sm-5">@Html.DisplayFor(model => model.empIDManager)</a>
+                                        </div>
+                                    }
                                 </td>
                             </tr>
                             <tr>

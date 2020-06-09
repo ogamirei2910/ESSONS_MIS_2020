@@ -57,6 +57,8 @@ namespace ESSONS_MIS_2020_App.Models
         public IFormFile ProfileImage { get; set; }
 
         public int office { get; set; }
+        public string empNameManager { get; set; }
+        public string empIDManager { get; set; }
         public string depchildID { get; set; }
         public string positionName { get; set; }
         public string depchildName { get; set; }

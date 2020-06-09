@@ -15,6 +15,7 @@ namespace ESSONS_MIS_2020.Models
         public string intime { get; set; }
         public string outtime { get; set; }
 
+        public string overtimeName { get; set; }
         public string shiftname { get; set; }
         public double hours { get; set; }
         public double OT { get; set; }

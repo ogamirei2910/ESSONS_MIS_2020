@@ -47,6 +47,7 @@ namespace ESSONS_MIS_2020.Controllers
                         em.datework = sdr["datework"].ToString();
                         em.intime = sdr["intime"].ToString();
                         em.outtime = sdr["outtime"].ToString();
+                        em.overtimeName = sdr["overtimeName"].ToString();
                         em.shiftname = sdr["shiftName"].ToString();
                         em.hours = double.Parse(sdr["giocong"].ToString());
                         em.OT = double.Parse(sdr["OT"].ToString());
@@ -109,6 +110,7 @@ namespace ESSONS_MIS_2020.Controllers
                         em.empName = sdr["empName"].ToString();
                         em.depName = sdr["depID"].ToString();
                         em.datework = sdr["datework"].ToString();
+                        em.overtimeName = sdr["overtimeName"].ToString();
                         em.shiftname = sdr["shiftName"].ToString();
                         em.intime = sdr["intime"].ToString();
                         em.outtime = sdr["outtime"].ToString();

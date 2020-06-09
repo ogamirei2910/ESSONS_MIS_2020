@@ -35,6 +35,9 @@ namespace ESSONS_MIS_2020_App.Controllers
         }
         public IActionResult Login()
         {
+            if(HttpContext.Session.GetString("isLogin") == "true")
+                return RedirectToAction("Index", "Home");
+
             return View();
         }
         [HttpPost]
@@ -68,13 +71,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                     return View();
                 }
             }
-
-            if (um.username == "nam" && um.password != "P@ssw0rd123")
-            {
-                ViewBag.Message = "Kiểm tra lại tài khoản hoặc mật khẩu";
-                return View();
-            }    
-
+  
             HttpClient hc = _api.Initial();
             var res = hc.PostAsJsonAsync<UserModel>("api/user/login", um);
             res.Wait();
@@ -84,6 +81,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             {
                 HttpContext.Session.SetString("notice", um.username);
                 HttpContext.Session.SetString("username", um.username);
+                HttpContext.Session.SetString("isLogin", "true");
                 return RedirectToAction("Index", "Home");
             }
 
@@ -156,6 +154,12 @@ namespace ESSONS_MIS_2020_App.Controllers
                 HttpContext.Session.SetString("notice", "Xóa không thành công");
 
             return RedirectToAction("SetFolder", "User");
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.SetString("isLogin", "");
+            return RedirectToAction("Index", "MainPage");
         }
     }
 }

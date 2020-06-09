@@ -24,7 +24,10 @@ namespace ESSONS_MIS_2020_App
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDistributedMemoryCache();           // Đăng ký dịch vụ lưu cache trong bộ nhớ (Session sẽ sử dụng nó)
-            services.AddSession();
+            services.AddSession(cfg => {                    // Đăng ký dịch vụ Session
+                cfg.Cookie.Name = "MIS";             // Đặt tên Session - tên này sử dụng ở Browser (Cookie)
+                cfg.IdleTimeout = new TimeSpan(12, 0, 0);    // Thời gian tồn tại của Session
+            });
 
 
             services.Configure<CookiePolicyOptions>(options =>

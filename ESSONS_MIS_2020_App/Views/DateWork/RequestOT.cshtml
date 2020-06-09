@@ -1,0 +1,167 @@
+﻿@model ESSONS_MIS_2020_App.Models.EmpDateWorkModel
+
+@{
+    ViewData["Title"] = "RequestOT";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Yêu cầu tăng ca</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form id="formData" method="post">
+                            <table class="table">
+                                <tr>
+                                    <td>
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label">Ngày bắt đầu</label>
+                                            <div class="col-6">
+                                                <div class="datepicker date input-group p-0 shadow-sm">
+                                                    <input asp-for="datework" type="text" class="form-control" id="reservationDate">
+                                                    <div class="input-group-append"><span class="input-group-text"></span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group row" id="dtDenNgay">
+                                            <label class="col-sm-4 col-form-label">Ngày kết thúc</label>
+                                            <div class="col-6">
+                                                <div class="datepicker date input-group p-0 shadow-sm">
+                                                    <input asp-for="dateworkend" type="text" class="form-control" id="reservationDate2">
+                                                    <div class="input-group-append"><span class="input-group-text"></span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-group row mySelect">
+                                            <label class="col-sm-4 col-form-label">Ca làm việc</label>
+                                            <label>&nbsp;&nbsp;</label>
+                                            <select asp-for="shiftName" class="custom-select col-6 selectpicker" id="calamviec"
+                                                    asp-items="@(new SelectList(ViewBag.timeworkList,"shiftName","shiftName"))">
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                            <div class="card-footer">
+                                <button id="btSend" class="btn btn-primary">
+                                    Xác nhận
+                                </button>
+                            </div>
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Mã nhân viên</th>
+                                        <th>Mã thời vụ</th>
+                                        <th>Tên nhân viên</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in ViewBag.emp)
+                                    {
+                                        <tr>
+                                            <td><input type="checkbox" id="@item.empID"></td>
+                                            <td>@item.empID</td>
+                                            <td>@item.empIDTemp</td>
+                                            <td>@item.empName</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </form>                    
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btSend").click(function (e) {
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: '@Url.Action("BuPhep", "ChamCong")',
+                    data: $("#formPhep").serialize(),
+                    success: function (result) {
+                        debugger
+                        if (result != '\r\nOK\r\n') {
+                            let dia = bs4pop.dialog({
+
+                                title: 'Thông báo',
+                                content: result,
+
+                                closeBtn: true,
+                                backdrop: 'static',
+                                btns: [
+                                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                                ],
+                                onDragStart: function () {
+                                    console.log('onDragStart');
+                                },
+                                onDrag: function () {
+                                    console.log('onDrag');
+                                }
+                            });
+                        }
+                        else {
+                            window.location.href = "/ChamCong/DateOffException";
+                        }
+                    }
+                })
+                e.preventDefault();
+            });
+        });
+
+
+
+        $(function () {
+
+            // INITIALIZE DATEPICKER PLUGIN
+            $('.datepicker').datepicker({
+                clearBtn: true,
+                format: "dd-mm-yyyy"
+            });
+
+            $('#reservationDate').on('change', function () {
+                var pickedDate = $('input').val();
+                $('#pickedDate').html(pickedDate);
+            });
+
+            $('#reservationDate2').on('change', function () {
+                var pickedDate = $('input').val();
+                $('#pickedDate').html(pickedDate);
+            });
+        })
+
+        //Timepicker
+        $('#timepicker').datetimepicker({
+            format: 'HH:mm'
+        })
+
+        $('#timepicker2').datetimepicker({
+            format: 'HH:mm'
+        })
+    </script>
+}
+

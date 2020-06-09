@@ -37,14 +37,14 @@
                                         <label>&nbsp;&nbsp;</label>
                                         <select asp-for="dateoffType" class="custom-select col-6 selectpicker" id="loainghiphep" onchange=" myFunction()">
                                             <option disabled selected>Chọn loại nghỉ</option>
-                                            <option value="4" title="Việc riêng là phép dùng để nghỉ nhưng sẽ không được tính công ngày nghỉ đó" >Việc riêng</option>
-                                            <option value="5">Đi trễ</option>
-                                            <option value="6">Về sớm</option>
+                                            <option value="4" title="Việc riêng là phép dùng để nghỉ nhưng sẽ không được tính công ngày nghỉ đó">Việc riêng</option>
                                             <option value="1" title="Phép năm là phép được cộng vào mỗi đầu tháng. Khi dùng phép năm để nghỉ sẽ được tính lương như bình thường">Phép năm</option>
-                                            <option value="2" title="Nghỉ ốm đau là phép nghỉ sẽ được BHXH thanh toán tiền lương" >Nghỉ ốm đau (BHXH)</option>
-                                            <option value="3" title="Nghỉ thai sản là phép nghỉ sẽ được BHXH thanh toán tiền lương" >Nghỉ thai sản (BHXH)</option>
+                                            <option value="2" title="Nghỉ bệnh là phép nghỉ sẽ được BHXH thanh toán tiền lương">Nghỉ bệnh (BHXH)</option>
+                                            <option value="13" title="Nghỉ con bệnh là phép nghỉ sẽ được BHXH thanh toán tiền lương">Con bệnh (BHXH)</option>
+                                            <option value="3" title="Nghỉ thai sản là phép nghỉ sẽ được BHXH thanh toán tiền lương">Nghỉ thai sản (BHXH)</option>
                                             <option value="10" title="Nghỉ vợ sinh/khám/dưỡng là phép nghỉ sẽ được công ty thanh toán theo quy định công ty">Vợ sinh, khám, dưỡng</option>
-                                            <option value="11" title="Nghỉ cưới/tang là phép nghỉ sẽ được công ty thanh toán theo quy định công ty">Cưới, Tang</option>
+                                            <option value="11" title="Nghỉ kết hôn là phép nghỉ sẽ được công ty thanh toán theo quy định công ty">Kết hôn</option>
+                                            <option value="12" title="Nghỉ tang gia là phép nghỉ sẽ được công ty thanh toán theo quy định công ty">Tang gia</option>
                                         </select>
                                     </div>
 
@@ -184,8 +184,11 @@
             var dtDenNgay = $('#dtDenNgay');
             var tpTuGio = $('#tpTuGio');
             var tpDenGio = $('#tpDenGio');
-            if (x == '2' || x == '3' || x == '10' || x == '11') {
-                document.getElementById("giaycanco").innerHTML = 'Cần giấy nghỉ bệnh của bệnh viện xác nhận';
+            if (x == '2' || x == '3' || x == '10' || x == '11' || x == '12' || x == '13') {
+                if (x == '11' || x == '12')
+                    document.getElementById("giaycanco").innerHTML = 'Cần giấy xác nhận tổ chức kết hôn, tang gia'; 
+                else
+                    document.getElementById("giaycanco").innerHTML = 'Cần giấy nghỉ bệnh của bệnh viện xác nhận';
                 dtDenNgay.prop('hidden', false);
                 tpTuGio.prop('hidden', true);
                 tpDenGio.prop('hidden', true);
@@ -193,16 +196,10 @@
             else
             {
                 document.getElementById("giaycanco").innerHTML = 'Không';
-                if (x == '5' || x == '6') {
-                    dtDenNgay.prop('hidden', true);
-                    tpTuGio.prop('hidden', false);
-                    tpDenGio.prop('hidden', false);
-                }
-
                 if (x == '1' || x == '4') {
                     dtDenNgay.prop('hidden', false);
-                    tpTuGio.prop('hidden', true);
-                    tpDenGio.prop('hidden', true);
+                    tpTuGio.prop('hidden', false);
+                    tpDenGio.prop('hidden', false);
                 }
             }
         }

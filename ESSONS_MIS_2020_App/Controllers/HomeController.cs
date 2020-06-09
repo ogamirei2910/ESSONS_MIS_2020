@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using ESSONS_MIS_2020_App.Helper;
 using System.Net.Http;
 using Newtonsoft.Json;
+using System.Management;
 
 namespace ESSONS_MIS_2020_App.Controllers
 {
@@ -18,47 +19,86 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public async Task<IActionResult> Index()
         {
+            //string[] lstPrinterList = new string[10];
+            //ManagementScope objScope = new ManagementScope(ManagementPath.DefaultPath); //For the local Access
+            //objScope.Connect();
+
+            //SelectQuery selectQuery = new SelectQuery();
+            //selectQuery.QueryString = "Select * from win32_Printer";
+            //ManagementObjectSearcher MOS = new ManagementObjectSearcher(objScope, selectQuery);
+            //ManagementObjectCollection MOC = MOS.Get();
+            //int i = 0;
+            //foreach (ManagementObject mo in MOC)
+            //{
+            //    lstPrinterList[i] = mo["Name"].ToString();
+            //    i++;
+            //}
+
 
             string username = HttpContext.Session.GetString("username");
-            List<UserRoleModel> um = new List<UserRoleModel>();
+            List<UserRoleModel> urm = new List<UserRoleModel>();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.GetAsync($"api/user/GetRole/{username}");
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
-                um = JsonConvert.DeserializeObject<List<UserRoleModel>>(results);
+                urm = JsonConvert.DeserializeObject<List<UserRoleModel>>(results);
+            }
+
+            List<DateOffModel> um = new List<DateOffModel>();       
+            res = await hc.GetAsync($"api/dateoff/GetEmpID/{urm.First().empID}");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                um = JsonConvert.DeserializeObject<List<DateOffModel>>(results);
+            }
+
+            res = await hc.GetAsync($"api/dateoff/GetDateOffInfo/{urm.First().empID}");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                ViewBag.InfoList = JsonConvert.DeserializeObject<DateOffInfoModel>(results);
+            }
+
+            EmpModel em = new EmpModel();
+            res = await hc.GetAsync($"api/emp/GetEmpID/{urm.First().empID}");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                em = JsonConvert.DeserializeObject<EmpModel>(results);
+                ViewBag.EmpInfo = em;
             }
 
             //Role
+
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");
-            ViewBag.message = um.First().empName.ToString();
-            ViewBag.roleID = um.First().roleID.ToString();
-            ViewBag.empid = um.First().empID.ToString();
-            if (um.First().empImage != null)
-                ViewBag.empImage = um.First().empImage.ToString();
+            ViewBag.message = urm.First().empName.ToString();
+            ViewBag.roleID = urm.First().roleID.ToString();
+            ViewBag.empid = urm.First().empID.ToString();
+            if (urm.First().empImage != null)
+                ViewBag.empImage = urm.First().empImage.ToString();
             else
                 ViewBag.empImage = "";
-            var DistinctItems = um.Select(x => x.folderID).Distinct().ToList();
+            var DistinctItems = urm.Select(x => x.folderID).Distinct().ToList();
             ViewBag.folder = DistinctItems;
-            ViewBag.folderList = um;
-            HttpContext.Session.SetObjectAsJson("folderList", um);
-            //-------------------------------------------------
+            ViewBag.folderList = urm;
+            HttpContext.Session.SetObjectAsJson("folderList", urm);
+            //------------------------------------------------- 
 
-            return View();
+            return View(um);
         }
 
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
-
+            //Hệ thống
             return View();
         }
 
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
-
             return View();
         }
 

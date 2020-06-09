@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Net.Mail;
+using System.Net.Http;
 using System.Threading.Tasks;
 using ESSONS_MIS_2020_App.Helper;
 using ESSONS_MIS_2020_App.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+
 
 namespace ESSONS_MIS_2020_App.Controllers
 {
@@ -42,16 +43,16 @@ namespace ESSONS_MIS_2020_App.Controllers
         [HttpPost]
         public IActionResult dateoff_Request(DateOffModel um)
         {
-            //SmtpClient client = new SmtpClient("essons.vn");
-            //client.UseDefaultCredentials = false;
-            //client.Credentials = new NetworkCredential("itdev@essons.vn", "P@ssw0rd123");
+            SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
+            client.UseDefaultCredentials = false;
+            client.Credentials = new NetworkCredential("itdev@essons.vn", "P@ssw0rd123");
 
-            //MailMessage mailMessage = new MailMessage();
-            //mailMessage.From = new MailAddress("idev@essons.vn");
-            //mailMessage.To.Add("idev@essons.vn");
-            //mailMessage.Body = "body";
-            //mailMessage.Subject = "subject";
-            //client.Send(mailMessage);
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress("itdev@essons.vn");
+            mailMessage.To.Add("itsys@essons.vn");
+            mailMessage.Body = "body";
+            mailMessage.Subject = "subject";
+            client.Send(mailMessage);
 
             getRole();
             HttpClient hc = _api.Initial();
@@ -62,11 +63,20 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return PartialView("DisplayError");
             }
 
-            double number = 0;
-            if (um.dateoffType == "5" || um.dateoffType == "6")
+            if (um.dateoffEnd == null)
             {
-                um.dateoffEnd = um.dateoffStart;
+                ViewBag.Error = "Chưa chọn ngày kết thúc nghỉ";
+                return PartialView("DisplayError");
+            }
 
+            double number = 0;
+            CultureInfo provider = CultureInfo.InvariantCulture;
+            string datestart = um.dateoffStart;
+            string dateend = um.dateoffEnd;
+            TimeSpan Total = DateTime.ParseExact(dateend, "dd-MM-yyyy", provider) - DateTime.ParseExact(datestart, "dd-MM-yyyy", provider);
+            number = (Total.TotalDays + 1) * 8;
+            if (um.dateoffType == "4")
+            {
                 if (um.dateoffEndTime != null && um.dateoffStartTime != null)
                 {
                     int yearS = int.Parse(um.dateoffStart.Substring(6, 4));
@@ -83,29 +93,11 @@ namespace ESSONS_MIS_2020_App.Controllers
                     int minuteE = int.Parse(um.dateoffEndTime.Substring(3, 2));
                     DateTime dtEnd = new DateTime(yearE, monthE, dayE, hourE, minuteE, 0);
 
-                    TimeSpan Total = dtEnd - dtStart;
-                    number = Math.Ceiling(Total.TotalHours / 2) * 2;
-                }
-                else
-                {
-                    ViewBag.Error = "Kiểm tra lại giờ xin nghỉ";
-                    return PartialView("DisplayError");
+                    TimeSpan Total2 = dtEnd - dtStart;
+                    number = Math.Ceiling(Total2.TotalHours / 2) * 2;
                 }
             }
-            else
-            {
-                if (um.dateoffEnd == null)
-                {
-                    ViewBag.Error = "Chưa chọn ngày kết thúc nghỉ";
-                    return PartialView("DisplayError");
-                }
 
-                CultureInfo provider = CultureInfo.InvariantCulture;
-                string datestart = um.dateoffStart;
-                string dateend = um.dateoffEnd;
-                TimeSpan Total = DateTime.ParseExact(dateend, "dd-MM-yyyy", provider) - DateTime.ParseExact(datestart, "dd-MM-yyyy", provider);
-                number = (Total.TotalDays + 1)* 8;
-            }
             um.dateoffNumber = number;
 
             um.empName = ViewBag.message;
