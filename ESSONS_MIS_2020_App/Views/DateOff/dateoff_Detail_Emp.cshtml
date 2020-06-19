@@ -85,7 +85,7 @@
                                         <td>@Html.DisplayFor(modelItem => item.dateoffEndTime)</td>
                                         <td>@Html.DisplayFor(modelItem => item.dateoffNumber)</td>
                                         <td>
-                                            @Html.ActionLink("Hủy", "dateoff_Delete", "dateoff", new { dateoffID = item.dateoffID },
+                                            @Html.ActionLink("Hủy", "dateoff_Delete", "dateoff", new { dateoffID = item.dateoffID, page = 1 },
                                                                                                 new
                                                                                                 {
                                                                                                     @class = "btn btn-danger btn-sm",

@@ -11,7 +11,7 @@ using ESSONS_MIS_2020_App.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-
+using OfficeOpenXml.FormulaParsing.Utilities;
 
 namespace ESSONS_MIS_2020_App.Controllers
 {
@@ -43,19 +43,24 @@ namespace ESSONS_MIS_2020_App.Controllers
         [HttpPost]
         public IActionResult dateoff_Request(DateOffModel um)
         {
-            SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
-            client.UseDefaultCredentials = false;
-            client.Credentials = new NetworkCredential("itdev@essons.vn", "P@ssw0rd123");
+            //SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
+            //client.UseDefaultCredentials = false;
+            //client.Credentials = new NetworkCredential("itdev@essons.vn", "P@ssw0rd123");
 
-            MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress("itdev@essons.vn");
-            mailMessage.To.Add("itsys@essons.vn");
-            mailMessage.Body = "body";
-            mailMessage.Subject = "subject";
-            client.Send(mailMessage);
+            //MailMessage mailMessage = new MailMessage();
+            //mailMessage.From = new MailAddress("itdev@essons.vn");
+            //mailMessage.To.Add("itsys@essons.vn");
+            //mailMessage.Body = "body";
+            //mailMessage.Subject = "subject";
+            //client.Send(mailMessage);
 
             getRole();
             HttpClient hc = _api.Initial();
+            if (um.dateoffType == "0" || um.dateoffType == null)
+            {
+                ViewBag.Error = "Chưa chọn loại nghỉ phép";
+                return PartialView("DisplayError");
+            }
 
             if (um.dateoffStart == null)
             { 
@@ -75,7 +80,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             string dateend = um.dateoffEnd;
             TimeSpan Total = DateTime.ParseExact(dateend, "dd-MM-yyyy", provider) - DateTime.ParseExact(datestart, "dd-MM-yyyy", provider);
             number = (Total.TotalDays + 1) * 8;
-            if (um.dateoffType == "4")
+            if (um.dateoffType == "4" || um.dateoffType == "1")
             {
                 if (um.dateoffEndTime != null && um.dateoffStartTime != null)
                 {
@@ -94,24 +99,35 @@ namespace ESSONS_MIS_2020_App.Controllers
                     DateTime dtEnd = new DateTime(yearE, monthE, dayE, hourE, minuteE, 0);
 
                     TimeSpan Total2 = dtEnd - dtStart;
-                    number = Math.Ceiling(Total2.TotalHours / 2) * 2;
+                    var numbertest = Math.Floor(Total2.TotalHours);
+                    var numbertest2 = numbertest + 0.5;
+                    number = Total2.TotalHours;
+                    if (Total2.TotalHours > numbertest && Total2.TotalHours <= numbertest2)
+                        number = numbertest2;
+                    if (Total2.TotalHours > numbertest2)
+                        number = Math.Ceiling(Total2.TotalHours);
+                    if (number > 8)
+                        number = 8;
+
                 }
             }
 
             um.dateoffNumber = number;
 
-            um.empName = ViewBag.message;
+            um.username = ViewBag.empid;
             var res = hc.PostAsJsonAsync<DateOffModel>("api/dateoff/Create", um);
             res.Wait();
 
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
+
                 HttpContext.Session.SetString("notice", "Đăng kí phép thành công");
-                return RedirectToAction("dateoff_Detail_Emp", "DateOff", new { empID = um.empID });
+                ViewBag.Error = "OK";
+                return PartialView("DisplayError");
             }
            
-            ViewBag.Error = "Lỗi kết nối hệ thống. Liên hệ IT";
+            ViewBag.Error = "Không đủ phép năm để nghỉ";
             return PartialView("DisplayError");
         }
 
@@ -142,7 +158,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return RedirectToAction("dateoff_Confirm");
         }
 
-        public IActionResult dateoff_Delete(string dateoffID)
+        public IActionResult dateoff_Delete(string dateoffID, int page)
         {
             getRole();
             DateOffModel em = new DateOffModel();
@@ -152,12 +168,27 @@ namespace ESSONS_MIS_2020_App.Controllers
             var res = hc.PostAsJsonAsync<DateOffModel>($"api/dateoff/Delete", em);
             res.Wait();
 
-            return RedirectToAction("dateoff_Detail_Emp", new { empID = ViewBag.empid });
+            if (page == 1)
+                return RedirectToAction("Index", "Home");
+            else
+                return RedirectToAction("dateoff_Confirm");
         }
 
-        public IActionResult dateoff_Detail()
+        public async Task<IActionResult> dateoff_Detail()
         {
-            return View();
+            getRole();
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
+
+            List<DateOffModel> um = new List<DateOffModel>();
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.GetAsync($"api/dateoff/GetAllEmp");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                um = JsonConvert.DeserializeObject<List<DateOffModel>>(results);
+            }
+            return View(um);
         }
 
         public async Task<IActionResult> dateoff_Detail_Emp()

@@ -46,9 +46,9 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Giới tính</label>
                                         <label>&nbsp;</label>
-                                        <select asp-for="empSex" id="empSex" class="custom-select col-sm-3">
-                                            <option value="Nam">Nam</option>
-                                            <option value="Nữ">Nữ</option>
+                                        <select asp-for="empSex" class="custom-select col-sm-3">
+                                                <option>Nam</option>
+                                                <option>Nữ</option>
                                         </select>
                                     </div>
                                     <div class="form-group row">
@@ -518,10 +518,9 @@
         $("#dep").val('@ViewBag.positiondepList.depID').change();
         $("#depchild").val('@ViewBag.positiondepList.depchildID').change();
         
-        $("#empSex").val('@Model.empSex').change();
         $("#empDomicile").text = '@Model.empDomicile';
         $("#empBorn").text = '@Model.empBorn';
-        $("#empSex").val('@Model.empSex').change();
+        $("#empSex").text = '@Model.empSex';
         $("#empMarriage").text = '@Model.empMarriage';
         $("#empProvince").val('@Model.empProvince').change();
         $("#empBirthCertificate").val('@Model.empBirthCertificate').change();

@@ -267,6 +267,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 }
                 ViewBag.positionList = ptm;
             }
+
             getRole();
             return View(um);
         }
@@ -391,11 +392,11 @@ namespace ESSONS_MIS_2020_App.Controllers
             return PartialView("DisplayDEpartmentChild");
         }
 
-        public async Task<IActionResult> EmpManager(string depID)
+        public async Task<IActionResult> EmpManager(string groupID)
         {
             List<EmpModel> em = new List<EmpModel>();
             HttpClient hc = _api.Initial();
-            HttpResponseMessage res = await hc.GetAsync($"api/emp/GetEmpManager?depID={depID}");
+            HttpResponseMessage res = await hc.GetAsync($"api/emp/GetEmpManager?groupID={groupID}");
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;

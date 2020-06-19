@@ -1,0 +1,131 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Danh sách yêu cầu tăng ca</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Mã yêu cầu</th>
+                                    <th>Bộ phận YC</th>
+                                    <th>Ca</th>
+                                    <th>Số lượng</th>
+                                    <th>Tăng ca</th>
+                                    <th>Ngày bắt đầu</th>
+                                    <th>Ngày kết thúc</th>
+                                    <th>Trạng thái</th>
+                                    <th>Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ViewBag.requestList)
+                                {
+                                <tr>
+                                    <td>@item.requestID</td>
+                                    <td>@item.depName</td>
+                                    <td>@item.shiftName</td>
+                                    <td>@item.number</td>
+                                    @if (item.isOT == 1)
+                                    {
+                                        <td>Có</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Không</td>
+                                    }
+                                    <td>@item.datework</td>
+                                    <td>@item.dateworkend</td>
+                                    <td>
+                                        @if (@item.status == "2")
+                                        {
+                                            <label>Đang chờ</label>
+                                        }
+                                        else
+                                        {
+                                            if (@item.status == "1")
+                                            {
+                                                <label>Đã xác nhận</label>
+                                            }
+                                            if (@item.status == "3")
+                                            {
+                                                <label>Hủy</label>
+                                            }
+                                        }
+
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Chi tiết", "Detail", "DateWork", new { requestID = item.requestID, isOT = item.isOT, shiftName = item.shiftName },
+                                                                                          new { @class = "btn btn-primary btn-sm" })
+                                        @if (@item.status == "2")
+                                        {
+
+                                            @Html.ActionLink("Duyệt", "Update", "DateWork", new { requestID = item.requestID, isOT = item.isOT, shiftName = item.shiftName, page = 1 },
+                                                                                         new { @class = "btn btn-info btn-sm" })
+
+                                            @Html.ActionLink("Hủy", "Delete", "DateWork", new { requestID = item.requestID, isOT = item.isOT, shiftName = item.shiftName, page = 1 },
+                                                                                     new
+                                                                                          {
+                                                                                              @class = "btn btn-danger btn-sm",
+                                                                                              id = "deleteBT"
+                                                                                          })
+
+                                            @if (item.isOT == 1)
+                                            {
+                                                <a href="@Url.Action("ExportV2", "DateWork",new { requestID = item.requestID, shiftName = item.shiftName })" class="links">
+                                                    <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                                                </a>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                                }
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+       var a = '@ViewBag.notice';
+        if (a != '') {
+            let dia = bs4pop.dialog({
+
+                title: 'Thông báo',
+                content: '@ViewBag.notice',
+
+                closeBtn: true,
+                backdrop: 'static',
+                btns: [
+                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                ],
+                onDragStart: function () {
+                    console.log('onDragStart');
+                },
+                onDrag: function () {
+                    console.log('onDrag');
+                }
+
+            });
+        }
+    </script>
+}

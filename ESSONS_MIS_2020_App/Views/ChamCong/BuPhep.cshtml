@@ -33,15 +33,19 @@
                                             <select asp-for="dateoffType" class="custom-select col-6 selectpicker" id="loainghiphep">
                                                 <option disabled>Chọn loại nghỉ</option>
                                                 @if (ViewBag.buphep.dateoffExName == "Lỗi phép đi trễ" || ViewBag.buphep.dateoffExName == "Lỗi phép về sớm"
-                                                 || ViewBag.buphep.dateoffExName == "Lỗi không xác định ca" || ViewBag.buphep.dateoffExName == "Lỗi về trước giờ ra"
-                                                 || ViewBag.buphep.dateoffExName == "Lỗi quét vân tay")
+                                           || ViewBag.buphep.dateoffExName == "Lỗi không xác định ca" || ViewBag.buphep.dateoffExName == "Lỗi về trước giờ ra"
+                                           || ViewBag.buphep.dateoffExName == "Lỗi quét vân tay")
                                                 {
+                                                    <option value="1">Phép năm</option>
                                                     <option value="4">Việc riêng</option>
                                                     <option value="7">Lỗi quét vân tay</option>
-                                                    <option value="9">Nghỉ nửa tiếng (Nữ)</option>
+                                                    <option value="14">Trực biệt thự</option>
+                                                    <option value="15">Đi công tác</option>
                                                 }
                                                 else
                                                 {
+                                                    <option value="14">Trực biệt thự</option>
+                                                    <option value="7">Lỗi quét vân tay</option>
                                                     <option value="8">Không phép</option>
                                                     <option value="1">Phép năm</option>
                                                     <option value="2">Nghỉ bệnh (BHXH)</option>
@@ -231,14 +235,19 @@
             var dtDenNgay = $('#dtDenNgay');
             var tpTuGio = $('#tpTuGio');
             var tpDenGio = $('#tpDenGio');
-            if (x == '2' || x == '3' || x == '8' || x == '1' || x == '4') {
+            if (x == '2' || x == '3' || x == '10' || x == '11' || x == '12' || x == '13') {
+                if (x == '11' || x == '12')
+                    document.getElementById("giaycanco").innerHTML = 'Cần giấy xác nhận tổ chức kết hôn(tang gia)';
+                else
+                    document.getElementById("giaycanco").innerHTML = 'Cần giấy nghỉ bệnh của bệnh viện xác nhận';
                 dtDenNgay.prop('hidden', false);
                 tpTuGio.prop('hidden', true);
                 tpDenGio.prop('hidden', true);
             }
             else {
-                if (x == '5' || x == '6' || x == '7' || x == '9') {
-                    dtDenNgay.prop('hidden', true);
+                document.getElementById("giaycanco").innerHTML = 'Không';
+                if (x == '1' || x == '4' || x == '14') {
+                    dtDenNgay.prop('hidden', false);
                     tpTuGio.prop('hidden', false);
                     tpDenGio.prop('hidden', false);
                 }

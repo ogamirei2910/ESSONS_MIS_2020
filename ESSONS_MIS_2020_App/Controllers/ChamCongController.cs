@@ -8,6 +8,7 @@ using ESSONS_MIS_2020_App.Helper;
 using ESSONS_MIS_2020_App.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json;
 
 namespace ESSONS_MIS_2020_App.Controllers
@@ -136,43 +137,47 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return PartialView("DisplayError");
             }
 
-
-            um.username = ViewBag.empid;
-
             double number = 0;
-            if (um.dateoffEndTime != null && um.dateoffStartTime != null)
+            CultureInfo provider = CultureInfo.InvariantCulture;
+            string datestart = um.dateoffStart;
+            string dateend = um.dateoffEnd;
+            TimeSpan Total = DateTime.ParseExact(dateend, "dd-MM-yyyy", provider) - DateTime.ParseExact(datestart, "dd-MM-yyyy", provider);
+            number = (Total.TotalDays + 1) * 8;
+            if (um.dateoffType == "4" || um.dateoffType == "1")
             {
-                int yearS = int.Parse(um.dateoffStart.Substring(6, 4));
-                int monthS = int.Parse(um.dateoffStart.Substring(3, 2));
-                int dayS = int.Parse(um.dateoffStart.Substring(0, 2));
-                int hourS = int.Parse(um.dateoffStartTime.Substring(0, 2));
-                int minuteS = int.Parse(um.dateoffStartTime.Substring(3, 2));
-                DateTime dtStart = new DateTime(yearS, monthS, dayS, hourS, minuteS, 0);
-
-                int yearE = int.Parse(um.dateoffEnd.Substring(6, 4));
-                int monthE = int.Parse(um.dateoffEnd.Substring(3, 2));
-                int dayE = int.Parse(um.dateoffEnd.Substring(0, 2));
-                int hourE = int.Parse(um.dateoffEndTime.Substring(0, 2));
-                int minuteE = int.Parse(um.dateoffEndTime.Substring(3, 2));
-                DateTime dtEnd = new DateTime(yearE, monthE, dayE, hourE, minuteE, 0);
-
-                TimeSpan Total = dtEnd - dtStart;
-                number = Math.Floor(Total.TotalMinutes / 30) / 2;
-
-            }
-            else
-            {
-                CultureInfo provider = CultureInfo.InvariantCulture;
-                string datestart = um.dateoffStart;
-                string dateend = um.dateoffEnd;
-                if (datestart != null && dateend != null)
+                if (um.dateoffEndTime != null && um.dateoffStartTime != null)
                 {
-                    TimeSpan Total = DateTime.ParseExact(dateend, "dd-MM-yyyy", provider) - DateTime.ParseExact(datestart, "dd-MM-yyyy", provider);
-                    number = (Total.TotalDays + 1) * 8;
+                    int yearS = int.Parse(um.dateoffStart.Substring(6, 4));
+                    int monthS = int.Parse(um.dateoffStart.Substring(3, 2));
+                    int dayS = int.Parse(um.dateoffStart.Substring(0, 2));
+                    int hourS = int.Parse(um.dateoffStartTime.Substring(0, 2));
+                    int minuteS = int.Parse(um.dateoffStartTime.Substring(3, 2));
+                    DateTime dtStart = new DateTime(yearS, monthS, dayS, hourS, minuteS, 0);
+
+                    int yearE = int.Parse(um.dateoffEnd.Substring(6, 4));
+                    int monthE = int.Parse(um.dateoffEnd.Substring(3, 2));
+                    int dayE = int.Parse(um.dateoffEnd.Substring(0, 2));
+                    int hourE = int.Parse(um.dateoffEndTime.Substring(0, 2));
+                    int minuteE = int.Parse(um.dateoffEndTime.Substring(3, 2));
+                    DateTime dtEnd = new DateTime(yearE, monthE, dayE, hourE, minuteE, 0);
+
+                    TimeSpan Total2 = dtEnd - dtStart;
+                    var numbertest = Math.Floor(Total2.TotalHours);
+                    var numbertest2 = numbertest + 0.5;
+                    number = Total2.TotalHours;
+                    if (Total2.TotalHours > numbertest && Total2.TotalHours <= numbertest2)
+                        number = numbertest2;
+                    if (Total2.TotalHours > numbertest2)
+                        number = Math.Ceiling(Total2.TotalHours);
+                    if (number > 8)
+                        number = 8;
+
                 }
             }
 
             um.dateoffNumber = number;
+
+            um.username = ViewBag.empid;
             var res = await hc.PostAsJsonAsync<DateOffModel>("api/DateOff/BuPhep", um);
 
             if (res.IsSuccessStatusCode)
@@ -181,12 +186,12 @@ namespace ESSONS_MIS_2020_App.Controllers
                 um = JsonConvert.DeserializeObject<DateOffModel>(results);
 
                 if (um.result == "OK")
-                    HttpContext.Session.SetString("notice", "Bù phép thành công");
+                    HttpContext.Session.SetString("notice", "Bù phép thành công"); 
 
                 ViewBag.Error = um.result;
                 return PartialView("DisplayError");
             }
-
+            
             ViewBag.Error = "Lỗi kết nối. Gọi IT";
             return PartialView("DisplayError");
         }

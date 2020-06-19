@@ -41,14 +41,14 @@
                                             <input asp-for="empTel" maxlength="15" type="text" class="form-control" placeholder="Số điện thoại" value="">
                                         </div>
                                     </div>
-                                </td>
+                                </td> 
                                 <td>
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Giới tính</label>
                                         <label>&nbsp;</label>
                                         <select asp-for="empSex" class="custom-select col-sm-3">
-                                            <option>Nam</option>
-                                            <option>Nữ</option>
+                                                <option>Nam</option>
+                                                <option selected="selected">Nữ</option>
                                         </select>
                                     </div>
                                     <div class="form-group row">
@@ -89,8 +89,11 @@
                                     <input type="hidden" asp-for="positionName" id="positionName" />
 
                                     <div class="form-group row" id="GroupEmpManager" hidden="hidden">
-                                        <label class="col-sm-3 col-form-label">Người Q.lý</label>
-                                        <select id="empManager" asp-for="empIDManager" class="custom-select col-sm-4"
+                                        <label class="col-sm-3 col-form-label">Tổ</label>
+                                        <select id="empGroup" asp-for="groupID" class="custom-select col-sm-4"
+                                                asp-items="@(new SelectList(""))">
+                                        </select>
+                                        <select id="empGroup" asp-for="empIDManager" class="custom-select col-sm-4"
                                                 asp-items="@(new SelectList(""))">
                                         </select>
                                     </div>
@@ -445,7 +448,8 @@
         $(document).ready(function () {
             var depID = $("#dep");
             var position = $("#position");
-            var depchild = $("#depchild");           
+            var depchild = $("#depchild");
+            var groupEmp = $("#GroupEmpManager");
             depchild.prop('disabled', true);
             position.prop('disabled', true);
             debugger
@@ -465,7 +469,6 @@
                 })
                 if (depvalue == 'DHE') {
                     var empManager = $("#empManager"); 
-                    var GroupEmpManager = $("#GroupEmpManager");
                     GroupEmpManager.prop('hidden', false);
                     debugger
                     $.ajax({
@@ -477,10 +480,6 @@
                             empManager.append(data);
                         }
                     })
-                }
-                else {
-                    empManager.empty();
-                    GroupEmpManager.prop('hidden', true);
                 }
             })
             depchild.change(function () {
@@ -496,6 +495,7 @@
                         position.empty();
                         position.prop('disabled', false);
                         position.append(data);
+
                     }
                 })
 

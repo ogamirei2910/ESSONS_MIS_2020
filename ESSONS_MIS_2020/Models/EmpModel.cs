@@ -25,7 +25,7 @@ namespace ESSONS_MIS_2020.Models
         public string empStandardDate { get; set; }
         public string empLeaveDate { get; set; }
         public string empImage { get; set; }
-        public int empYearOff { get; set; }
+        public decimal empYearOff { get; set; }
         public string positionID { get; set; }
         public int status { get; set; }
         public string indat { get; set; }
@@ -53,7 +53,7 @@ namespace ESSONS_MIS_2020.Models
 
         public int office { get; set; }
         public string empIDManager { get; set; }
-        public string empNameManager { get; set; }
+        public string groupID { get; set; }
 
         public string depchildID { get; set; }
         public string positionName { get; set; }

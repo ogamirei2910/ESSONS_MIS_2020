@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Danh sách đăng kí ca và tăng ca</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Mã yêu cầu</th>
+                                        <th>Số thẻ</th>
+                                        <th>Bộ phận YC</th>
+                                        <th>Ca</th>
+                                        <th>Tăng ca</th>
+                                        <th>Ngày bắt đầu</th>
+                                        <th>Ngày kết thúc</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead> 
+                                <tbody>
+                                    @foreach (var item in ViewBag.requestList)
+                                    {
+                                        <tr>
+                                            <td>@item.requestID</td>
+                                            <td>@item.empid</td>
+                                            <td>@item.depName</td>
+                                            <td>@item.shiftName</td>
+                                            @if (item.isOT == 1)
+                                            {
+                                                <td>Có</td>
+                                            }
+                                            else
+                                            {
+                                                <td>Không</td>
+                                            }
+                                            <td>@item.datework</td>
+                                            <td>@item.dateworkend</td>
+                                            <td>
+                                                @if (@item.status == "2")
+                                                {
+                                                    <label>Đang chờ</label>
+                                                }
+                                                else
+                                                {
+                                                    if (@item.status == "1")
+                                                    {
+                                                        <label>Đã xác nhận</label>
+                                                    }
+                                                    if (@item.status == "3")
+                                                    {
+                                                        <label>Hủy</label>
+                                                    }
+                                                }
+
+                                            </td>
+                                        </tr>
+                                    }
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+

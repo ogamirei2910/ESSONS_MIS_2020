@@ -837,7 +837,7 @@
                                                     @if (folderChild.folderChildID == 0)
                                                     {
                                                         <li class="nav-item">
-                                                            <a href="/DateOff/dateoff_Detail_Emp" class="nav-link">
+                                                            <a href="/DateOff/dateoff_Detail" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Theo dõi nghỉ phép</p>
                                                             </a>
@@ -854,24 +854,17 @@
                                                                 <p>Duyệt yêu cầu</p>
                                                             </a>
                                                         </li>
-                                                        <li class="nav-item">
+                                                        @*<li class="nav-item">
                                                             <a href="/User/SetFolder" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Phân quyền</p>
                                                             </a>
-                                                        </li>
+                                                        </li>*@
                                                     }
                                                     else
                                                     {
                                                         @if (folderChild.folderChildID == 1)
                                                         {
-
-                                                            <li class="nav-item">
-                                                                <a href="/DateOff/dateoff_Detail_Emp" class="nav-link">
-                                                                    <i class="far fa-circle nav-icon"></i>
-                                                                    <p>Theo dõi nghỉ phép</p>
-                                                                </a>
-                                                            </li>
                                                             <li class="nav-item">
                                                                 <a href="/DateOff/dateoff_Request" class="nav-link">
                                                                     <i class="far fa-circle nav-icon"></i>
@@ -952,15 +945,37 @@
                                                     @if (folderChild.folderChildID == 0)
                                                     {
                                                         <li class="nav-item">
-                                                            <a href="/DateWork/RequestOT" class="nav-link">
+                                                            <a href="/DateWork/Index" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
-                                                                <p>Yêu cầu tăng ca</p>
+                                                                <p>Thông tin</p>
                                                             </a>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a href="#" class="nav-link">
+                                                            <a href="/DateWork/RequestOT" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Đăng kí ca</p>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a href="/DateWork/Confirm" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Duyệt tăng ca</p>
+                                                            </a>
+                                                        </li>
+                                                    }
+
+                                                    @if (folderChild.folderChildID == 1)
+                                                    {
+                                                        <li class="nav-item">
+                                                            <a href="/DateWork/Index" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Thông tin</p>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a href="/DateWork/RequestOT" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Yêu cầu tăng ca</p>
                                                             </a>
                                                         </li>
                                                     }

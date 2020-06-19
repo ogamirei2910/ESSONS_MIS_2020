@@ -9,7 +9,7 @@ namespace ESSONS_MIS_2020_App.Models
     {
         public double pheprieng { get; set;}
         public double phepnam { get; set; }
-
+        public double phepnamhienco { get; set; }
         public double phepnamdadung { get; set; }
 
         public double BHXH { get; set; }

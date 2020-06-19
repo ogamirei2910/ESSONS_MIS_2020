@@ -55,7 +55,7 @@ namespace ESSONS_MIS_2020.Controllers
                         em.empStandardDate = sdr["empStandardDate"].ToString();
                         em.empLeaveDate = sdr["empLeaveDate"].ToString();
                         em.positionID = sdr["positionName"].ToString();
-                        em.empImage = sdr["empImage"].ToString();
+                        em.empImage = sdr["empImage"].ToString(); 
 
                         if(sdr["groupName"] != null)
                             em.empIDManager = sdr["groupName"].ToString();
@@ -79,7 +79,7 @@ namespace ESSONS_MIS_2020.Controllers
                         em.empNation = sdr["empNation"].ToString();
                         em.empProvince = int.Parse(sdr["empProvince"].ToString());
                         em.empReligion = sdr["empReligion"].ToString();
-                        //em.empYearOff = int.Parse(sdr["empYearOff"].ToString());
+                        //em.empYearOff = Decimal.Parse(sdr["empYearOff"].ToString());
                     }
                 }
                 return em;
@@ -226,7 +226,7 @@ namespace ESSONS_MIS_2020.Controllers
                     {
                         EmpModel dm = new EmpModel();
                         dm.empIDManager = sdr["empID"].ToString();
-                        dm.empNameManager = sdr["empName"].ToString();
+                        //dm.empNameManager = sdr["empName"].ToString();
                         ldm.Add(dm);
                     }
                 }

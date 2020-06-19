@@ -12,7 +12,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Yêu cầu tăng ca</h3>
+                        <h3 class="card-title">Đăng kí ca và yêu cầu tăng ca</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -24,7 +24,7 @@
                                             <label class="col-sm-4 col-form-label">Ngày bắt đầu</label>
                                             <div class="col-6">
                                                 <div class="datepicker date input-group p-0 shadow-sm">
-                                                    <input asp-for="datework" type="text" class="form-control" id="reservationDate">
+                                                    <input asp-for="datework" type="text" value="" class="form-control" id="reservationDate">
                                                     <div class="input-group-append"><span class="input-group-text"></span></div>
                                                 </div>
                                             </div>
@@ -35,7 +35,7 @@
                                             <label class="col-sm-4 col-form-label">Ngày kết thúc</label>
                                             <div class="col-6">
                                                 <div class="datepicker date input-group p-0 shadow-sm">
-                                                    <input asp-for="dateworkend" type="text" class="form-control" id="reservationDate2">
+                                                    <input asp-for="dateworkend" type="text" value="" class="form-control" id="reservationDate2">
                                                     <div class="input-group-append"><span class="input-group-text"></span></div>
                                                 </div>
                                             </div>
@@ -51,6 +51,8 @@
                                                     asp-items="@(new SelectList(ViewBag.timeworkList,"shiftName","shiftName"))">
                                             </select>
                                         </div>
+                                        <input asp-for="empid" id="empid" type="hidden" class="form-control">
+                                        <input asp-for="isOT" id="isOT" type="hidden" class="form-control">
                                     </td>
                                     <td></td>
                                 </tr>
@@ -60,10 +62,11 @@
                                     Xác nhận
                                 </button>
                             </div>
-                            <table id="example1" class="table table-bordered table-striped">
+                            <table id="tbValue" hidden>
                                 <thead>
                                     <tr>
-                                        <th></th>
+                                        <th>Chọn nhân viên</th>
+                                        <th>Được phép tăng ca</th>
                                         <th>Mã nhân viên</th>
                                         <th>Mã thời vụ</th>
                                         <th>Tên nhân viên</th>
@@ -73,7 +76,8 @@
                                     @foreach (var item in ViewBag.emp)
                                     {
                                         <tr>
-                                            <td><input type="checkbox" id="@item.empID"></td>
+                                            <td><input type="checkbox" name="SelectEmp" id="@item.empID-a" value="@item.empID"></td>
+                                            <td><input type="checkbox" name="SelectOT" id="@item.empID-b"></td>
                                             <td>@item.empID</td>
                                             <td>@item.empIDTemp</td>
                                             <td>@item.empName</td>
@@ -81,7 +85,30 @@
                                     }
                                 </tbody>
                             </table>
-                        </form>                    
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Chọn nhân viên</th>
+                                        <th>Được phép tăng ca</th>
+                                        <th>Mã nhân viên</th>
+                                        <th>Mã thời vụ</th>
+                                        <th>Tên nhân viên</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in ViewBag.emp)
+                                    {
+                                        <tr>
+                                            <td><input type="checkbox" name="@item.empID-a" onclick="myFunction($(this).attr('Name'))"></td>
+                                            <td><input type="checkbox" name="@item.empID-b" onclick="myFunction($(this).attr('Name'))"></td>
+                                            <td>@item.empID</td>
+                                            <td>@item.empIDTemp</td>
+                                            <td>@item.empName</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </form>
                         <!-- /.card-body -->
                     </div>
                 </div>
@@ -96,47 +123,6 @@
 
 @section scripts{
     <script type="text/javascript">
-        $(document).ready(function () {
-            $("#btSend").click(function (e) {
-                $.ajax({
-                    cache: false,
-                    type: "POST",
-                    url: '@Url.Action("BuPhep", "ChamCong")',
-                    data: $("#formPhep").serialize(),
-                    success: function (result) {
-                        debugger
-                        if (result != '\r\nOK\r\n') {
-                            let dia = bs4pop.dialog({
-
-                                title: 'Thông báo',
-                                content: result,
-
-                                closeBtn: true,
-                                backdrop: 'static',
-                                btns: [
-                                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
-                                ],
-                                onDragStart: function () {
-                                    console.log('onDragStart');
-                                },
-                                onDrag: function () {
-                                    console.log('onDrag');
-                                }
-                            });
-                        }
-                        else {
-                            window.location.href = "/ChamCong/DateOffException";
-                        }
-                    }
-                })
-                e.preventDefault();
-            });
-        });
-
-
-
-        $(function () {
-
             // INITIALIZE DATEPICKER PLUGIN
             $('.datepicker').datepicker({
                 clearBtn: true,
@@ -152,16 +138,130 @@
                 var pickedDate = $('input').val();
                 $('#pickedDate').html(pickedDate);
             });
-        })
 
-        //Timepicker
-        $('#timepicker').datetimepicker({
-            format: 'HH:mm'
-        })
 
-        $('#timepicker2').datetimepicker({
-            format: 'HH:mm'
-        })
+        function myFunction(a) {
+            // Get the checkbox
+            debugger
+            var $boxes = $('input[name=' + a + ']');
+            var $boxes2 = $('input[id=' + a + ']');
+
+            if ($boxes.prop('checked') == true) {
+                $boxes2.prop('checked', true);
+            }
+            else {
+                $boxes2.prop('checked', false);
+            }
+        } 
+
+        $(document).ready(function () {         
+            $("#btSend").click(function (e) {
+                debugger
+                if ($("input[name=datework]").val() != '' && $("input[name=dateworkend]").val() != '') {
+                    $('#tbValue tr').each(function () {
+                    var ckEmp = $(this).find('input[name=SelectEmp]');
+                    var ckOT = $(this).find('input[name=SelectOT]');
+                    if (ckEmp.prop('checked') == true) {
+                        $("#empid").val(ckEmp.prop('value'));
+                        if (ckOT.prop('checked') == true)
+                            $("#isOT").val(1);
+                        else
+                            $("#isOT").val(0);
+
+                        $.ajax({
+                            cache: false,
+                            type: "POST",
+                            url: '@Url.Action("RequestOT", "DateWork")',
+                            data: $("#formData").serialize()
+                        })
+                    }
+                });
+                e.preventDefault();
+                let dia = bs4pop.dialog({
+                    title: 'Thông báo',
+                    content: 'Yêu cầu thành công',
+
+                    closeBtn: true,
+                    backdrop: 'static',
+                    btns: [
+                           { label: 'OK', className: 'btn-primary', onClick(cb) { window.location.href = "/DateWork/Index"; } }
+                        ],
+                    onDragStart: function () {
+                            console.log('onDragStart');
+                        },
+                    onDrag: function () {
+                            console.log('onDrag');
+                        }
+                    });
+                }
+                else {
+                    let dia = bs4pop.dialog({
+
+                        title: 'Thông báo',
+                        content: 'Chưa chọn ngày bắt đầu hoặc ngày kết thúc',
+
+                        closeBtn: true,
+                        backdrop: 'static',
+                        btns: [
+                            { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                        ],
+                        onDragStart: function () {
+                            console.log('onDragStart');
+                        },
+                        onDrag: function () {
+                            console.log('onDrag');
+                        }
+                    });
+                    e.preventDefault();
+                }
+                @*if ($("input[name=datework]").val() != '' && $("input[name=dateworkend]").val() != '') {
+                    $('#example1').find('input[type="checkbox"]:checked').each(function () {
+                        $("#empid").val($(this).val());
+                        $("#isOT").val(1);
+                        $.ajax({
+                            cache: false,
+                            type: "POST",
+                            url: '@Url.Action("RequestOT", "DateWork")',
+                            data: $("#formData").serialize()
+                        })
+                        e.preventDefault();
+                    });
+                    $('#example1').find('tr input[type="checkbox"]:not(:checked)').each(function () {
+                        $("#empid").val($(this).val());
+                        $("#isOT").val(0);
+                        $.ajax({
+                            cache: false,
+                            type: "POST",
+                            url: '@Url.Action("RequestOT", "DateWork")',
+                            data: $("#formData").serialize()
+                        })
+                        e.preventDefault();
+                    });*@
+
+                    //let dia = bs4pop.dialog({
+
+                    //    title: 'Thông báo',
+                    //    content: 'Yêu cầu thành công',
+
+                    //    closeBtn: true,
+                    //    backdrop: 'static',
+                    //    btns: [
+                    //        { label: 'OK', className: 'btn-primary', onClick(cb) { window.location.href = "/DateWork/Index"; } }
+                    //    ],
+                    //    onDragStart: function () {
+                    //        console.log('onDragStart');
+                    //    },
+                    //    onDrag: function () {
+                    //        console.log('onDrag');
+                    //    }
+                    //});
+                //}
+                //else {
+
+                //}
+            });
+        });
+
     </script>
 }
 

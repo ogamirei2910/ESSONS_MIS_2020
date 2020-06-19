@@ -28,29 +28,34 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <b class="col-sm-3 col-form-label">Tổng phép năm</b>
+                                        <b class="col-sm-5 col-form-label">Tổng phép năm</b>
                                         <a class="col-sm-3 col-form-label">@ViewBag.InfoList.phepnam ngày</a>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <b class="col-sm-5 col-form-label">Phép năm hiện có</b>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.phepnamhienco ngày</a>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group row">
-                                        <b class="col-sm-3 col-form-label">Đã dùng phép năm</b>
+                                        <b class="col-sm-5 col-form-label">Phép năm đã dùng</b>
                                         <a class="col-sm-3 col-form-label">@ViewBag.InfoList.phepnamdadung ngày</a>
                                     </div>
 
                                     <div class="form-group row">
-                                        <b class="col-sm-3 col-form-label">Phép VR</b>
-                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.pheprieng ngày</a>
+                                        <b class="col-sm-5 col-form-label">Phép VR (Tháng)</b>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.pheprieng Giờ</a>
                                     </div>
 
                                     <div class="form-group row">
-                                        <b class="col-sm-3 col-form-label">Không phép</b>
-                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.khongphep ngày</a>
+                                        <b class="col-sm-5 col-form-label">Không phép (Tháng)</b>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.khongphep Giờ</a>
                                     </div>
 
                                     <div class="form-group row">
-                                        <b class="col-sm-3 col-form-label">Nghỉ BHXH</b>
-                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.BHXH ngày</a>
+                                        <b class="col-sm-5 col-form-label">Nghỉ BHXH (Tháng)</b>
+                                        <a class="col-sm-3 col-form-label">@ViewBag.InfoList.BHXH Giờ</a>
                                     </div>
                                 </td>
                             </tr>
@@ -84,13 +89,24 @@
                                             <td>@Html.DisplayFor(modelItem => item.dateoffStartTime)</td>
                                             <td>@Html.DisplayFor(modelItem => item.dateoffEndTime)</td>
                                             <td>@Html.DisplayFor(modelItem => item.dateoffNumber)</td>
-                                            <td>
-                                                @Html.ActionLink("Hủy", "dateoff_Delete", "CongNhan", new { dateoffID = item.dateoffID },
-                                                                                                    new
-                                                                                                    {
-                                                                                                        @class = "btn btn-danger btn-sm"
-                                                                                                    })
-                                            </td>
+                                            @if (item.status == 2)
+                                            {
+                                                <td>
+                                                    @Html.ActionLink("Hủy", "dateoff_Delete", "DateOff", new { dateoffID = item.dateoffID, page = 1 },
+                                                                                                        new
+                                                                                                        {
+                                                                                                            @class = "btn btn-danger btn-sm"
+                                                                                                        })
+                                                </td>
+                                            }
+                                            @if (item.status == 1)
+                                            {
+                                                <td>Đã xác nhận</td>
+                                            }
+                                            @if (item.status == 3)
+                                            {
+                                                <td>Đã hủy</td>
+                                            }
                                         </tr>
                                     }
 
@@ -114,7 +130,7 @@
             let dia = bs4pop.dialog({
 
                 title: 'Đăng nhập thành công',
-                content: 'Người dùng ' + '@ViewBag.message' + ' đã đăng nhập hệ thống thành công.',
+                content: '@ViewBag.notice',
 
                 closeBtn: true,
                 backdrop: 'static',

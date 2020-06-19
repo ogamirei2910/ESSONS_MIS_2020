@@ -79,7 +79,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
-                HttpContext.Session.SetString("notice", um.username);
+                HttpContext.Session.SetString("notice", "Người dùng " + um.username + " đã đăng nhập thành công");
                 HttpContext.Session.SetString("username", um.username);
                 HttpContext.Session.SetString("isLogin", "true");
                 return RedirectToAction("Index", "Home");

@@ -31,18 +31,18 @@
                                         <div class="col-6">
                                             <input type="text" class="form-control" readonly placeholder="Họ tên" value="@ViewBag.message">
                                         </div>
-                                    </div>
+                                    </div> 
                                     <div class="form-group row mySelect">
                                         <label class="col-sm-3 col-form-label">Loại xin phép</label>
                                         <label>&nbsp;&nbsp;</label>
                                         <select asp-for="dateoffType" class="custom-select col-6 selectpicker" id="loainghiphep" onchange=" myFunction()">
-                                            <option disabled selected>Chọn loại nghỉ</option>
+                                            <option disabled value="0" selected>Chọn loại nghỉ</option>
                                             <option value="4" title="Việc riêng là phép dùng để nghỉ nhưng sẽ không được tính công ngày nghỉ đó">Việc riêng</option>
                                             <option value="1" title="Phép năm là phép được cộng vào mỗi đầu tháng. Khi dùng phép năm để nghỉ sẽ được tính lương như bình thường">Phép năm</option>
                                             <option value="2" title="Nghỉ bệnh là phép nghỉ sẽ được BHXH thanh toán tiền lương">Nghỉ bệnh (BHXH)</option>
                                             <option value="13" title="Nghỉ con bệnh là phép nghỉ sẽ được BHXH thanh toán tiền lương">Con bệnh (BHXH)</option>
                                             <option value="3" title="Nghỉ thai sản là phép nghỉ sẽ được BHXH thanh toán tiền lương">Nghỉ thai sản (BHXH)</option>
-                                            <option value="10" title="Nghỉ vợ sinh/khám/dưỡng là phép nghỉ sẽ được công ty thanh toán theo quy định công ty">Vợ sinh, khám, dưỡng</option>
+                                            <option value="10" title="Nghỉ vợ sinh/khám/dưỡng là phép nghỉ sẽ được BHXH thanh toán tiền lương">Vợ sinh, khám, dưỡng</option>
                                             <option value="11" title="Nghỉ kết hôn là phép nghỉ sẽ được công ty thanh toán theo quy định công ty">Kết hôn</option>
                                             <option value="12" title="Nghỉ tang gia là phép nghỉ sẽ được công ty thanh toán theo quy định công ty">Tang gia</option>
                                         </select>
@@ -126,6 +126,7 @@
                     data: $("#formPhep").serialize(),
                     success: function (result) {
                         debugger
+                        if (result != '\r\nOK\r\n') {
                             let dia = bs4pop.dialog({
 
                                 title: 'Thông báo',
@@ -143,6 +144,11 @@
                                     console.log('onDrag');
                                 }
                             });
+                        }
+                        else {
+                            window.location.href = "/Home/Index";
+                        }
+                            
                     }
                 })
                 e.preventDefault();

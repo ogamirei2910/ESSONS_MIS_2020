@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<ESSONS_MIS_2020_App.Models.DateOffModel>
 @{
     ViewData["Title"] = "dateoff_Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,67 +11,39 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Quản lý các loại phép</h3>
+                        <h3 class="card-title">Thông tin nghỉ phép chi tiết</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Số thẻ</th>
-                                    <th>Họ tên</th>
-                                    <th>Phòng ban</th>
-                                    <th>Chức năng</th>
+                                    <th>Mã nghỉ</th>
+                                    <th>Mã nhân viên</th>
+                                    <th>Loại phép</th>
+                                    <th>Từ ngày</th>
+                                    <th>Đến ngày</th>
+                                    <th>Từ giờ</th>
+                                    <th>Đến giờ</th>
+                                    <th>Số giờ</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach (var item in Model)
+                                {
                                 <tr>
-                                    <td>1</td>
+                                    <td>@Html.DisplayFor(modelItem => item.dateoffID)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.empID)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.dateoffType)</td>
                                     <td>
-                                        Lê Hoài Nam
+                                        @Html.DisplayFor(modelItem => item.dateoffStart)
                                     </td>
-                                    <td>IT</td>
-                                    <td>Phép năm</td>
-                                    <td>
-                                        <a class="btn btn-primary btn-sm" href="http://localhost:50147/Home/DateOff_Detail_Emp">
-                                            <i class="fas fa-folder">
-                                            </i>
-                                            Chi tiết
-                                        </a>
-                                    </td>
+                                    <td>@Html.DisplayFor(modelItem => item.dateoffEnd)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.dateoffStartTime)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.dateoffEndTime)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.dateoffNumber)</td>
                                 </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        Lê Hoài Nam
-                                    </td>
-                                    <td>IT</td>
-                                    <td>VR</td>
-                                    <td>2</td>
-                                    <td>
-                                        <a class="btn btn-primary btn-sm" href="http://localhost:50147/Home/DateOff_Detail_Emp">
-                                            <i class="fas fa-folder">
-                                            </i>
-                                            Chi tiết
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>3899</td>
-                                    <td>
-                                        Nguyễn Văn A
-                                    </td>
-                                    <td>Kho</td>
-                                    <td>Phép năm</td>
-                                    <td>2</td>
-                                    <td>
-                                        <a class="btn btn-primary btn-sm" href="http://localhost:50147/Home/DateOff_Detail_Emp">
-                                            <i class="fas fa-folder">
-                                            </i>
-                                            Chi tiết
-                                        </a>
-                                    </td>
-                                </tr>
+                                }
                         </table>
                     </div>
                     <!-- /.card-body -->
@@ -82,6 +54,5 @@
         </div>
         <!-- /.row -->
     </section>
-    <!-- /.content -->
 </div>
 
