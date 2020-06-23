@@ -13,7 +13,7 @@ namespace ESSONS_MIS_2020_App.Models
         public string empid { get; set; }
         public int isOT { get; set; }
         public string shiftName { get; set; }
-
+        public string empidTemp { get; set; }
         public string depName { get; set; }
         public string status { get; set; }
         public string indat { get; set; }

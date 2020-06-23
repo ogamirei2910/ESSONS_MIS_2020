@@ -47,8 +47,8 @@
                                         <label class="col-sm-3 col-form-label">Giới tính</label>
                                         <label>&nbsp;</label>
                                         <select asp-for="empSex" class="custom-select col-sm-3">
-                                                <option>Nam</option>
-                                                <option>Nữ</option>
+                                            <option>Nam</option>
+                                            <option>Nữ</option>
                                         </select>
                                     </div>
                                     <div class="form-group row">
@@ -76,7 +76,7 @@
                                                 asp-items="@(new SelectList(""))">
                                             @if (ViewBag.departmentchildList != null)
                                             {
-                                                @foreach (var item in ViewBag.departmentchildList)
+                                            @foreach (var item in ViewBag.departmentchildList)
                                                 {
                                                     if (item.DepChildName == Model.depchildName)
                                                     {
@@ -99,15 +99,15 @@
                                         <select id="position" asp-for="positionID" class="custom-select col-sm-4">
                                             @if (ViewBag.positionList != null)
                                             {
-                                                @foreach (var item in ViewBag.positionList)
+                                            @foreach (var item in ViewBag.positionList)
                                                 {
                                                     if (item.positionName == Model.positionName)
                                                     {
-                                                        <option value="@item.positionID" selected>@item.positionName</option>
+                                            <option value="@item.positionID" selected>@item.positionName</option>
                                                     }
                                                     else
                                                     {
-                                                        <option value="@item.positionID">@item.positionName</option>
+                                            <option value="@item.positionID">@item.positionName</option>
                                                     }
                                                 }
                                             }
@@ -115,6 +115,21 @@
                                         </select>
                                     </div>
                                     <input type="hidden" asp-for="positionName" id="positionName" value="@ViewBag.positiondepList.positionName" />
+
+                                    @if(Model.depID == "Định hình")
+                                    {
+                                    <div class="form-group row" id="GroupEmpManager">
+                                        <label class="col-sm-3 col-form-label">Tổ</label>
+                                        <select id="empGroup" asp-for="groupID" class="custom-select col-sm-4"
+                                                asp-items="@(new SelectList(ViewBag.groupList,"groupID","groupID"))">
+                                            <option disabled selected>Chọn tổ</option>
+                                        </select>
+                                        <select id="empIDManager" asp-for="empIDManager" class="custom-select col-sm-4"
+                                                asp-items="@(new SelectList(""))">
+                                        </select>
+                                    </div>
+                                     }
+
                                 </td>
                             </tr>
                             <tr>
@@ -478,6 +493,7 @@
             var depID = $("#dep");
             var position = $("#position");
             var depchild = $("#depchild");
+            var empGroup = $("#empGroup");
             debugger
             depID.change(function () {
                 var depvalue = $(this).val();
@@ -490,12 +506,18 @@
                         depchild.empty();
                         position.empty();
                         depchild.append(data);
+                        if (depvalue != 'DHE')
+                            $('#GroupEmpManager').prop('hidden', true);
+                        else
+                            $('#GroupEmpManager').prop('hidden', false);
                     }
                 })
             })
             depchild.change(function () {
                 var depchildvalue = $(this).val();
                 var depchildtext = $("#depchild option:selected").text();
+                var groupManager = $('#GroupEmpManager');
+                var empManager = $('#empIDManager');
                 $("#depchildName").val(depchildtext);
                 $.ajax({
                     type: "GET",
@@ -505,19 +527,42 @@
                         debugger
                         position.empty();
                         position.append(data);
+                        groupManager.prop('hidden', false);
+                        if (depchildvalue != 'TTDHE')
+                            empManager.prop('hidden', false);
+                        else
+                            empManager.prop('hidden', true);
                     }
                 })
-
             })
+
+            empGroup.change(function () {
+                var empGroupVal = $(this).val();
+                var empManager = $('#empIDManager');
+                $.ajax({
+                    type: "GET",
+                    url: "/Emp/EmpManager?groupID=" + empGroupVal,
+                    contentType: "html",
+                    success: function (data) {
+                        debugger
+                        empManager.empty();
+                        empManager.append(data);
+                    }
+                })
+            })
+
             position.change(function () {
                 var positionvalue = $("#position option:selected").text();
                 $("#positionName").val(positionvalue);
             })
         })
 
+
+
         $("#dep").val('@ViewBag.positiondepList.depID').change();
         $("#depchild").val('@ViewBag.positiondepList.depchildID').change();
-        
+        if ('@ViewBag.positiondepList.depchildID' == 'TTDHE')
+            $('#empIDManager').prop('hidden', true);
         $("#empDomicile").text = '@Model.empDomicile';
         $("#empBorn").text = '@Model.empBorn';
         $("#empSex").text = '@Model.empSex';

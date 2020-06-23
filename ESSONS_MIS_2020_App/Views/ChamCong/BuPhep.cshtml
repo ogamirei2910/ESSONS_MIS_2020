@@ -33,8 +33,8 @@
                                             <select asp-for="dateoffType" class="custom-select col-6 selectpicker" id="loainghiphep">
                                                 <option disabled>Chọn loại nghỉ</option>
                                                 @if (ViewBag.buphep.dateoffExName == "Lỗi phép đi trễ" || ViewBag.buphep.dateoffExName == "Lỗi phép về sớm"
-                                           || ViewBag.buphep.dateoffExName == "Lỗi không xác định ca" || ViewBag.buphep.dateoffExName == "Lỗi về trước giờ ra"
-                                           || ViewBag.buphep.dateoffExName == "Lỗi quét vân tay")
+                                         || ViewBag.buphep.dateoffExName == "Lỗi không xác định ca" || ViewBag.buphep.dateoffExName == "Lỗi về trước giờ ra"
+                                         || ViewBag.buphep.dateoffExName == "Lỗi quét vân tay")
                                                 {
                                                     <option value="1">Phép năm</option>
                                                     <option value="4">Việc riêng</option>
@@ -50,7 +50,9 @@
                                                     <option value="1">Phép năm</option>
                                                     <option value="2">Nghỉ bệnh (BHXH)</option>
                                                     <option value="13">Con bệnh (BHXH)</option>
+                                                    <option value="13">Vợ sinh/khám/dưỡng</option>
                                                     <option value="3">Nghỉ thai sản (BHXH)</option>
+                                                    <option value="16">Dưỡng sức</option>
                                                     <option value="11">Kết hôn</option>
                                                     <option value="12">Tang gia</option>
                                                 }

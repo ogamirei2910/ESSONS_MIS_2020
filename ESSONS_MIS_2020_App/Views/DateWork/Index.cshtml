@@ -70,10 +70,6 @@
                                                                                           new { @class = "btn btn-primary btn-sm" })
                                         @if (@item.status == "2")
                                         {
-
-                                            @Html.ActionLink("Duyệt", "Update", "DateWork", new { requestID = item.requestID, isOT = item.isOT, shiftName = item.shiftName, page = 1 },
-                                                                                         new { @class = "btn btn-info btn-sm" })
-
                                             @Html.ActionLink("Hủy", "Delete", "DateWork", new { requestID = item.requestID, isOT = item.isOT, shiftName = item.shiftName, page = 1 },
                                                                                      new
                                                                                           {

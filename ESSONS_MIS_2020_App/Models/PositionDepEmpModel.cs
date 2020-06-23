@@ -19,6 +19,9 @@ namespace ESSONS_MIS_2020_App.Models
         public int status { get; set; }
         public string confirmDate { get; set; }
         public string username { get; set; }
+        public string empName { get; set; }
+        public int groupID { get; set; }
+        public string depName { get; set; }
 
     }
 }

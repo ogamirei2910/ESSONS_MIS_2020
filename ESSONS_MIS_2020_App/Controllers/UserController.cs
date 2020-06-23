@@ -79,10 +79,28 @@ namespace ESSONS_MIS_2020_App.Controllers
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
-                HttpContext.Session.SetString("notice", "Người dùng " + um.username + " đã đăng nhập thành công");
-                HttpContext.Session.SetString("username", um.username);
-                HttpContext.Session.SetString("isLogin", "true");
-                return RedirectToAction("Index", "Home");
+                List<UserRoleModel> urm = new List<UserRoleModel>();
+                hc = _api.Initial();
+                res = hc.GetAsync($"api/user/GetRole/{um.username}");
+                results = res.Result;
+                if (results.IsSuccessStatusCode)
+                {
+                    var results2 = results.Content.ReadAsStringAsync().Result;
+                    urm = JsonConvert.DeserializeObject<List<UserRoleModel>>(results2);
+                }
+                HttpContext.Session.SetObjectAsJson("folderList", urm);
+
+                HttpContext.Session.SetString("notice", "Người dùng " + urm.First().empName + " đã đăng nhập thành công");
+                if (HttpContext.Session.GetString("resultPage") is null || HttpContext.Session.GetString("resultPage") == "")
+                {
+                    HttpContext.Session.SetString("isLogin", "true");
+                    return RedirectToAction("Index", "Home");
+                }                  
+                else
+                {
+                    HttpContext.Session.SetString("isLogin", "true");
+                    return RedirectToAction("dateoff_confirm", "dateoff");
+                }                  
             }
 
             ViewBag.Message = "Tài khoản chưa đăng kí trên hệ thống. Liên hệ IT";

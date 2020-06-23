@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ESSONS_MIS_2020_App.Models.PositionDepEmpModel>
+@{
+    ViewData["Title"] = "emp_Position";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Quá trình công tác công nhân viên</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Mã nhân viên</th>
+                                    <th>Tên nhân viên</th>
+                                    <th>Tên phòng ban</th>
+                                    <th>Tên bộ phận</th>
+                                    <th>Chức vụ</th>
+                                    <th>Ngày xác nhận</th>
+                                    <th>Người xác nhận</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.empID)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.empName)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.depName)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.depchildName)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.positionName)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.confirmDate)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.username)</td>
+                                    </tr>
+                                }
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+</div>
+

@@ -43,17 +43,7 @@ namespace ESSONS_MIS_2020_App.Controllers
         [HttpPost]
         public IActionResult dateoff_Request(DateOffModel um)
         {
-            //SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
-            //client.UseDefaultCredentials = false;
-            //client.Credentials = new NetworkCredential("itdev@essons.vn", "P@ssw0rd123");
-
-            //MailMessage mailMessage = new MailMessage();
-            //mailMessage.From = new MailAddress("itdev@essons.vn");
-            //mailMessage.To.Add("itsys@essons.vn");
-            //mailMessage.Body = "body";
-            //mailMessage.Subject = "subject";
-            //client.Send(mailMessage);
-
+            
             getRole();
             HttpClient hc = _api.Initial();
             if (um.dateoffType == "0" || um.dateoffType == null)
@@ -121,18 +111,56 @@ namespace ESSONS_MIS_2020_App.Controllers
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
+                string dateoffName = "";
+                switch(um.dateoffType)
+                {
+                    case "1": dateoffName = "Phép năm"; break;
+                    case "2": dateoffName = "Nghỉ bệnh (BHXH)"; break;
+                    case "3": dateoffName = "Nghỉ thai sản"; break;
+                    case "4": dateoffName = "Việc riêng"; break;
+                    case "10": dateoffName = "Nghỉ vợ sinh/khám/dưỡng"; break;
+                    case "11": dateoffName = "Nghỉ kết hôn"; break;
+                    case "12": dateoffName = "Nghỉ tang gia"; break;
+                    case "13": dateoffName = "Nghỉ con bệnh"; break;
+                    case "16": dateoffName = "Dưỡng sức"; break;
+                }
 
+                EmpModel am = new EmpModel();
+                res = hc.GetAsync($"api/emp/GetEmailEmpManager?empid={ViewBag.empid}");
+                res.Wait();
+                results = res.Result;
+                if (results.IsSuccessStatusCode)
+                {
+                    var results2 = results.Content.ReadAsStringAsync().Result;
+                    am = JsonConvert.DeserializeObject<EmpModel>(results2);
+                    SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");
+
+                    MailMessage mailMessage = new MailMessage();
+                    mailMessage.From = new MailAddress("noreply@essons.vn");
+                    mailMessage.To.Add(am.empEmail);
+                    mailMessage.IsBodyHtml = true;
+                    mailMessage.Body = "Nhân viên " + ViewBag.message +"("+ViewBag.empid+")"+ " xin nghỉ " + dateoffName +
+                        "<br /> Từ ngày: " + um.dateoffStart + " Đến ngày: " + um.dateoffEnd + @" <br /> Đang chờ bạn xác nhận http://portal.essons.vn:456/DateOff/dateoff_Confirm";
+                    mailMessage.Subject = "Nhân viên xin nghỉ phép";
+                    client.Send(mailMessage);
+                }
                 HttpContext.Session.SetString("notice", "Đăng kí phép thành công");
                 ViewBag.Error = "OK";
                 return PartialView("DisplayError");
             }
            
-            ViewBag.Error = "Không đủ phép năm để nghỉ";
+            ViewBag.Error = "Không đủ phép năm để nghỉ phép. Vui lòng kiểm tra lại phép năm.";
             return PartialView("DisplayError");
         }
 
         public async Task<IActionResult> dateoff_Confirm()
         {
+            HttpContext.Session.SetString("resultPage", "dateoff_Confirm");
+            if (HttpContext.Session.GetString("isLogin") is null || HttpContext.Session.GetString("isLogin") == "")
+                return RedirectToAction("Login", "User");
+
             getRole();
             List<DateOffModel> um = new List<DateOffModel>();
             HttpClient hc = _api.Initial();
@@ -187,6 +215,23 @@ namespace ESSONS_MIS_2020_App.Controllers
             {
                 var results = res.Content.ReadAsStringAsync().Result;
                 um = JsonConvert.DeserializeObject<List<DateOffModel>>(results);
+            }
+            return View(um);
+        }
+
+        public async Task<IActionResult> dateoff_yearoff()
+        {
+            getRole();
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
+
+            List<YearOffModel> um = new List<YearOffModel>();
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.GetAsync($"api/emp/GetAllYearOff");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                um = JsonConvert.DeserializeObject<List<YearOffModel>>(results);
             }
             return View(um);
         }

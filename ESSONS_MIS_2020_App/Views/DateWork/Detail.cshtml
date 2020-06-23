@@ -20,6 +20,7 @@
                                     <tr>
                                         <th>Mã yêu cầu</th>
                                         <th>Số thẻ</th>
+                                        <th>Số thời vụ</th>
                                         <th>Bộ phận YC</th>
                                         <th>Ca</th>
                                         <th>Tăng ca</th>
@@ -31,40 +32,41 @@
                                 <tbody>
                                     @foreach (var item in ViewBag.requestList)
                                     {
-                                        <tr>
-                                            <td>@item.requestID</td>
-                                            <td>@item.empid</td>
-                                            <td>@item.depName</td>
-                                            <td>@item.shiftName</td>
-                                            @if (item.isOT == 1)
+                                    <tr>
+                                        <td>@item.requestID</td>
+                                        <td>@item.empid</td>
+                                        <td>@item.empidTemp</td>
+                                        <td>@item.depName</td>
+                                        <td>@item.shiftName</td>
+                                        @if (item.isOT == 1)
+                                        {
+                                            <td>Có</td>
+                                        }
+                                        else
+                                        {
+                                            <td>Không</td>
+                                        }
+                                        <td>@item.datework</td>
+                                        <td>@item.dateworkend</td>
+                                        <td>
+                                            @if (@item.status == "2")
                                             {
-                                                <td>Có</td>
+                                                <label>Đang chờ</label>
                                             }
                                             else
                                             {
-                                                <td>Không</td>
+                                                if (@item.status == "1")
+                                                {
+                                                    <label>Đã xác nhận</label>
+                                                }
+                                                if (@item.status == "3")
+                                                {
+                                                    <label>Hủy</label>
+                                                }
                                             }
-                                            <td>@item.datework</td>
-                                            <td>@item.dateworkend</td>
-                                            <td>
-                                                @if (@item.status == "2")
-                                                {
-                                                    <label>Đang chờ</label>
-                                                }
-                                                else
-                                                {
-                                                    if (@item.status == "1")
-                                                    {
-                                                        <label>Đã xác nhận</label>
-                                                    }
-                                                    if (@item.status == "3")
-                                                    {
-                                                        <label>Hủy</label>
-                                                    }
-                                                }
 
-                                            </td>
-                                        </tr>
+                                        </td>
+                                    </tr>
                                     }
                             </table>
                         </div>

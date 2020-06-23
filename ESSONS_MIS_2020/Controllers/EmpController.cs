@@ -59,6 +59,8 @@ namespace ESSONS_MIS_2020.Controllers
 
                         if(sdr["groupName"] != null)
                             em.empIDManager = sdr["groupName"].ToString();
+                        if (sdr["groupID"] != null)
+                            em.groupID = sdr["groupID"].ToString();
                         em.depchildName = sdr["depchildName"].ToString();
                         em.positionName = sdr["positionName"].ToString();
                         em.depchildID = sdr["depchildName"].ToString();
@@ -178,6 +180,68 @@ namespace ESSONS_MIS_2020.Controllers
             return dm;
         }
 
+        public List<PositionDepEmpModel> GetAllPositionDepEmp()
+        {
+            List<PositionDepEmpModel> ldm = new List<PositionDepEmpModel>();
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_positiondepemp", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "SelectAll"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        PositionDepEmpModel dm = new PositionDepEmpModel();
+                        dm.empID = sdr["empID"].ToString();
+                        dm.empName = sdr["empName"].ToString();
+                        dm.positionName = sdr["positionName"].ToString();
+                        dm.depName = sdr["depName"].ToString();
+                        dm.depchildName = sdr["depchildName"].ToString();
+                        dm.confirmDate = sdr["confirmDate"].ToString();
+                        dm.username = sdr["username"].ToString();
+                        ldm.Add(dm);
+                    }
+                }
+            }
+            return ldm;
+        }
+
+        public List<YearOffModel> GetAllYearOff()
+        {
+            List<YearOffModel> ldm = new List<YearOffModel>();
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_yearoff", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "SelectAll"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        YearOffModel dm = new YearOffModel();
+                        dm.empid = sdr["empid"].ToString();
+                        dm.empName = sdr["empName"].ToString();
+                        dm.depName = sdr["depName"].ToString();
+                        dm.positionName = sdr["positionName"].ToString();
+                        dm.yearOff = decimal.Parse(sdr["YearOff"].ToString());
+                        dm.yearOffActive = decimal.Parse(sdr["yearOffActive"].ToString());
+                        dm.yearOffUsed = decimal.Parse(sdr["yearOffUsed"].ToString());
+                        ldm.Add(dm);
+                    }
+                }
+            }
+            return ldm;
+        }
+
         [HttpGet]
         public List<DepartmentModel> GetDepartment()
         {
@@ -206,7 +270,7 @@ namespace ESSONS_MIS_2020.Controllers
         }
 
         [HttpGet]
-        public List<EmpModel> GetEmpManager(string depID)
+        public List<EmpModel> GetEmpManager(string groupID)
         {
             List<EmpModel> ldm = new List<EmpModel>();
             string connection = _configuration.GetConnectionString("DefaultConnection");
@@ -218,7 +282,7 @@ namespace ESSONS_MIS_2020.Controllers
                     sql.Open();
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
                     sc.Parameters.Add(
-                       new SqlParameter("@depID", depID));
+                       new SqlParameter("@groupID", groupID));
                     sc.Parameters.Add(
                         new SqlParameter("@type", "GetEmpManager"));
                     SqlDataReader sdr = sc.ExecuteReader();
@@ -226,7 +290,31 @@ namespace ESSONS_MIS_2020.Controllers
                     {
                         EmpModel dm = new EmpModel();
                         dm.empIDManager = sdr["empID"].ToString();
-                        //dm.empNameManager = sdr["empName"].ToString();
+                        ldm.Add(dm);
+                    }
+                }
+            }
+            return ldm;
+        }
+        [HttpGet]
+        public List<PositionDepEmpModel> GetGroupID()
+        {
+            List<PositionDepEmpModel> ldm = new List<PositionDepEmpModel>();
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_employee", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "GetGroupID"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        PositionDepEmpModel dm = new PositionDepEmpModel();
+                        dm.groupID = int.Parse(sdr["groupID"].ToString());
                         ldm.Add(dm);
                     }
                 }
@@ -262,6 +350,32 @@ namespace ESSONS_MIS_2020.Controllers
                 }
             }
             return ldm;
+        }
+
+        [HttpGet]
+        public EmpModel GetEmailEmpManager(string empid)
+        {
+            EmpModel dm = new EmpModel();
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_employee", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                       new SqlParameter("@empID", empid));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "GetEmailEmpManager"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        dm.empEmail = sdr["empEmail"].ToString();
+                    }
+                }
+            }
+            return dm;
         }
 
         [HttpGet]
@@ -402,6 +516,8 @@ namespace ESSONS_MIS_2020.Controllers
                         new SqlParameter("@empYearOff", model.empYearOff));
                     sc.Parameters.Add(
                        new SqlParameter("@empIDManager", model.empIDManager));
+                    sc.Parameters.Add(
+                       new SqlParameter("@groupID", model.groupID));
 
                     sc.Parameters.Add(
                         new SqlParameter("@depchildID", model.depchildID));
@@ -511,6 +627,8 @@ namespace ESSONS_MIS_2020.Controllers
                         new SqlParameter("@empYearOff", value.empYearOff));
                     sc.Parameters.Add(
                         new SqlParameter("@empIDManager", value.empIDManager));
+                    sc.Parameters.Add(
+                        new SqlParameter("@groupID", value.groupID));
 
                     sc.Parameters.Add(
                        new SqlParameter("@empIdentityPlace", value.empIdentityPlace));

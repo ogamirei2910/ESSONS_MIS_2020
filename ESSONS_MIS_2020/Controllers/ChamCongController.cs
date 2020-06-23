@@ -83,7 +83,6 @@ namespace ESSONS_MIS_2020.Controllers
 
                 }
             }
-            return resultGet;
         }
 
         [HttpGet]

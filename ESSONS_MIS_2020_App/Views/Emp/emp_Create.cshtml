@@ -91,9 +91,10 @@
                                     <div class="form-group row" id="GroupEmpManager" hidden="hidden">
                                         <label class="col-sm-3 col-form-label">Tổ</label>
                                         <select id="empGroup" asp-for="groupID" class="custom-select col-sm-4"
-                                                asp-items="@(new SelectList(""))">
+                                                asp-items="@(new SelectList(ViewBag.groupList,"groupID","groupID"))">
+                                            <option value="0" disabled selected>Chọn tổ</option>
                                         </select>
-                                        <select id="empGroup" asp-for="empIDManager" class="custom-select col-sm-4"
+                                        <select hidden id="empIDManager" asp-for="empIDManager" class="custom-select col-sm-4"
                                                 asp-items="@(new SelectList(""))">
                                         </select>
                                     </div>
@@ -449,7 +450,7 @@
             var depID = $("#dep");
             var position = $("#position");
             var depchild = $("#depchild");
-            var groupEmp = $("#GroupEmpManager");
+            var empGroup = $("#empGroup");
             depchild.prop('disabled', true);
             position.prop('disabled', true);
             debugger
@@ -465,25 +466,18 @@
                         position.empty();
                         depchild.prop('disabled', false);
                         depchild.append(data);
+                        if (depvalue != 'DHE')
+                            $('#GroupEmpManager').prop('hidden', true);
+                        else
+                            $('#GroupEmpManager').prop('hidden', false);
                     }
                 })
-                if (depvalue == 'DHE') {
-                    var empManager = $("#empManager"); 
-                    GroupEmpManager.prop('hidden', false);
-                    debugger
-                    $.ajax({
-                        type: "GET",
-                        url: "/Emp/EmpManager?depid=" + depvalue,
-                        contentType: "html",
-                        success: function (data) {
-                            debugger                          
-                            empManager.append(data);
-                        }
-                    })
-                }
             })
+
             depchild.change(function () {
                 var depchildvalue = $(this).val();
+                var groupManager = $('#GroupEmpManager');
+                var empManager = $('#empIDManager');
                 var depchildtext = $("#depchild option:selected").text();
                 $("#depchildName").val(depchildtext);
                 $.ajax({
@@ -495,11 +489,31 @@
                         position.empty();
                         position.prop('disabled', false);
                         position.append(data);
+                        groupManager.prop('hidden', false);
+                        if (depchildvalue != 'TTDHE')
+                            empManager.prop('hidden', false);
+                        else
+                            empManager.prop('hidden', true);
+                    }
+                })
+            })
 
+            empGroup.change(function () {
+                var empGroupVal = $(this).val();
+                var empManager = $('#empIDManager');
+                $.ajax({
+                    type: "GET",
+                    url: "/Emp/EmpManager?groupID=" + empGroupVal,
+                    contentType: "html",
+                    success: function (data) {
+                        debugger
+                        empManager.empty();
+                        empManager.append(data);
                     }
                 })
 
             })
+
             position.change(function () {
                 var positionvalue = $("#position option:selected").text();
                 $("#positionName").val(positionvalue);

@@ -54,6 +54,22 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View(um);
         }
 
+        public async Task<IActionResult> emp_Position()
+        {
+            getRole();
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
+
+            List<PositionDepEmpModel> um = new List<PositionDepEmpModel>();
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.GetAsync($"api/emp/GetAllPositionDepEmp");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                um = JsonConvert.DeserializeObject<List<PositionDepEmpModel>>(results);
+            }
+            return View(um);
+        }
         [HttpGet]
         public async Task<IActionResult> emp_Detail(string empID)
         {
@@ -83,6 +99,14 @@ namespace ESSONS_MIS_2020_App.Controllers
                 em = JsonConvert.DeserializeObject<List<DepartmentModel>>(results);
             }
 
+            List<PositionDepEmpModel> am = new List<PositionDepEmpModel>();
+            res = await hc.GetAsync("api/emp/GetGroupID");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                am = JsonConvert.DeserializeObject<List<PositionDepEmpModel>>(results);
+            }
+
             string empid = "";
             res = await hc.GetAsync("api/emp/GetEmpSTT");
             if (res.IsSuccessStatusCode)
@@ -93,6 +117,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             }
 
             ViewBag.departmentList = em;
+            ViewBag.groupList = am;
             getRole();
 
             return View();
@@ -218,6 +243,15 @@ namespace ESSONS_MIS_2020_App.Controllers
                 var results = res.Content.ReadAsStringAsync().Result;
                 um = JsonConvert.DeserializeObject<EmpModel>(results);
             }
+
+            List<PositionDepEmpModel> am = new List<PositionDepEmpModel>();
+            res = await hc.GetAsync("api/emp/GetGroupID");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                am = JsonConvert.DeserializeObject<List<PositionDepEmpModel>>(results);
+            }
+            ViewBag.groupList = am;
 
             if (um.empImage != null && um.empImage != "")
                 HttpContext.Session.SetString("empImage", um.empImage);
@@ -402,7 +436,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 var results = res.Content.ReadAsStringAsync().Result;
                 em = JsonConvert.DeserializeObject<List<EmpModel>>(results);
             }
-            ViewBag.DepartmentCList = em;
+            ViewBag.empManagerList = em;
             return PartialView("DisplayEmpManager");
         }
 

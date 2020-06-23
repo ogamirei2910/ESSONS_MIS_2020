@@ -115,7 +115,8 @@ namespace ESSONS_MIS_2020_App.Controllers
                 worksheet.Cells["A3"].Value = "Của bộ lao động-Thương binh và xã hội";
                 worksheet.Cells["A4"].Value = "DOANH NGHIỆP CÔNG TY:TNHH CÔNG NGHIỆP TOÀN CẦU ESSONS";
                 worksheet.Cells["A5"].Value = "BIÊN BẢN THỎA THUẬN CỦA NGƯỜI LÀM THÊM GIỜ";
-                worksheet.Cells["A6"].Value = "Thời gian làm thêm: Từ ngày  15  tháng  6  đến ngày  20  tháng 6  năm 2020";
+                worksheet.Cells["A6"].Value = "Thời gian làm thêm: Từ ngày " +um.First().datework.Substring(8,2)+ " tháng  "+ um.First().datework.Substring(5, 2) + "  " +
+                    "đến ngày  " + um.First().dateworkend.Substring(8, 2) + "  tháng " + um.First().dateworkend.Substring(5, 2) + "  năm " +um.First().datework.Substring(0,4);
                 //worksheet.Cells["A7"].Value = "Địa điểm làm thêm BỘ PHẬN: CHẾ BIẾN NL";
                 ExcelRange rg = worksheet.Cells["A7"];
                 rg.IsRichText = true;
@@ -210,6 +211,8 @@ namespace ESSONS_MIS_2020_App.Controllers
                 //Bold
                 worksheet.Cells["A1"].Style.Font.Bold = true;
                 worksheet.Cells["A2"].Style.Font.Bold = true;
+                worksheet.Cells["A4"].Style.Font.Bold = true;
+                worksheet.Cells["A5"].Style.Font.Bold = true;
                 worksheet.Cells["A39"].Style.Font.Bold = true;
                 worksheet.Cells["A" + (cell + 2).ToString()].Style.Font.Bold = true;
                 worksheet.Cells["A" + (cell + 3).ToString()].Style.Font.Bold = true;

@@ -1,4 +1,5 @@
-﻿@foreach (var item in ViewBag.DepartmentCList)
+﻿<option selected="selected" disabled>Chọn người QL</option>
+@foreach (var item in ViewBag.empManagerList)
 {
     <option value="@item.empIDManager">@item.empIDManager</option>
 }

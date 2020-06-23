@@ -34,19 +34,11 @@ namespace ESSONS_MIS_2020_App.Controllers
             //    i++;
             //}
 
-
-            string username = HttpContext.Session.GetString("username");
-            List<UserRoleModel> urm = new List<UserRoleModel>();
+            var urm = HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList");
             HttpClient hc = _api.Initial();
-            HttpResponseMessage res = await hc.GetAsync($"api/user/GetRole/{username}");
-            if (res.IsSuccessStatusCode)
-            {
-                var results = res.Content.ReadAsStringAsync().Result;
-                urm = JsonConvert.DeserializeObject<List<UserRoleModel>>(results);
-            }
 
-            List<DateOffModel> um = new List<DateOffModel>();       
-            res = await hc.GetAsync($"api/dateoff/GetEmpID/{urm.First().empID}");
+            List<DateOffModel> um = new List<DateOffModel>();
+            HttpResponseMessage res = await hc.GetAsync($"api/dateoff/GetEmpID/{urm.First().empID}");
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
@@ -83,7 +75,6 @@ namespace ESSONS_MIS_2020_App.Controllers
             var DistinctItems = urm.Select(x => x.folderID).Distinct().ToList();
             ViewBag.folder = DistinctItems;
             ViewBag.folderList = urm;
-            HttpContext.Session.SetObjectAsJson("folderList", urm);
             //------------------------------------------------- 
 
             return View(um);

@@ -29,22 +29,23 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Họ tên</label>
                                         <div class="col-6">
-                                            <input type="text" class="form-control" readonly placeholder="Họ tên" value="@ViewBag.message">
+                                            <input id="empName" type="text" class="form-control" readonly placeholder="Họ tên" value="@ViewBag.message">
                                         </div>
-                                    </div> 
+                                    </div>
                                     <div class="form-group row mySelect">
                                         <label class="col-sm-3 col-form-label">Loại xin phép</label>
                                         <label>&nbsp;&nbsp;</label>
                                         <select asp-for="dateoffType" class="custom-select col-6 selectpicker" id="loainghiphep" onchange=" myFunction()">
                                             <option disabled value="0" selected>Chọn loại nghỉ</option>
-                                            <option value="4" title="Việc riêng là phép dùng để nghỉ nhưng sẽ không được tính công ngày nghỉ đó">Việc riêng</option>
-                                            <option value="1" title="Phép năm là phép được cộng vào mỗi đầu tháng. Khi dùng phép năm để nghỉ sẽ được tính lương như bình thường">Phép năm</option>
-                                            <option value="2" title="Nghỉ bệnh là phép nghỉ sẽ được BHXH thanh toán tiền lương">Nghỉ bệnh (BHXH)</option>
-                                            <option value="13" title="Nghỉ con bệnh là phép nghỉ sẽ được BHXH thanh toán tiền lương">Con bệnh (BHXH)</option>
-                                            <option value="3" title="Nghỉ thai sản là phép nghỉ sẽ được BHXH thanh toán tiền lương">Nghỉ thai sản (BHXH)</option>
-                                            <option value="10" title="Nghỉ vợ sinh/khám/dưỡng là phép nghỉ sẽ được BHXH thanh toán tiền lương">Vợ sinh, khám, dưỡng</option>
-                                            <option value="11" title="Nghỉ kết hôn là phép nghỉ sẽ được công ty thanh toán theo quy định công ty">Kết hôn</option>
-                                            <option value="12" title="Nghỉ tang gia là phép nghỉ sẽ được công ty thanh toán theo quy định công ty">Tang gia</option>
+                                            <option value="4">Việc riêng</option>
+                                            <option value="1">Phép năm</option>
+                                            <option value="2">Nghỉ bệnh (BHXH)</option>
+                                            <option value="13">Con bệnh (BHXH)</option>
+                                            <option value="3">Nghỉ thai sản (BHXH)</option>
+                                            <option value="10">Vợ sinh, khám, dưỡng</option>
+                                            <option value="16">Dưỡng sức</option>
+                                            <option value="11">Kết hôn</option>
+                                            <option value="12">Tang gia</option>
                                         </select>
                                     </div>
 
@@ -98,12 +99,12 @@
                                 </td>
                             </tr>
                         </table>
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary" href="#">
-                                Tạo mới
-                            </button>
-                        </div>
                     </form>
+                    <div class="card-footer">
+                        <button id="btCreate" type="button" class="btn btn-primary" onclick="myClick()" >
+                            Tạo mới
+                        </button>
+                    </div>
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
@@ -117,9 +118,36 @@
 
 @section scripts{
     <script type="text/javascript">
+        $('#btCreate').on('click',function(){
+            bs4pop.confirm('Số thẻ: ' + $('#empID').val() + '<br/>Họ tên: ' + $('#empName').val() + '<br/>Loại xin phép: ' + $('#loainghiphep option:selected').text() +
+                ' <br/>Từ ngày: ' + $('#reservationDate').val() + '&nbsp;&nbsp; Đến ngày: ' + $('#reservationDate2').val() +
+                '<br/>Từ giờ:' + $('#dateoffStartTime').val() + '&nbsp;&nbsp; Đến giờ:' + $('#dateoffEndTime').val(), function (sure) {
+                console.log('Are You Sure:', sure);
+            }, {
+                title: 'Xác nhận thông tin phép',
+                hideRemove: true,
+                btns: [
+                    {
+                        label: 'Xác nhận',
+                        onClick(cb) {
+                            $("#formPhep").submit();
+                        }
+                    },
+                    {
+                        label: 'Hủy',
+                        className: 'btn-default',
+                        onClick(cb) {
+                        }
+                    }
+                ]
+            });
+
+        });
+
         $(document).ready(function () {
+
             $("#formPhep").submit(function (e) {
-                $.ajax({
+                 $.ajax({
                     cache: false,
                     type: "POST",
                     url: '@Url.Action("dateoff_Request", "DateOff")',
@@ -148,7 +176,7 @@
                         else {
                             window.location.href = "/Home/Index";
                         }
-                            
+
                     }
                 })
                 e.preventDefault();
@@ -187,14 +215,20 @@
 
         function myFunction() {
             var x = document.getElementById("loainghiphep").value;
+            var content = "";
             var dtDenNgay = $('#dtDenNgay');
             var tpTuGio = $('#tpTuGio');
             var tpDenGio = $('#tpDenGio');
-            if (x == '2' || x == '3' || x == '10' || x == '11' || x == '12' || x == '13') {
-                if (x == '11' || x == '12')
-                    document.getElementById("giaycanco").innerHTML = 'Cần giấy xác nhận tổ chức kết hôn, tang gia'; 
+            if (x == '2' || x == '3' || x == '10' || x == '11' || x == '12' || x == '13' || x == '16') {
+                if (x == '11' || x == '12') {
+                    if (x == '12') 
+                        document.getElementById("giaycanco").innerHTML = 'Cần giấy xác nhận chứng tử';
+                    else
+                        document.getElementById("giaycanco").innerHTML = 'Cần giấy xác nhận kết hôn bản sao';
+                }              
                 else
                     document.getElementById("giaycanco").innerHTML = 'Cần giấy nghỉ bệnh của bệnh viện xác nhận';
+
                 dtDenNgay.prop('hidden', false);
                 tpTuGio.prop('hidden', true);
                 tpDenGio.prop('hidden', true);
@@ -208,6 +242,38 @@
                     tpDenGio.prop('hidden', false);
                 }
             }
+
+            switch (x) {
+                case "1": content = "Là phép được hưởng nguyên lương, 01 tháng NLĐ sẽ được hưởng 01 ngày phép.<br />" +
+                    "Nếu trong tháng NLĐ không nghỉ sẽ được cộng dồn phép vào tháng kế tiếp."
+                    + "<br /> NLĐ làm đủ 05 năm thì mỗi năm sẽ được cộng thêm 01 ngày phép."; break;
+                case "13":
+                case "2": content = "Khi NLĐ nghỉ bệnh, con bệnh, khám thai định kỳ có giấy nghỉ bệnh của bệnh viện sẽ được BHXH chi trả bằng 75% mức lương đóng BHXH đối với nghỉ bệnh, con bệnh và 100% mức lương đóng BHXH đối với khám thai định kỳ."; break;
+                case "3": content = "NLĐ sẽ được nghỉ 06 tháng và được BHXH chi trả tiền thai sản bằng 6 tháng lương bình quân của 6 tháng cuối và 02 tháng lương cơ sở (gửi giấy chứng sinh photo công chứng, giấy khai sinh cho phòng Nhân sự)"; break;
+                case "16":
+                case "10": content = "NLĐ hết chế độ thai sản đi làm lại, sau đó sẽ được nghỉ dưỡng sức và lao động nam có vợ sinh con thì được nghỉ 05 ngày nếu sinh thường và 07 ngày nếu sinh mổ."; break;
+                case "4": content = "NLĐ nghỉ việc riêng sẽ không được tính lương ngày nghỉ, nghỉ việc riêng sẽ ảnh hưởng đến việc xét thi đua cuối năm."; break;
+                case "11": content = "NLĐ kết hôn sẽ được nghỉ 03 ngày, con kết hôn được nghỉ 01 ngày hưởng nguyên lương ( gửi giấy chứng nhận kết hôn bản sao cho phòng nhân sự)"; break;
+                case "12": content = "Khi Cha Mẹ ( bên chồng, bên vợ); vợ, chồng, con chết thì được nghỉ 03 ngày hưởng nguyên lương (gửi giấy chứng tử)"; break;
+            }
+
+            let dia = bs4pop.dialog({
+                title: 'Ghi chú',
+                content: content,
+
+                closeBtn: true,
+                backdrop: 'static',
+                btns: [
+                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                ],
+                onDragStart: function () {
+                    console.log('onDragStart');
+                },
+                onDrag: function () {
+                    console.log('onDrag');
+                }
+
+            });
         }
 
         $(".selectpicker").selectpicker()
@@ -219,7 +285,5 @@
         $("ul.selectpicker li").each(function (i) {
             $(this).attr('title', title[i]).tooltip({ container: "#tooltipBox" });
         })
-
-
     </script>
 }

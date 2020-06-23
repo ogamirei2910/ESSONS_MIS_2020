@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<ESSONS_MIS_2020_App.Models.DepartmentChildModel>
 
-<option value="0">Chọn bộ phận</option>
+<option selected="selected" disabled>Chọn bộ phận</option>
 @foreach (var item in ViewBag.DepartmentCList)
 {
     <option value="@item.DepChildID">@item.DepChildName</option>

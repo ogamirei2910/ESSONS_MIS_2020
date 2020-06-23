@@ -799,7 +799,19 @@
                                                 {
                                                     @if (folderChild.folderChildID == 0)
                                                     {
+                                                        <li class="nav-item">
+                                                            <a href="/Emp/Index" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Kiểm tra thông tin</p>
+                                                            </a>
+                                                        </li>
 
+                                                        <li class="nav-item">
+                                                            <a href="/Emp/emp_Position" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Quá trình công tác</p>
+                                                            </a>
+                                                        </li>
                                                     }
                                                     else
                                                     {
@@ -809,6 +821,15 @@
                                                                 <a href="/Emp/Index" class="nav-link">
                                                                     <i class="far fa-circle nav-icon"></i>
                                                                     <p>Kiểm tra thông tin</p>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                        @if (folderChild.folderChildID == 2)
+                                                        {
+                                                            <li class="nav-item">
+                                                                <a href="/Emp/emp_Position" class="nav-link">
+                                                                    <i class="far fa-circle nav-icon"></i>
+                                                                    <p>Quá trình công tác</p>
                                                                 </a>
                                                             </li>
                                                         }
@@ -854,12 +875,12 @@
                                                                 <p>Duyệt yêu cầu</p>
                                                             </a>
                                                         </li>
-                                                        @*<li class="nav-item">
-                                                            <a href="/User/SetFolder" class="nav-link">
+                                                        <li class="nav-item">
+                                                            <a href="/DateOff/dateoff_yearoff" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
-                                                                <p>Phân quyền</p>
+                                                                <p>Chi tiết phép năm</p>
                                                             </a>
-                                                        </li>*@
+                                                        </li>
                                                     }
                                                     else
                                                     {
@@ -873,13 +894,30 @@
                                                             </li>
 
                                                         }
-
                                                         @if (folderChild.folderChildID == 2)
                                                         {
                                                             <li class="nav-item">
                                                                 <a href="/DateOff/dateoff_Confirm" class="nav-link">
                                                                     <i class="far fa-circle nav-icon"></i>
                                                                     <p>Duyệt yêu cầu</p>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                        @if (folderChild.folderChildID == 3)
+                                                        {
+                                                            <li class="nav-item">
+                                                                <a href="/DateOff/dateoff_Confirm" class="nav-link">
+                                                                    <i class="far fa-circle nav-icon"></i>
+                                                                    <p>Theo dõi nghỉ phép</p>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                        @if (folderChild.folderChildID == 4)
+                                                        {
+                                                            <li class="nav-item">
+                                                                <a href="/DateOff/dateoff_Confirm" class="nav-link">
+                                                                    <i class="far fa-circle nav-icon"></i>
+                                                                    <p>Chi tiết phép năm</p>
                                                                 </a>
                                                             </li>
                                                         }

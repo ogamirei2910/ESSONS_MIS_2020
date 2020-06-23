@@ -83,13 +83,14 @@
                                         <b class="col-sm-3">Chức vụ</b>
                                         <a class="col-sm-5">@Html.DisplayFor(model => model.positionName)</a>
                                     </div>
-                                    @if (Model.empIDManager != null && Model.empIDManager != "")
-                                    {
-                                        <div class="form-group row">
-                                            <b class="col-sm-3">Người Q.lý:</b>
-                                            <a class="col-sm-5">@Html.DisplayFor(model => model.empIDManager)</a>
-                                        </div>
-                                    }
+                                    <div class="form-group row">
+                                        @if (Model.depID == "Định hình")
+                                        {
+                                            <b class="col-sm-3">Tổ</b>
+                                            <a class="col-sm-3">@Html.DisplayFor(model => model.groupID)</a>
+                                            <a class="col-sm-3">@Html.DisplayFor(model => model.empIDManager)</a>
+                                        }
+                                    </div>
                                 </td>
                             </tr>
                             <tr>

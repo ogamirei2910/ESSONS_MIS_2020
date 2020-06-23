@@ -123,6 +123,7 @@ namespace ESSONS_MIS_2020.Controllers
                         em.requestID = sdr["requestID"].ToString();
                         em.datework = sdr["datework"].ToString();
                         em.empid = sdr["empid"].ToString();
+                        em.empidTemp = sdr["empIDTemp"].ToString();
                         em.dateworkend = sdr["dateworkend"].ToString();
                         em.shiftName = sdr["shiftName"].ToString();
                         em.depName = sdr["depID"].ToString();

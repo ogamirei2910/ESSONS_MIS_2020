@@ -52,15 +52,16 @@ namespace ESSONS_MIS_2020.Controllers
                         switch (sdr["dateoffType"].ToString())
                         {
                             case "1": em.dateoffType = "Phép năm"; break;
-                            case "2": em.dateoffType = "Nghỉ bệnh"; break;
-                            case "3": em.dateoffType = "Nghỉ thai sản"; break;
+                            case "2": em.dateoffType = "Nghỉ ốm đau (BHXH)"; break;
+                            case "3": em.dateoffType = "Nghỉ thai sản (BHXH)"; break;
                             case "4": em.dateoffType = "Việc riêng"; break;
-                            case "10": em.dateoffType = "Nghỉ vợ sinh/khám/dưỡng"; break;
-                            case "11": em.dateoffType = "Nghỉ kết hôn"; break;
-                            case "12": em.dateoffType = "Nghỉ tang gia"; break;
-                            case "13": em.dateoffType = "Nghỉ con bệnh"; break;
+                            case "10": em.dateoffType = "Vợ sinh/khám/dưỡng"; break;
+                            case "11": em.dateoffType = "Kết hôn"; break;
+                            case "12": em.dateoffType = "Tang gia"; break;
+                            case "13": em.dateoffType = "Con bệnh (BHXH)"; break;
                             case "14": em.dateoffType = "Trực biệt thự"; break;
-                            case "15": em.dateoffType = "Đi công tác"; break;
+                            case "15": em.dateoffType = "Công tác"; break;
+                            case "16": em.dateoffType = "Dưỡng sức"; break;
                         }
                         em.username = sdr["username"].ToString();
                         lem.Add(em);
@@ -226,7 +227,13 @@ namespace ESSONS_MIS_2020.Controllers
                             case "2": em.dateoffType = "Nghỉ ốm đau (BHXH)"; break;
                             case "3": em.dateoffType = "Nghỉ thai sản (BHXH)"; break;
                             case "4": em.dateoffType = "Việc riêng"; break;
-                            case "5": em.dateoffType = "Nghỉ việc"; break;
+                            case "10": em.dateoffType = "Vợ sinh/khám/dưỡng"; break;
+                            case "11": em.dateoffType = "Kết hôn"; break;
+                            case "12": em.dateoffType = "Tang gia"; break;
+                            case "13": em.dateoffType = "Con bệnh (BHXH)"; break;
+                            case "14": em.dateoffType = "Trực biệt thự"; break;
+                            case "15": em.dateoffType = "Công tác"; break;
+                            case "16": em.dateoffType = "Dưỡng sức"; break;
                         }
                         
                         lem.Add(em);

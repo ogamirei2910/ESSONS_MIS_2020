@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ESSONS_MIS_2020_App.Models.YearOffModel>
+@{
+    ViewData["Title"] = "dateoff_yearoff";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Thông tin phép năm công nhân viên</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Mã nhân viên</th>
+                                        <th>Tên nhân viên</th>
+                                        <th>Mã phòng ban</th>
+                                        <th>Chức vụ</th>
+                                        <th>Tổng phép năm</th>
+                                        <th>Phép hiện có</th>
+                                        <th>Phép đã dùng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@Html.DisplayFor(modelItem => item.empid)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.empName)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.depName)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.positionName)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.yearOff)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.yearOffActive)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.yearOffUsed)</td>
+                                        </tr>
+                                    }
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+    </div>

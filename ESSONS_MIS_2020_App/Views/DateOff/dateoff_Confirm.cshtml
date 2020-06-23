@@ -16,7 +16,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table id="example1" class="table table-bordered table-striped table-responsive">
+                        <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Mã nhân viên</th>
@@ -53,8 +53,7 @@
                                             @Html.ActionLink("Hủy", "dateoff_Delete", "dateoff", new { dateoffID = item.dateoffID, page = 2 },
                                                                                                 new
                                                                                                 {
-                                                                                                    @class = "btn btn-danger btn-sm",
-                                                                                                    onclick = "return confirm('Bạn có muốn hủy yêu cầu này ?')"
+                                                                                                    @class = "btn btn-danger btn-sm"
                                                                                                 })
                                         </td>
                                     </tr>
@@ -71,4 +70,13 @@
     </section>
     <!-- /.content -->
 </div>
+@section scripts{
+    <script type="text/javascript">
+        $.fn.dataTable.ext.errMode = 'throw';
 
+        $('#example1').dataTable({
+            "aaSorting": [],
+                // Your other options here...
+        });
+    </script>
+}

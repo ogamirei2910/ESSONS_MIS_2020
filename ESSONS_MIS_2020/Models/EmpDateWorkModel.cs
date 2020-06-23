@@ -11,6 +11,7 @@ namespace ESSONS_MIS_2020.Models
         public string datework { get; set; }
         public string dateworkend { get; set; }
         public string empid { get; set; }
+        public string empidTemp { get; set; }
         public int isOT { get; set; }
         public string shiftName { get; set; }
 

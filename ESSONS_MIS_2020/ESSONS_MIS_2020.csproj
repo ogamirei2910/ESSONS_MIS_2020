@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="PublishAPI\**" />
+    <Content Remove="PublishAPI\**" />
+    <EmbeddedResource Remove="PublishAPI\**" />
+    <None Remove="PublishAPI\**" />
+    <TypeScriptCompile Remove="PublishAPI\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
