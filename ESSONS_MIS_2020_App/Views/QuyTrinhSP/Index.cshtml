@@ -1,0 +1,69 @@
+﻿@model List<ESSONS_MIS_2020_App.Models.ChildQuyTrinh>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="se-pre-con"></div>
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fa fa-info"></i>
+                        Quy trình phát triển sản phẩm
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <table id="example1" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Số chứng từ</th>
+                                <th>Ngày duyệt</th>
+                                <th>Ngày phát hành</th>
+                                <th>Code KH</th>
+                                <th>Code SP</th>
+                                <th>Mã khuônTW</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SoChungTu)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NgayDuyet)
+                                    </td>
+                                    <td>@Html.DisplayFor(modelItem => item.NgayPhatHanh)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.CodeKH)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.CodeSP)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.MaKhuonTW)</td>
+                                    <td>
+                                        @Html.ActionLink("Chi tiết", "Detail", "QuyTrinhSP", new { codeSP = item.CodeSP }, new { @class = "btn btn-primary btn-sm", @target = "_blank" })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".se-pre-con").fadeOut('slow');
+        });
+
+        $.fn.dataTable.ext.errMode = 'throw';
+
+        $('#example1').dataTable({
+            "aaSorting": [],
+            // Your other options here...
+        });
+    </script>
+}

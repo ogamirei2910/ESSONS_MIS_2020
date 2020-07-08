@@ -42,9 +42,12 @@
                             </table>
                         </form>
                         <div class="card-footer">
-                            <button class="btn btn-primary" id="btGetData">
-                                Lấy dữ liệu
-                            </button>
+                            @if (ViewBag.empid != "01653")
+                            {
+                                <button class="btn btn-primary" id="btGetData">
+                                    Lấy dữ liệu
+                                </button>
+                            }
                             <button class="btn btn-primary" id="btDay">
                                 Theo ngày
                             </button>
@@ -54,10 +57,13 @@
                             <button class="btn btn-primary" id="btSumMonth">
                                 Theo tổng tháng
                             </button>
-                            <button class="btn btn-primary" id="btOT">
-                                Cập nhật tăng ca
-                            </button>
-                        </div>
+                            @if (ViewBag.empid != "01653")
+                            {
+                                <button class="btn btn-primary" id="btOT">
+                                    Cập nhật tăng ca
+                                </button>
+                            }
+                            </div>
                         <br />
                         <table id="example1" class="table table-bordered table-striped">
                             @if (ViewBag.type != "SumMonth")

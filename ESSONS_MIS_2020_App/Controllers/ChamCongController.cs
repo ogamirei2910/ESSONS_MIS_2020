@@ -32,15 +32,18 @@ namespace ESSONS_MIS_2020_App.Controllers
         }
         public async Task<IActionResult> Index(string date, string type)
         {
+            //Role
+            getRole();
+            //-----------------------------------
             List<ChamCongModel> um = new List<ChamCongModel>();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = new HttpResponseMessage();
             if (type == "All")
-                res = await hc.GetAsync($"api/chamcong/GetChamCong?date={date}");
+                res = await hc.GetAsync($"api/chamcong/GetChamCong?date={date}&&empid={ViewBag.empid}");
             if (type == "Day")
-                res = await hc.GetAsync($"api/chamcong/GetChamCongTheoNgay?date={date}");
+                res = await hc.GetAsync($"api/chamcong/GetChamCongTheoNgay?date={date}&&empid={ViewBag.empid}");
             if (type == "SumMonth")
-                res = await hc.GetAsync($"api/chamcong/GetChamCongTheoThang?date={date}");
+                res = await hc.GetAsync($"api/chamcong/GetChamCongTheoThang?date={date}&&empid={ViewBag.empid}");
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
@@ -49,9 +52,7 @@ namespace ESSONS_MIS_2020_App.Controllers
 
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");
-            //Role
-            getRole();
-            //-----------------------------------
+
 
             ViewBag.type = type;
             ViewBag.chamcongList = um;
@@ -74,20 +75,20 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public async Task<IActionResult> DateOffException()
         {
+            //Role
+            getRole();
+            //-----------------------------------
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");
 
             List<DateOffExceptionModel> um = new List<DateOffExceptionModel>();
             HttpClient hc = _api.Initial();
-            HttpResponseMessage res = await hc.GetAsync($"api/dateoff/DateOffException");
+            HttpResponseMessage res = await hc.GetAsync($"api/dateoff/DateOffException?empid={ViewBag.empid}");
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
                 um = JsonConvert.DeserializeObject<List<DateOffExceptionModel>>(results);
-            }
-            //Role
-            getRole();
-            //-----------------------------------
+            }          
             ViewBag.dateoffList = um;
             return View();
         }
@@ -198,31 +199,13 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public async Task<IActionResult> LayLieuChamCong(string date)
         {
-            //HttpClient hc = _api.Initial();
-            //var res = await hc.GetAsync($"api/ChamCong/LayLieuChamCong?date={date}");
-
-            //if (res.IsSuccessStatusCode)
-            //{
-            //    var results = res.Content.ReadAsStringAsync().Result;
-            //    if (results == "OK")
-            //    {
-            //        ViewBag.Error = "Lấy dữ liệu thành công";
-            //        return PartialView("DisplayError");
-            //    }
-            //    else
-            //    {
-            //        ViewBag.Error = results;
-            //        return PartialView("DisplayError");
-            //    }
-            //}
-
             DateTime dt;
             DateTime.TryParseExact(date,
                             "dd-MM-yyyy",
                             CultureInfo.InvariantCulture,
                             DateTimeStyles.None, out dt);
 
-            if (dt < DateTime.Now)
+            if (dt.Date < DateTime.Now.Date)
             {
                 HttpClient hc = _api.Initial();
                 var res = await hc.GetAsync($"api/ChamCong/LayLieuChamCong?date={date}");
@@ -244,7 +227,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             }
             else
             {
-                ViewBag.Error = "Ngày làm việc chưa kết thúc";
+                ViewBag.Error = "Lỗi lấy dữ liệu (Đã lấy dữ liệu hoặc Chưa kết thúc ngày công)";
                 return PartialView("DisplayError");
             }
 

@@ -22,7 +22,7 @@ namespace ESSONS_MIS_2020.Controllers
         }
 
         [HttpGet]
-        public List<ChamCongModel> GetChamCong(string date)
+        public List<ChamCongModel> GetChamCong(string date, string empid)
         {
             List<ChamCongModel> lem = new List<ChamCongModel>();
             string connection = _configuration.GetConnectionString("DefaultConnection");
@@ -35,6 +35,8 @@ namespace ESSONS_MIS_2020.Controllers
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
                     sc.Parameters.Add(
                         new SqlParameter("@date", date));
+                    sc.Parameters.Add(
+                        new SqlParameter("@empid", empid));
                     sc.Parameters.Add(
                         new SqlParameter("@type", "All"));
                     SqlDataReader sdr = sc.ExecuteReader();
@@ -86,7 +88,7 @@ namespace ESSONS_MIS_2020.Controllers
         }
 
         [HttpGet]
-        public List<ChamCongModel> GetChamCongTheoNgay(string date)
+        public List<ChamCongModel> GetChamCongTheoNgay(string date, string empid)
         {
             List<ChamCongModel> lem = new List<ChamCongModel>();
             string connection = _configuration.GetConnectionString("DefaultConnection");
@@ -101,6 +103,8 @@ namespace ESSONS_MIS_2020.Controllers
                         new SqlParameter("@date", date));
                     sc.Parameters.Add(
                         new SqlParameter("@type", "day"));
+                    sc.Parameters.Add(
+                        new SqlParameter("@empid", empid));
                     SqlDataReader sdr = sc.ExecuteReader();
                     while (sdr.Read())
                     {
@@ -123,7 +127,7 @@ namespace ESSONS_MIS_2020.Controllers
         }
 
         [HttpGet]
-        public List<ChamCongModel> GetChamCongTheoThang(string date)
+        public List<ChamCongModel> GetChamCongTheoThang(string date, string empid)
         {
             List<ChamCongModel> lem = new List<ChamCongModel>();
             string connection = _configuration.GetConnectionString("DefaultConnection");
@@ -136,6 +140,8 @@ namespace ESSONS_MIS_2020.Controllers
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
                     sc.Parameters.Add(
                         new SqlParameter("@date", date));
+                    sc.Parameters.Add(
+                        new SqlParameter("@empid", empid));
                     sc.Parameters.Add(
                         new SqlParameter("@type", "month"));
                     SqlDataReader sdr = sc.ExecuteReader();

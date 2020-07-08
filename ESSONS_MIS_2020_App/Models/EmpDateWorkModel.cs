@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ESSONS_MIS_2020_App.Models;
 
 namespace ESSONS_MIS_2020_App.Models
 {
@@ -9,8 +10,9 @@ namespace ESSONS_MIS_2020_App.Models
     {
         public string requestID { get; set; }
         public string datework { get; set; }
-        public string dateworkend { get; set;}
+        public string dateworkend { get; set; }
         public string empid { get; set; }
+        public string empName { get; set; }
         public int isOT { get; set; }
         public string shiftName { get; set; }
         public string empidTemp { get; set; }
@@ -18,7 +20,7 @@ namespace ESSONS_MIS_2020_App.Models
         public string status { get; set; }
         public string indat { get; set; }
         public string username { get; set; }
-
         public int number { get; set; }
+        public List<ChildDateWork> childDateWork { get; set; }
     }
 }

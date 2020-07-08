@@ -113,7 +113,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             {
                 var results = res.Content.ReadAsStringAsync().Result;
                 empid = JsonConvert.DeserializeObject<string>(results);
-                ViewBag.STT = (int.Parse(empid) +1).ToString("D5");
+                ViewBag.STT = (int.Parse(empid) + 1).ToString("D5");
             }
 
             ViewBag.departmentList = em;
@@ -233,6 +233,76 @@ namespace ESSONS_MIS_2020_App.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> emp_Create_QR()
+        {
+            getRole();
+            List<EmpModel> um = new List<EmpModel>();
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.GetAsync("api/emp/Get");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                um = JsonConvert.DeserializeObject<List<EmpModel>>(results);
+            }
+
+            var i = 1;
+            var j = 1;
+            var x = 20;
+            var x1 = 40;
+            var y = 10;
+            var y1 = 100;
+            Image img = Image.FromFile("wwwroot\\images\\layoutQR.png"); 
+            Graphics g = Graphics.FromImage(img);
+            foreach (var item in um)
+            {
+                if (i == 1)
+                {
+                    img = Image.FromFile("wwwroot\\images\\layoutQR.png");
+                    g = Graphics.FromImage(img);
+                }
+                //Create QRcode
+                QRCodeGenerator _qrCode = new QRCodeGenerator();
+                QRCodeData _qrCodeData = _qrCode.CreateQrCode(item.empID, QRCodeGenerator.ECCLevel.Q);
+                QRCode qrCode = new QRCode(_qrCodeData);
+                Bitmap qrCodeImage = qrCode.GetGraphic(20);
+                //-----------------------------------------------------
+                g.DrawImage(qrCodeImage, x, y, 100, 100);
+                g.DrawString(item.empID, new Font("Calibri", 9, FontStyle.Bold), new SolidBrush(Color.Black), new Point(x1, y1));  
+
+                if (i % 14 == 0)
+                {
+                    y += 140;
+                    y1 += 140;
+                    x = 20;
+                    x1 = 40;
+                }
+                else
+                {
+                    x += 110;
+                    x1 += 110;
+                }
+
+                if (i == 70 || j == um.Count )
+                {
+                    string path = $"wwwroot/images/NhanVien/test{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.png";
+                    img.Save(path);
+                    i = 1;
+                    x = 20;
+                    x1 = 40;
+                    y = 10;
+                    y1 = 100;
+                }
+                else
+                    i++;
+                                
+                j++;
+            }
+
+
+            return View();
+        }
+
+        [HttpGet]
         public async Task<IActionResult> emp_Update(string empID)
         {
             EmpModel um = new EmpModel();
@@ -300,6 +370,16 @@ namespace ESSONS_MIS_2020_App.Controllers
                     ptm = JsonConvert.DeserializeObject<List<PositionModel>>(results);
                 }
                 ViewBag.positionList = ptm;
+
+                List<EmpModel> group = new List<EmpModel>();
+                hc = _api.Initial();
+                res = await hc.GetAsync($"api/Emp/GetEmpManager?groupID={pm.groupID}");
+                if (res.IsSuccessStatusCode)
+                {
+                    var results = res.Content.ReadAsStringAsync().Result;
+                    group = JsonConvert.DeserializeObject<List<EmpModel>>(results);
+                }
+                ViewBag.empList = group;
             }
 
             getRole();
@@ -315,7 +395,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             string[] NameAndType = new string[2];
             //Saving Image on Server
             if (image != null)
-            {           
+            {
                 if (image.Length > 0)
                 {
                     NameAndType = image.FileName.Split(".");
@@ -326,7 +406,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                     }
                 }
                 um.empImage = um.empID + "." + NameAndType[1];
-                um.ProfileImage = null;           
+                um.ProfileImage = null;
             }
 
             if (um.empImage == null)
@@ -375,7 +455,7 @@ namespace ESSONS_MIS_2020_App.Controllers
 
                 img.Save($"wwwroot/images/NhanVien/Card_{um.empImage}");
             }
-           
+
 
             um.username = ViewBag.empid;
             um.indat = DateTime.Now.ToString("dd-MM-yyyy");
@@ -386,12 +466,31 @@ namespace ESSONS_MIS_2020_App.Controllers
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
-                HttpContext.Session.SetString("notice", "Đã cập nhật nhân viên " + um.empID );
+                HttpContext.Session.SetString("notice", "Đã cập nhật nhân viên " + um.empID);
                 return RedirectToAction("emp_Detail", "Emp", new { empID = um.empID });
             }
 
             ViewBag.Message = "Lỗi kết nối hệ thống. Liên hệ IT";
             return View(um.empID);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> emp_UnBlock()
+        {
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
+
+            List<EmpModel> um = new List<EmpModel>();
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.GetAsync($"api/emp/GetEmpBlock/");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                um = JsonConvert.DeserializeObject<List<EmpModel>>(results);
+            }
+            getRole();
+            return View(um);
         }
 
         public IActionResult emp_Block(string empID)
@@ -409,6 +508,24 @@ namespace ESSONS_MIS_2020_App.Controllers
             }
 
             HttpContext.Session.SetString("notice", "Lỗi chưa khóa nhân viên " + empID);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult emp_UnBlock(string empID)
+        {
+            EmpModel em = new EmpModel();
+            em.empID = empID;
+            HttpClient hc = _api.Initial();
+            var res = hc.PostAsJsonAsync<EmpModel>($"api/emp/UnBlock", em);
+            res.Wait();
+            var results = res.Result;
+            if (results.IsSuccessStatusCode)
+            {
+                HttpContext.Session.SetString("notice", "Đã mở khóa nhân viên " + empID);
+                return PartialView("Index");
+            }
+
+            HttpContext.Session.SetString("notice", "Lỗi chưa mở khóa nhân viên " + empID);
             return RedirectToAction("Index");
         }
 

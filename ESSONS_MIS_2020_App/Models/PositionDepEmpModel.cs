@@ -21,6 +21,7 @@ namespace ESSONS_MIS_2020_App.Models
         public string username { get; set; }
         public string empName { get; set; }
         public int groupID { get; set; }
+        public string groupName { get; set; }
         public string depName { get; set; }
 
     }

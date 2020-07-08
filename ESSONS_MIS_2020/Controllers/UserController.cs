@@ -43,8 +43,8 @@ namespace ESSONS_MIS_2020.Controllers
             }
         }
 
-        [HttpGet("{username}")]
-        public List<UserRoleModel> GetRole(string username)
+        [HttpGet("{empid}")]
+        public List<UserRoleModel> GetRole(string empid)
         {
             List<UserRoleModel> em = new List<UserRoleModel>();
             string connection = _configuration.GetConnectionString("DefaultConnection");
@@ -56,7 +56,9 @@ namespace ESSONS_MIS_2020.Controllers
                     sql.Open();
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
                     sc.Parameters.Add(
-                        new SqlParameter("@username", username));
+                        new SqlParameter("@empid", empid));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "NEW"));
                     SqlDataReader sdr = sc.ExecuteReader();
                     while (sdr.Read())
                     {
@@ -68,6 +70,41 @@ namespace ESSONS_MIS_2020.Controllers
                         urm.roleID = int.Parse(sdr["roleID"].ToString());
                         urm.folderID = int.Parse(sdr["folderID"].ToString());
                         urm.folderChildID = int.Parse(sdr["folderChildID"].ToString());
+                        em.Add(urm);
+                    }
+                }
+                return em;
+            }
+        }
+
+        [HttpGet("{empid}")]
+        public List<UserRoleModel> GetRoleCN(string empid)
+        {
+            List<UserRoleModel> em = new List<UserRoleModel>();
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_userrole", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@empid", empid));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        UserRoleModel urm = new UserRoleModel();
+                        urm.empName = sdr["empName"].ToString();
+                        urm.empID = sdr["empID"].ToString();
+                        urm.empImage = sdr["empImage"].ToString();
+                        try
+                        {
+                            urm.roleID = int.Parse(sdr["roleID"].ToString());
+                            urm.folderID = int.Parse(sdr["folderID"].ToString());
+                            urm.folderChildID = int.Parse(sdr["folderChildID"].ToString());
+                        }
+                        catch { }
                         em.Add(urm);
                     }
                 }

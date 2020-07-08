@@ -9,6 +9,7 @@ namespace ESSONS_MIS_2020.Models
     {
         public string empid { get; set; }
 
+        public string empName { get; set; }
         public string datework { get; set; }
 
         public string dateoffExName { get; set; }

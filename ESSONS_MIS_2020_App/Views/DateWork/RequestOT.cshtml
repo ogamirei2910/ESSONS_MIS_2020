@@ -51,10 +51,9 @@
                                                     asp-items="@(new SelectList(ViewBag.timeworkList,"shiftName","shiftName"))">
                                             </select>
                                         </div>
-                                        <input asp-for="empid" id="empid" type="hidden" class="form-control">
-                                        <input asp-for="isOT" id="isOT" type="hidden" class="form-control">
                                     </td>
-                                    <td></td>
+                                    <td>
+                                    </td>
                                 </tr>
                             </table>
                             <div class="card-footer">
@@ -62,28 +61,18 @@
                                     Xác nhận
                                 </button>
                             </div>
-                            <table id="tbValue" hidden>
-                                <thead>
+                            <table id="data1" hidden>
+                                @for (int i = 0; i < Model.childDateWork.Count; i++)
+                                {
                                     <tr>
-                                        <th>Chọn nhân viên</th>
-                                        <th>Được phép tăng ca</th>
-                                        <th>Mã nhân viên</th>
-                                        <th>Mã thời vụ</th>
-                                        <th>Tên nhân viên</th>
+                                        <td>
+                                            <input type="hidden" id="@i-empid" asp-for="@Model.childDateWork[i].empID" value="" />
+                                        </td>
+                                        <td>
+                                            <input type="hidden" id="@i-isOT" asp-for="@Model.childDateWork[i].isOT" value="0" />
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in ViewBag.emp)
-                                    {
-                                        <tr>
-                                            <td><input type="checkbox" name="SelectEmp" id="@item.empID-a" value="@item.empID"></td>
-                                            <td><input type="checkbox" name="SelectOT" id="@item.empID-b"></td>
-                                            <td>@item.empID</td>
-                                            <td>@item.empIDTemp</td>
-                                            <td>@item.empName</td>
-                                        </tr>
-                                    }
-                                </tbody>
+                                }
                             </table>
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
@@ -96,14 +85,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in ViewBag.emp)
+                                    @for (int i = 0; i < Model.childDateWork.Count; i++)
                                     {
                                         <tr>
-                                            <td><input type="checkbox" name="@item.empID-a" onclick="myFunction($(this).attr('Name'))"></td>
-                                            <td><input type="checkbox" name="@item.empID-b" onclick="myFunction($(this).attr('Name'))"></td>
-                                            <td>@item.empID</td>
-                                            <td>@item.empIDTemp</td>
-                                            <td>@item.empName</td>
+                                            <td>
+                                                <input type="checkbox" id="@i-empid-cb" value="@Model.childDateWork[i].empID" onclick="myFunction($(this).attr('id'))" />
+                                                
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" id="@i-isOT-cb" value="1" onclick="myFunction($(this).attr('id'))" />
+                                                
+                                            </td>
+                                            <td>@Model.childDateWork[i].empID</td>
+                                            <td>@Model.childDateWork[i].empIDTemp</td>
+                                            <td>@Model.childDateWork[i].empName</td>
                                         </tr>
                                     }
                                 </tbody>
@@ -143,39 +138,33 @@
         function myFunction(a) {
             // Get the checkbox
             debugger
-            var $boxes = $('input[name=' + a + ']');
-            var $boxes2 = $('input[id=' + a + ']');
+            var $boxes = $('#' + a);
+            var getValue = a.split("-");
 
             if ($boxes.prop('checked') == true) {
-                $boxes2.prop('checked', true);
+                if(getValue[1] == "empid")
+                    $("#" + getValue[0] + "-empid").val($boxes.val());
+                else
+                    $("#" + getValue[0] + "-isOT").val(1);
             }
             else {
-                $boxes2.prop('checked', false);
+                if (getValue[1] == "empid")
+                    $("#" + getValue[0] + "-empid").val(0);
+                else
+                    $("#" + getValue[0] + "-isOT").val(0);
             }
-        } 
+        }
 
-        $(document).ready(function () {         
+        $(document).ready(function () {
             $("#btSend").click(function (e) {
                 debugger
                 if ($("input[name=datework]").val() != '' && $("input[name=dateworkend]").val() != '') {
-                    $('#tbValue tr').each(function () {
-                    var ckEmp = $(this).find('input[name=SelectEmp]');
-                    var ckOT = $(this).find('input[name=SelectOT]');
-                    if (ckEmp.prop('checked') == true) {
-                        $("#empid").val(ckEmp.prop('value'));
-                        if (ckOT.prop('checked') == true)
-                            $("#isOT").val(1);
-                        else
-                            $("#isOT").val(0);
-
-                        $.ajax({
-                            cache: false,
-                            type: "POST",
-                            url: '@Url.Action("RequestOT", "DateWork")',
-                            data: $("#formData").serialize()
-                        })
-                    }
-                });
+                    $.ajax({
+                     cache: false,
+                     type: "POST",
+                     url: '@Url.Action("RequestOT", "DateWork")',
+                     data: $("#formData").serialize()
+                 })
                 e.preventDefault();
                 let dia = bs4pop.dialog({
                     title: 'Thông báo',
@@ -214,51 +203,6 @@
                     });
                     e.preventDefault();
                 }
-                @*if ($("input[name=datework]").val() != '' && $("input[name=dateworkend]").val() != '') {
-                    $('#example1').find('input[type="checkbox"]:checked').each(function () {
-                        $("#empid").val($(this).val());
-                        $("#isOT").val(1);
-                        $.ajax({
-                            cache: false,
-                            type: "POST",
-                            url: '@Url.Action("RequestOT", "DateWork")',
-                            data: $("#formData").serialize()
-                        })
-                        e.preventDefault();
-                    });
-                    $('#example1').find('tr input[type="checkbox"]:not(:checked)').each(function () {
-                        $("#empid").val($(this).val());
-                        $("#isOT").val(0);
-                        $.ajax({
-                            cache: false,
-                            type: "POST",
-                            url: '@Url.Action("RequestOT", "DateWork")',
-                            data: $("#formData").serialize()
-                        })
-                        e.preventDefault();
-                    });*@
-
-                    //let dia = bs4pop.dialog({
-
-                    //    title: 'Thông báo',
-                    //    content: 'Yêu cầu thành công',
-
-                    //    closeBtn: true,
-                    //    backdrop: 'static',
-                    //    btns: [
-                    //        { label: 'OK', className: 'btn-primary', onClick(cb) { window.location.href = "/DateWork/Index"; } }
-                    //    ],
-                    //    onDragStart: function () {
-                    //        console.log('onDragStart');
-                    //    },
-                    //    onDrag: function () {
-                    //        console.log('onDrag');
-                    //    }
-                    //});
-                //}
-                //else {
-
-                //}
             });
         });
 

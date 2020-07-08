@@ -68,7 +68,7 @@
 
                                     </td>
                                     <td>
-                                        @Html.ActionLink("Chi tiết", "Detail", "DateWork", new { requestID = item.requestID, isOT = item.isOT, shiftName = item.shiftName },
+                                        @Html.ActionLink("Chi tiết", "Detail", "DateWork", new { requestID = item.requestID, isOT = item.isOT, shiftName = item.shiftName, page = 2 },
                                                                                           new { @class = "btn btn-primary btn-sm" })
                                         @if (@item.status == "2")
                                         {

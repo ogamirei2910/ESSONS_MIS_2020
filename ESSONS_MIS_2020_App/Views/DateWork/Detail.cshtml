@@ -21,6 +21,7 @@
                                         <th>Mã yêu cầu</th>
                                         <th>Số thẻ</th>
                                         <th>Số thời vụ</th>
+                                        <th>Tên nhân viên</th>
                                         <th>Bộ phận YC</th>
                                         <th>Ca</th>
                                         <th>Tăng ca</th>
@@ -28,47 +29,58 @@
                                         <th>Ngày kết thúc</th>
                                         <th>Trạng thái</th>
                                     </tr>
-                                </thead> 
+                                </thead>
                                 <tbody>
                                     @foreach (var item in ViewBag.requestList)
                                     {
-                                    <tr>
-                                        <td>@item.requestID</td>
-                                        <td>@item.empid</td>
-                                        <td>@item.empidTemp</td>
-                                        <td>@item.depName</td>
-                                        <td>@item.shiftName</td>
-                                        @if (item.isOT == 1)
-                                        {
-                                            <td>Có</td>
-                                        }
-                                        else
-                                        {
-                                            <td>Không</td>
-                                        }
-                                        <td>@item.datework</td>
-                                        <td>@item.dateworkend</td>
-                                        <td>
-                                            @if (@item.status == "2")
+                                        <tr>
+                                            <td>@item.requestID</td>
+                                            <td>@item.empid</td>
+                                            <td>@item.empidTemp</td>
+                                            <td>@item.empName</td>
+                                            <td>@item.depName</td>
+                                            <td>@item.shiftName</td>
+                                            @if (item.isOT == 1)
                                             {
-                                                <label>Đang chờ</label>
+                                                <td>Có</td>
                                             }
                                             else
                                             {
-                                                if (@item.status == "1")
-                                                {
-                                                    <label>Đã xác nhận</label>
-                                                }
-                                                if (@item.status == "3")
-                                                {
-                                                    <label>Hủy</label>
-                                                }
+                                                <td>Không</td>
                                             }
+                                            <td>@item.datework</td>
+                                            <td>@item.dateworkend</td>
+                                            <td>
+                                                @if (@item.status == "2")
+                                                {
+                                                    <label>Đang chờ</label>
+                                                }
+                                                else
+                                                {
+                                                    if (@item.status == "1")
+                                                    {
+                                                        <label>Đã xác nhận</label>
+                                                    }
+                                                    if (@item.status == "3")
+                                                    {
+                                                        <label>Hủy</label>
+                                                    }
+                                                }
 
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
                                     }
                             </table>
+                        </div>
+                        <div class="card-footer">
+                            @if (ViewBag.page == 2)
+                            {
+                                <a href="/DateWork/Confirm" class="btn btn-secondary">Quay Lại</a>
+                            }
+                            @if (ViewBag.page == 1)
+                            {
+                                <a href="/DateWork/Index" class="btn btn-secondary">Quay Lại</a>
+                            }
                         </div>
                         <!-- /.card-body -->
                     </div>

@@ -13,6 +13,7 @@ using System.Net;
 using System.Runtime.InteropServices;
 using Novell.Directory.Ldap;
 using Novell.Directory.Ldap.Extensions;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace ESSONS_MIS_2020_App.Controllers
 {
@@ -21,9 +22,6 @@ namespace ESSONS_MIS_2020_App.Controllers
         EssonsApi _api = new EssonsApi();
         public void getRole()
         {
-            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
-                RedirectToAction("User", "Login");
-
             var role = HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList");
             ViewBag.message = role.First().empName.ToString();
             ViewBag.roleID = role.First().roleID.ToString();
@@ -35,7 +33,7 @@ namespace ESSONS_MIS_2020_App.Controllers
         }
         public IActionResult Login()
         {
-            if(HttpContext.Session.GetString("isLogin") == "true")
+            if (HttpContext.Session.GetString("isLogin") == "true")
                 return RedirectToAction("Index", "Home");
 
             return View();
@@ -49,58 +47,122 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return View();
             }
 
-            if (um.username != "nam")
-            {
-                string username = um.username + "@essons.vn";
-                //using (var DE = new DirectoryEntry("LDAP://OU=Essons Amata,DC=essons,DC=vn", "Administrator", "Csi@dvtk2020")) P@ssw0rd123
-                try
-                {
-                    using (var connection = new LdapConnection { SecureSocketLayer = false })
-                    {
-                        connection.Connect("10.0.11.2", LdapConnection.DEFAULT_PORT); 
-                        connection.Bind(username, um.password);
-                        if (connection.Bound)
-                        {
 
+            string username = um.username + "@essons.vn";
+            var mail = "";
+            var empid = "";
+            //using (var DE = new DirectoryEntry("LDAP://OU=Essons Amata,DC=essons,DC=vn", "Administrator", "Csi@dvtk2020")) P@ssw0rd123
+            try
+            {
+                using (var connection = new LdapConnection { SecureSocketLayer = false })
+                {
+                    connection.Connect("10.0.11.2", LdapConnection.DEFAULT_PORT);
+                    connection.Bind(username, um.password);
+                    if (connection.Bound)
+                    {
+                        String[] attrs = new String[2];
+                        attrs[0] = "postOfficeBox";
+                        attrs[1] = "mail";
+
+                        LdapSearchResults lsc = connection.Search("OU=Essons Amata,DC=essons,DC=vn",
+                           LdapConnection.SCOPE_SUB,
+                           "sAMAccountName=" + um.username,
+                           attrs,
+                           false);
+
+                        while (lsc.HasMore())
+                        {
+                            LdapEntry nextEntry = null;
+                            try
+                            {
+                                nextEntry = lsc.Next();
+                            }
+                            catch (LdapException e)
+                            {
+                                // Exception is thrown, go for next entry
+                                continue;
+                            }
+                            LdapAttributeSet attributeSet = nextEntry.getAttributeSet();
+                            System.Collections.IEnumerator ienum = attributeSet.GetEnumerator();
+                            
+                            while (ienum.MoveNext())
+                            {
+                                LdapAttribute attribute = (LdapAttribute)ienum.Current;
+                                if (attribute.Name == "mail")                        
+                                    mail = attribute.StringValue;
+                                else
+                                    empid = attribute.StringValue;
+                            }
                         }
+                        connection.Disconnect();
                     }
                 }
-                catch (LdapException ex)
-                {
-                    ViewBag.Message = "Kiểm tra lại tài khoản hoặc mật khẩu";
-                    return View();
-                }
             }
-  
+            catch (LdapException ex)
+            {
+                ViewBag.Message = "Kiểm tra lại tài khoản hoặc mật khẩu";
+                return View();
+            }
+
             HttpClient hc = _api.Initial();
-            var res = hc.PostAsJsonAsync<UserModel>("api/user/login", um);
+            EmpModel em = new EmpModel();
+            hc = _api.Initial();
+            em.empID = empid;
+            em.empEmail = mail;
+            var res = hc.PostAsJsonAsync<EmpModel>($"api/emp/UpdateMail/", em);
             res.Wait();
 
+
+            List<UserRoleModel> urm = new List<UserRoleModel>();
+            hc = _api.Initial();
+            res = hc.GetAsync($"api/user/GetRole/{empid}");
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
-                List<UserRoleModel> urm = new List<UserRoleModel>();
-                hc = _api.Initial();
-                res = hc.GetAsync($"api/user/GetRole/{um.username}");
-                results = res.Result;
-                if (results.IsSuccessStatusCode)
-                {
-                    var results2 = results.Content.ReadAsStringAsync().Result;
-                    urm = JsonConvert.DeserializeObject<List<UserRoleModel>>(results2);
-                }
+                var results2 = results.Content.ReadAsStringAsync().Result;
+                urm = JsonConvert.DeserializeObject<List<UserRoleModel>>(results2);
+
                 HttpContext.Session.SetObjectAsJson("folderList", urm);
 
                 HttpContext.Session.SetString("notice", "Người dùng " + urm.First().empName + " đã đăng nhập thành công");
                 if (HttpContext.Session.GetString("resultPage") is null || HttpContext.Session.GetString("resultPage") == "")
                 {
                     HttpContext.Session.SetString("isLogin", "true");
+                    HttpContext.Session.SetString("loginPage", "true");
                     return RedirectToAction("Index", "Home");
-                }                  
+                }
                 else
                 {
-                    HttpContext.Session.SetString("isLogin", "true");
-                    return RedirectToAction("dateoff_confirm", "dateoff");
-                }                  
+                    if(HttpContext.Session.GetString("resultPage") == "dateoff_Confirm")
+                    {
+                        HttpContext.Session.SetString("isLogin", "true");
+                        return RedirectToAction("dateoff_confirm", "dateoff");
+                    }
+
+                    if (HttpContext.Session.GetString("resultPage") == "XacNhanCongTac")
+                    {
+                        HttpContext.Session.SetString("isLogin", "true");
+                        return RedirectToAction("XacNhanCongTac", "CongTac");
+                    }
+
+                    if (HttpContext.Session.GetString("resultPage") == "CongTacIndex")
+                    {
+                        HttpContext.Session.SetString("isLogin", "true");
+                        return RedirectToAction("Index", "CongTac");
+                    }
+
+                    if (HttpContext.Session.GetString("resultPage") == "datework_Confirm")
+                    {
+                        HttpContext.Session.SetString("isLogin", "true");
+                        return RedirectToAction("Confirm", "DateWork");
+                    }
+
+                    if (HttpContext.Session.GetString("resultPage") == "datework_Index")
+                    {
+                        HttpContext.Session.SetString("isLogin", "true");
+                        return RedirectToAction("Index", "DateWork");
+                    }
+                }
             }
 
             ViewBag.Message = "Tài khoản chưa đăng kí trên hệ thống. Liên hệ IT";
@@ -122,7 +184,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 ViewBag.perList = um;
             }
 
-            getRole();         
+            getRole();
             return View();
         }
 
@@ -134,7 +196,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 ViewBag.Error = "Chưa nhập số thẻ";
                 return PartialView("DisplayError");
             }
-            
+
             HttpClient hc = _api.Initial();
             var res = await hc.PostAsJsonAsync<UserRoleModel>("api/user/setfolder", urm);
 

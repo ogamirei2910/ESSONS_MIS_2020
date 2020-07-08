@@ -107,6 +107,10 @@
                                             {
                                                 <td>Đã hủy</td>
                                             }
+                                            @if (item.status == 4)
+                                            {
+                                                <td>Chưa bổ sung giấy tờ</td>
+                                            }
                                         </tr>
                                     }
 
@@ -124,7 +128,7 @@
 </div>
 
 @section scripts{
-    <script type="text/javascript">
+    <script type="text/javascript">     
         var a = '@ViewBag.notice';
         if (a != '') {
             let dia = bs4pop.dialog({
@@ -146,5 +150,13 @@
 
             });
         }
+
+
+        $.fn.dataTable.ext.errMode = 'throw';
+
+        $('#example1').dataTable({
+            "aaSorting": [],
+            // Your other options here...
+        });
     </script>
 }

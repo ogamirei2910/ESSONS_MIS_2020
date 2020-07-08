@@ -66,7 +66,7 @@
 
                                     </td>
                                     <td>
-                                        @Html.ActionLink("Chi tiết", "Detail", "DateWork", new { requestID = item.requestID, isOT = item.isOT, shiftName = item.shiftName },
+                                        @Html.ActionLink("Chi tiết", "Detail", "DateWork", new { requestID = item.requestID, isOT = item.isOT, shiftName = item.shiftName, page = 1 },
                                                                                           new { @class = "btn btn-primary btn-sm" })
                                         @if (@item.status == "2")
                                         {
@@ -77,6 +77,15 @@
                                                                                               id = "deleteBT"
                                                                                           })
 
+                                            @if (item.isOT == 1)
+                                            {
+                                                <a href="@Url.Action("ExportV2", "DateWork",new { requestID = item.requestID, shiftName = item.shiftName })" class="links">
+                                                    <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                                                </a>
+                                            }
+                                        }
+                                        @if (item.status == "1")
+                                        {
                                             @if (item.isOT == 1)
                                             {
                                                 <a href="@Url.Action("ExportV2", "DateWork",new { requestID = item.requestID, shiftName = item.shiftName })" class="links">
@@ -123,5 +132,11 @@
 
             });
         }
+        $.fn.dataTable.ext.errMode = 'throw';
+
+        $('#example1').dataTable({
+            "aaSorting": [],
+            // Your other options here...
+        });
     </script>
 }

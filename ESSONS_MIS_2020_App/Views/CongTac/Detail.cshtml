@@ -1,0 +1,183 @@
+﻿@model ESSONS_MIS_2020_App.Models.CongTacModel
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_LayoutCongNhan.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Chi tiết thông tin công tác</h1>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <form method="post" id="formPhep" asp-action="Edit">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Chi tiết công tác</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="inputName">Mã công tác</label>
+                                <input asp-for="congtacID" type="text" readonly id="inputName" class="form-control" value="@ViewBag.infoList.congtacID">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputName">Tên kế hoạch</label>
+                                <input asp-for="planName" type="text" id="inputName" class="form-control" value="@ViewBag.infoList.planName">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputDescription">Mô tả kế hoạch</label>
+                                <textarea asp-for="planDescription" id="inputDescription" class="form-control" rows=""></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputStatus">Loại hình công tác</label>
+                                <select asp-for="planType" class="form-control custom-select">
+                                    @if (ViewBag.infoList.planType == "Trong nước")
+                                    {
+                                        <option selected>Trong nước</option>
+                                        <option>Nước ngoài</option>
+                                    }
+                                    else
+                                    {
+                                        <option>Trong nước</option>
+                                        <option selected>Nước ngoài</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputDescription">Người công tác</label>
+                                <select id="test" class="js-example-basic-multiple form-control" multiple="multiple">
+                                    @foreach (var item in ViewBag.emp)
+                                    {
+                                        <option value="@item.empID">@item.empName</option>
+                                    }
+                                </select>
+                                <input asp-for="empid" id="testinput" type="text" hidden>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputProjectLeader">Mã nhân viên KH</label>
+                                <input asp-for="username" type="text" readonly id="inputProjectLeader" class="form-control" value="@ViewBag.infoList.username">
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-secondary">
+                        <div class="card-header">
+                            <h3 class="card-title">Ngân sách</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="inputEstimatedBudget">Dự tính</label>
+                                <input asp-for="planEstimatedBudget" type="number" value="@ViewBag.infoList.planEstimatedBudget" id="inputEstimatedBudget" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputSpentBudget">Tổng mức chi</label>
+                                <input asp-for="planSpentBudget" type="number" value="@ViewBag.infoList.planSpentBudget" id="inputSpentBudget" class="form-control">
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Từ ngày</label>
+                                <div class="col-5">
+                                    <div class="datepicker date input-group p-0 shadow-sm">
+                                        <input asp-for="planStart" type="text" value="@ViewBag.infoList.planStart" class="form-control" id="reservationDate">
+                                        <div class="input-group-append"><span class="input-group-text"></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row" id="dtDenNgay">
+                                <label class="col-sm-3 col-form-label">Đến ngày</label>
+                                <div class="col-5">
+                                    <div class="datepicker date input-group p-0 shadow-sm">
+                                        <input asp-for="planEnd" type="text" value="@ViewBag.infoList.planEnd" class="form-control" id="reservationDate2">
+                                        <div class="input-group-append"><span class="input-group-text"></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Số km</label>
+                                <input asp-for="planKM" value="@ViewBag.infoList.planKM" type="number" id="inputKM" class="form-control">
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <div class="col-12">
+                    <div class="card-footer">
+                        @if (ViewBag.page == 2)
+                        {
+                            <a href="/CongTac/XacNhanCongTac" class="btn btn-secondary">Quay Lại</a>
+                        }
+                        @if (ViewBag.page == 1 && ViewBag.infoList.status == 2)
+                        {
+                            <a href="/CongTac/Index" class="btn btn-secondary">Quay Lại</a>
+                            <button id="btCreate" class="btn btn-primary float-right">
+                                Cập nhật
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+    <br />
+    <!-- /.content -->
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('.js-example-basic-multiple').select2();
+            // INITIALIZE DATEPICKER PLUGIN
+            $('.datepicker').datepicker({
+                clearBtn: true,
+                format: "dd-mm-yyyy"
+            });
+            // FOR DEMO PURPOSE
+            $('#reservationDate').on('change', function () {
+                var pickedDate = $('input').val();
+                $('#pickedDate').html(pickedDate);
+            });
+
+            $('#reservationDate2').on('change', function () {
+                var pickedDate = $('input').val();
+                $('#pickedDate').html(pickedDate);
+            });
+        })
+
+        $('#test').on('change', function (e) {
+            var data = $("#test").select2("val");
+            $("#testinput").val(data);
+        })
+
+        var arrayOfArrays = @Json.Serialize(ViewBag.infoList.empmodel);
+        var finalArray = arrayOfArrays.map(function (obj) {
+            return obj.empid;
+        });
+        $('#test').val(finalArray).trigger('change');
+        document.getElementById("inputDescription").innerHTML = '@ViewBag.infoList.planDescription';
+    </script>
+}
+

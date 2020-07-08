@@ -19,6 +19,7 @@
                             <thead>
                                 <tr>
                                     <th>Mã nhân viên</th>
+                                    <th>Tên nhân viên</th>
                                     <th>Ngày làm</th>
                                     <th>Loại lỗi</th>
                                     <th>Nội dung</th>
@@ -28,15 +29,21 @@
                             <tbody>
                                 @foreach (var item in ViewBag.dateoffList)
                                 {
-                                    <tr>
-                                        <td>@item.empid</td>
-                                        <td>
-                                            @item.datework
-                                        </td>
-                                        <td>@item.dateoffExName</td>
-                                        <td>@item.comment</td>
-                                        <td> @Html.ActionLink("Xử lý", "BuPhep", "ChamCong", new { empID = item.empid, workdate = item.datework }, new { @class = "btn btn-primary btn-sm" })</td>
-                                    </tr>
+                                <tr>
+                                    <td>@item.empid</td>
+                                    <td>@item.empName</td>
+                                    <td>
+                                        @item.datework
+                                    </td>
+                                    <td>@item.dateoffExName</td>
+                                    <td>@item.comment</td>
+                                    <td>
+                                        @if (ViewBag.empid != "01653")
+                                        {
+                                            @Html.ActionLink("Xử lý", "BuPhep", "ChamCong", new { empID = item.empid, workdate = item.datework }, new { @class = "btn btn-primary btn-sm" })
+                                        }
+                                    </td>
+                                </tr>
                                 }
                             </tbody>
                         </table>
@@ -75,5 +82,12 @@
 
             });
         }
+
+        $.fn.dataTable.ext.errMode = 'throw';
+
+        $('#example1').dataTable({
+            "aaSorting": [],
+            // Your other options here...
+        });
     </script>
 }

@@ -49,18 +49,19 @@ namespace ESSONS_MIS_2020.Controllers
                         em.dateoffStartTime = sdr["dateoffStartTime"].ToString();
                         em.dateoffEndTime = sdr["dateoffEndTime"].ToString();
                         em.dateoffNumber = Double.Parse(sdr["dateoffNumber"].ToString());
+  
                         switch (sdr["dateoffType"].ToString())
                         {
                             case "1": em.dateoffType = "Phép năm"; break;
                             case "2": em.dateoffType = "Nghỉ ốm đau (BHXH)"; break;
                             case "3": em.dateoffType = "Nghỉ thai sản (BHXH)"; break;
                             case "4": em.dateoffType = "Việc riêng"; break;
+                            case "9": em.dateoffType = "Nghỉ 0.5h Nữ"; break;
                             case "10": em.dateoffType = "Vợ sinh/khám/dưỡng"; break;
                             case "11": em.dateoffType = "Kết hôn"; break;
                             case "12": em.dateoffType = "Tang gia"; break;
                             case "13": em.dateoffType = "Con bệnh (BHXH)"; break;
                             case "14": em.dateoffType = "Trực biệt thự"; break;
-                            case "15": em.dateoffType = "Công tác"; break;
                             case "16": em.dateoffType = "Dưỡng sức"; break;
                         }
                         em.username = sdr["username"].ToString();
@@ -102,12 +103,14 @@ namespace ESSONS_MIS_2020.Controllers
                             case "2": em.dateoffType = "Nghỉ bệnh"; break;
                             case "3": em.dateoffType = "Nghỉ thai sản"; break;
                             case "4": em.dateoffType = "Việc riêng"; break;
+                            case "9": em.dateoffType = "Nghỉ 0.5h Nữ"; break;
                             case "10": em.dateoffType = "Nghỉ vợ sinh/khám/dưỡng"; break;
                             case "11": em.dateoffType = "Nghỉ kết hôn"; break;
                             case "12": em.dateoffType = "Nghỉ tang gia"; break;
                             case "13": em.dateoffType = "Nghỉ con bệnh"; break;
                             case "14": em.dateoffType = "Trực biệt thự"; break;
                             case "15": em.dateoffType = "Đi công tác"; break;
+                            case "16": em.dateoffType = "Dưỡng sức"; break;
                         }
                         em.username = sdr["username"].ToString();
                         lem.Add(em);
@@ -243,7 +246,7 @@ namespace ESSONS_MIS_2020.Controllers
             }
         }
 
-        public List<DateOffExceptionModel> DateOffException()
+        public List<DateOffExceptionModel> DateOffException(string empID)
         {
             List<DateOffExceptionModel> lem = new List<DateOffExceptionModel>();
             string connection = _configuration.GetConnectionString("DefaultConnection");
@@ -255,12 +258,15 @@ namespace ESSONS_MIS_2020.Controllers
                     sql.Open();
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
                     sc.Parameters.Add(
+                        new SqlParameter("@empid", empID));
+                    sc.Parameters.Add(
                         new SqlParameter("@type", "Select"));
                     SqlDataReader sdr = sc.ExecuteReader();
                     while (sdr.Read())
                     {
                         DateOffExceptionModel em = new DateOffExceptionModel();
                         em.empid = sdr["empID"].ToString();
+                        em.empName = sdr["empName"].ToString();
                         var date = sdr["datework"].ToString();
                         var parsedDate = DateTime.ParseExact(date, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
                         var formattedDate = parsedDate.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
@@ -464,6 +470,32 @@ namespace ESSONS_MIS_2020.Controllers
                         new SqlParameter("@status", value.status));
                     sc.Parameters.Add(
                         new SqlParameter("@type", "Update"));
+
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.RecordsAffected > 0)
+                        return Ok();
+                    else return NotFound();
+
+                }
+            }
+        }
+
+        public IActionResult UpdatePaper([FromBody]DateOffModel value)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_dateoff", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@dateoffID", value.dateoffID));
+                    sc.Parameters.Add(
+                        new SqlParameter("@status", value.status));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "UpdatePaper"));
 
                     SqlDataReader sdr = sc.ExecuteReader();
                     if (sdr.RecordsAffected > 0)

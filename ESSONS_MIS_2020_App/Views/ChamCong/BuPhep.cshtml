@@ -33,14 +33,18 @@
                                             <select asp-for="dateoffType" class="custom-select col-6 selectpicker" id="loainghiphep">
                                                 <option disabled>Chọn loại nghỉ</option>
                                                 @if (ViewBag.buphep.dateoffExName == "Lỗi phép đi trễ" || ViewBag.buphep.dateoffExName == "Lỗi phép về sớm"
-                                         || ViewBag.buphep.dateoffExName == "Lỗi không xác định ca" || ViewBag.buphep.dateoffExName == "Lỗi về trước giờ ra"
-                                         || ViewBag.buphep.dateoffExName == "Lỗi quét vân tay")
+                                      || ViewBag.buphep.dateoffExName == "Lỗi không xác định ca" || ViewBag.buphep.dateoffExName == "Lỗi về trước giờ ra"
+                                      || ViewBag.buphep.dateoffExName == "Lỗi quét vân tay")
                                                 {
                                                     <option value="1">Phép năm</option>
                                                     <option value="4">Việc riêng</option>
                                                     <option value="7">Lỗi quét vân tay</option>
                                                     <option value="14">Trực biệt thự</option>
-                                                    <option value="15">Đi công tác</option>
+                                                    <option value="2">Nghỉ bệnh (BHXH)</option>
+                                                    <option value="13">Con bệnh (BHXH)</option>
+                                                    <option value="10">Vợ sinh/khám/dưỡng</option>
+                                                    <option value="3">Nghỉ thai sản (BHXH)</option>
+                                                    <option value="16">Dưỡng sức</option>
                                                 }
                                                 else
                                                 {
@@ -50,7 +54,7 @@
                                                     <option value="1">Phép năm</option>
                                                     <option value="2">Nghỉ bệnh (BHXH)</option>
                                                     <option value="13">Con bệnh (BHXH)</option>
-                                                    <option value="13">Vợ sinh/khám/dưỡng</option>
+                                                    <option value="10">Vợ sinh/khám/dưỡng</option>
                                                     <option value="3">Nghỉ thai sản (BHXH)</option>
                                                     <option value="16">Dưỡng sức</option>
                                                     <option value="11">Kết hôn</option>
@@ -152,6 +156,9 @@
                             </tbody>
                         </table>
                         <!-- /.card-body -->
+                    </div>
+                    <div class="card-footer">
+                        <a href="/ChamCong/DateOffException" class="btn btn-secondary">Quay Lại</a>
                     </div>
                 </div>
                 <!-- /.card -->

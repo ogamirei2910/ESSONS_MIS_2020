@@ -116,8 +116,6 @@
                                     </div>
                                     <input type="hidden" asp-for="positionName" id="positionName" value="@ViewBag.positiondepList.positionName" />
 
-                                    @if(Model.depID == "Định hình")
-                                    {
                                     <div class="form-group row" id="GroupEmpManager">
                                         <label class="col-sm-3 col-form-label">Tổ</label>
                                         <select id="empGroup" asp-for="groupID" class="custom-select col-sm-4"
@@ -126,9 +124,15 @@
                                         </select>
                                         <select id="empIDManager" asp-for="empIDManager" class="custom-select col-sm-4"
                                                 asp-items="@(new SelectList(""))">
+                                            @if (ViewBag.empList != null)
+                                            {
+                                                @foreach (var item in ViewBag.empList)
+                                                {
+                                                        <option value="@item.empIDManager">@item.empIDManager</option>
+                                                }
+                                            }
                                         </select>
                                     </div>
-                                     }
 
                                 </td>
                             </tr>
@@ -556,13 +560,24 @@
                 $("#positionName").val(positionvalue);
             })
         })
-
-
-
         $("#dep").val('@ViewBag.positiondepList.depID').change();
         $("#depchild").val('@ViewBag.positiondepList.depchildID').change();
-        if ('@ViewBag.positiondepList.depchildID' == 'TTDHE')
-            $('#empIDManager').prop('hidden', true);
+
+        var depV = '@ViewBag.positiondepList.depID';
+        var depchildV = '@ViewBag.positiondepList.depchildID';
+
+        if ( depV == 'DHE') {
+            $('#GroupEmpManager').prop('hidden', false);
+            if ( depchildV == 'TTDHE')
+                $('#empIDManager').prop('hidden', true);
+            else
+                $('#empIDManager').prop('hidden', false);
+        }
+        else {
+            $('#GroupEmpManager').prop('hidden', true);
+        }
+
+        $("#empIDManager").val('@ViewBag.positiondepList.groupName').change();
         $("#empDomicile").text = '@Model.empDomicile';
         $("#empBorn").text = '@Model.empBorn';
         $("#empSex").text = '@Model.empSex';

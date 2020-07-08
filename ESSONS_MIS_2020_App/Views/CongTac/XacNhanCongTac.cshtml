@@ -1,0 +1,125 @@
+﻿
+@{
+    ViewData["Title"] = "XacNhanCongTac";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Danh sách đăng kí công tác</h3>
+                        <br />
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Mã công tác</th>
+                                    <th>Bộ phận</th>
+                                    <th>Tên kế hoạch</th>
+                                    <th>Ngày bắt đầu</th>
+                                    <th>Ngày kết thúc</th>
+                                    <th>Trạng thái</th>
+                                    <th>Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ViewBag.requestList)
+                                {
+                                    <tr>
+                                        <td>@item.congtacID</td>
+                                    <td>@item.depName</td>
+                                    <td>@item.planName</td>
+                                    <td>@item.planStart</td>
+                                    <td>@item.planEnd</td>
+                                    <td>
+                                        @if (@item.status == 2)
+                                        {
+                                            <label>Đang chờ</label>
+                                        }
+                                        else
+                                        {
+                                            if (@item.status == 1)
+                                            {
+                                                <label>Đã xác nhận</label>
+                                            }
+                                            if (@item.status == 3)
+                                            {
+                                                <label>Hủy</label>
+                                            }
+                                            @if (@item.status == 4)
+                                            {
+                                                <label>Hoàn thành</label>
+                                            }
+                                        }
+                                    </td>
+                                        <td>
+                                            @Html.ActionLink("Chi tiết", "Detail", "CongTac", new { congtacID = item.congtacID },
+                                                                                              new { @class = "btn btn-primary btn-sm" })
+                                            @if (@item.status == 2)
+                                            {
+                                                @Html.ActionLink("Duyệt", "Update", "CongTac", new { congtacID = item.congtacID, status = 1 ,page = 2 },
+                                                                                              new { @class = "btn btn-info btn-sm" })
+
+                                                @Html.ActionLink("Hủy", "Delete", "CongTac", new { congtacID = item.congtacID, status = 3 ,page = 2 },
+                                                                                         new
+                                                                                              {
+                                                                                                  @class = "btn btn-danger btn-sm"
+                                                                                              })
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+       var a = '@ViewBag.notice';
+        if (a != '') {
+            let dia = bs4pop.dialog({
+
+                title: 'Thông báo',
+                content: '@ViewBag.notice',
+
+                closeBtn: true,
+                backdrop: 'static',
+                btns: [
+                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                ],
+                onDragStart: function () {
+                    console.log('onDragStart');
+                },
+                onDrag: function () {
+                    console.log('onDrag');
+                }
+
+            });
+        }
+
+        $.fn.dataTable.ext.errMode = 'throw';
+
+        $('#example1').dataTable({
+            "aaSorting": [],
+                // Your other options here...
+        });
+    </script>
+}
+
+
+

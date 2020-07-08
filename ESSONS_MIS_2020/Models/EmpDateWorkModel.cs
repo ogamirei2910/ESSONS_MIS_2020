@@ -12,6 +12,7 @@ namespace ESSONS_MIS_2020.Models
         public string dateworkend { get; set; }
         public string empid { get; set; }
         public string empidTemp { get; set; }
+        public string empName { get; set; }
         public int isOT { get; set; }
         public string shiftName { get; set; }
 
@@ -22,5 +23,6 @@ namespace ESSONS_MIS_2020.Models
 
 
         public int number { get; set; } /* procedure */
+        public List<ChildDateWork> childDateWork { get; set; }
     }
 }

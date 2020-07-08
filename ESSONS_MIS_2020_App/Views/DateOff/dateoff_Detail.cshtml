@@ -26,33 +26,59 @@
                                     <th>Từ giờ</th>
                                     <th>Đến giờ</th>
                                     <th>Số giờ</th>
+                                    <th>Trạng thái</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in Model)
                                 {
-                                <tr>
-                                    <td>@Html.DisplayFor(modelItem => item.dateoffID)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.empID)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.dateoffType)</td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.dateoffStart)
-                                    </td>
-                                    <td>@Html.DisplayFor(modelItem => item.dateoffEnd)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.dateoffStartTime)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.dateoffEndTime)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.dateoffNumber)</td>
-                                </tr>
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffID)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.empID)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffType)</td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.dateoffStart)
+                                        </td>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffEnd)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffStartTime)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffEndTime)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.dateoffNumber)</td>
+                                        @if (item.status == 1)
+                                        {
+                                            <td>Đã xác nhận</td>
+                                        }
+                                        @if (item.status == 4)
+                                        {
+                                            <td>
+                                                @Html.ActionLink("Bổ sung giấy", "dateoff_UpdatePaper", "dateoff", new { dateoffID = item.dateoffID },
+                                                                                                   new
+                                                                                                   {
+                                                                                                       @class = "btn btn-info btn-sm"
+                                                                                                   })
+                                            </td>
+                                        }
+                                    </tr>
                                 }
                         </table>
                     </div>
-                    <!-- /.card-body -->
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
                 </div>
-                <!-- /.card -->
-            </div>
             <!-- /.col -->
         </div>
         <!-- /.row -->
     </section>
 </div>
 
+@section scripts{
+    <script type="text/javascript">
+       
+        $.fn.dataTable.ext.errMode = 'throw';
+
+        $('#example1').dataTable({
+            "aaSorting": [],
+            // Your other options here...
+        });
+    </script>
+}

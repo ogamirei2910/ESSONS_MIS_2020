@@ -36,7 +36,7 @@ namespace ESSONS_MIS_2020
                             SqlDataReader sdr = sc.ExecuteReader();
                         }
                     }
-                    await Task.Delay(new TimeSpan(0, 1, 0));
+                    await Task.Delay(new TimeSpan(1, 0, 0));
                 }
             }
         }

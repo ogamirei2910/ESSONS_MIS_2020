@@ -14,6 +14,8 @@ namespace ESSONS_MIS_2020.Models
         public string depchildID { get; set; }
 
         public int groupID { get; set; }
+
+        public string groupName { get; set; }
         public string depchildName { get; set; }
         public string typeName { get; set; }
         public string comment { get; set; }

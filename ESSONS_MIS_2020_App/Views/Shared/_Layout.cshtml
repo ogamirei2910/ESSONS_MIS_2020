@@ -6,6 +6,7 @@
     <title>@ViewData["Title"]</title>
 
     <!-- Font Awesome -->
+    <link href="~/Assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
     <link href="~/Assets/popup/bs4.pop.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/Assets/plugins/fontawesome-free/css/all.min.css">
     <!-- overlayScrollbars -->
@@ -24,8 +25,34 @@
     <link rel="stylesheet" href="~/Assets/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="~/Assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="~/Assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <style>
+        .no-js #loader {
+            display: none;
+        }
+
+        .js #loader {
+            display: block;
+            position: absolute;
+            left: 100px;
+            top: 0;
+        }
+
+        .se-pre-con {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: url('/images/Preloader_11.gif') center no-repeat #fff;
+        }
+    </style> 
 </head>
 <body class="hold-transition sidebar-mini">
+    @if (ViewBag.loginPage == null || ViewBag.loginPage == "")
+    {
+        <div class="se-pre-con"></div>
+    }
     <div class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -786,7 +813,7 @@
                                 {
                                     <li class="nav-item has-treeview">
                                         <a href="#" class="nav-link">
-                                            <i class="nav-icon fas fa-th"></i>
+                                            <i class="nav-icon fa fa-address-book"></i>
                                             <p>
                                                 Quản lý nhân viên
                                                 <i class="right fas fa-angle-left"></i>
@@ -799,17 +826,30 @@
                                                 {
                                                     @if (folderChild.folderChildID == 0)
                                                     {
-                                                        <li class="nav-item">
+                                                        <li class="nav-item" onclick="test()">
                                                             <a href="/Emp/Index" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Kiểm tra thông tin</p>
                                                             </a>
                                                         </li>
 
-                                                        <li class="nav-item">
+                                                        <li class="nav-item" onclick="test()">
                                                             <a href="/Emp/emp_Position" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Quá trình công tác</p>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item" onclick="test()">
+                                                            <a href="/Emp/emp_UnBlock" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Danh sách khóa</p>
+                                                            </a>
+                                                        </li>
+
+                                                        <li class="nav-item" onclick="test()">
+                                                            <a href="/User/SetFolder" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Duyệt quyền</p>
                                                             </a>
                                                         </li>
                                                     }
@@ -817,16 +857,25 @@
                                                     {
                                                         @if (folderChild.folderChildID == 1)
                                                         {
-                                                            <li class="nav-item">
+                                                            <li class="nav-item" onclick="test()">
                                                                 <a href="/Emp/Index" class="nav-link">
                                                                     <i class="far fa-circle nav-icon"></i>
                                                                     <p>Kiểm tra thông tin</p>
                                                                 </a>
                                                             </li>
                                                         }
+                                                        @if (folderChild.folderChildID == 3)
+                                                        {
+                                                            <li class="nav-item" onclick="test()">
+                                                                <a href="/Emp/emp_UnBlock" class="nav-link">
+                                                                    <i class="far fa-circle nav-icon"></i>
+                                                                    <p>Danh sách khóa</p>
+                                                                </a>
+                                                            </li>
+                                                        }
                                                         @if (folderChild.folderChildID == 2)
                                                         {
-                                                            <li class="nav-item">
+                                                            <li class="nav-item" onclick="test()">
                                                                 <a href="/Emp/emp_Position" class="nav-link">
                                                                     <i class="far fa-circle nav-icon"></i>
                                                                     <p>Quá trình công tác</p>
@@ -844,7 +893,7 @@
                                 {
                                     <li class="nav-item has-treeview">
                                         <a href="#" class="nav-link">
-                                            <i class="nav-icon fas fa-th"></i>
+                                            <i class="nav-icon fa fa-calendar"></i>
                                             <p>
                                                 Nghỉ phép - VR
                                                 <i class="right fas fa-angle-left"></i>
@@ -857,25 +906,25 @@
                                                 {
                                                     @if (folderChild.folderChildID == 0)
                                                     {
-                                                        <li class="nav-item">
+                                                        <li class="nav-item" onclick="test()">
                                                             <a href="/DateOff/dateoff_Detail" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Theo dõi nghỉ phép</p>
                                                             </a>
                                                         </li>
-                                                        <li class="nav-item">
+                                                        <li class="nav-item" onclick="test()">
                                                             <a href="/DateOff/dateoff_Request" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Yêu cầu nghỉ</p>
                                                             </a>
                                                         </li>
-                                                        <li class="nav-item">
+                                                        <li class="nav-item" onclick="test()">
                                                             <a href="/DateOff/dateoff_Confirm" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Duyệt yêu cầu</p>
                                                             </a>
                                                         </li>
-                                                        <li class="nav-item">
+                                                        <li class="nav-item" onclick="test()">
                                                             <a href="/DateOff/dateoff_yearoff" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Chi tiết phép năm</p>
@@ -886,7 +935,7 @@
                                                     {
                                                         @if (folderChild.folderChildID == 1)
                                                         {
-                                                            <li class="nav-item">
+                                                            <li class="nav-item" onclick="test()">
                                                                 <a href="/DateOff/dateoff_Request" class="nav-link">
                                                                     <i class="far fa-circle nav-icon"></i>
                                                                     <p>Yêu cầu nghỉ</p>
@@ -896,7 +945,7 @@
                                                         }
                                                         @if (folderChild.folderChildID == 2)
                                                         {
-                                                            <li class="nav-item">
+                                                            <li class="nav-item" onclick="test()">
                                                                 <a href="/DateOff/dateoff_Confirm" class="nav-link">
                                                                     <i class="far fa-circle nav-icon"></i>
                                                                     <p>Duyệt yêu cầu</p>
@@ -905,8 +954,8 @@
                                                         }
                                                         @if (folderChild.folderChildID == 3)
                                                         {
-                                                            <li class="nav-item">
-                                                                <a href="/DateOff/dateoff_Confirm" class="nav-link">
+                                                            <li class="nav-item" onclick="test()">
+                                                                <a href="/DateOff/dateoff_Detail" class="nav-link">
                                                                     <i class="far fa-circle nav-icon"></i>
                                                                     <p>Theo dõi nghỉ phép</p>
                                                                 </a>
@@ -914,8 +963,8 @@
                                                         }
                                                         @if (folderChild.folderChildID == 4)
                                                         {
-                                                            <li class="nav-item">
-                                                                <a href="/DateOff/dateoff_Confirm" class="nav-link">
+                                                            <li class="nav-item" onclick="test()">
+                                                                <a href="/DateOff/dateoff_yearoff" class="nav-link">
                                                                     <i class="far fa-circle nav-icon"></i>
                                                                     <p>Chi tiết phép năm</p>
                                                                 </a>
@@ -924,8 +973,6 @@
                                                     }
 
                                                 }
-
-
                                             }
                                         </ul>
                                     </li>
@@ -934,7 +981,7 @@
                                 {
                                     <li class="nav-item has-treeview">
                                         <a href="#" class="nav-link">
-                                            <i class="nav-icon fas fa-th"></i>
+                                            <i class="nav-icon fa fa-calculator"></i>
                                             <p>
                                                 Chấm công
                                                 <i class="right fas fa-angle-left"></i>
@@ -947,19 +994,30 @@
                                                 {
                                                     @if (folderChild.folderChildID == 0)
                                                     {
-                                                        <li class="nav-item">
+                                                        <li class="nav-item" onclick="test()">
                                                             <a href="/ChamCong/Index?date=@DateTime.Now.ToString("dd-MM-yyyy")&&type=SumMonth" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Theo dõi chấm công</p>
                                                             </a>
                                                         </li>
-                                                        <li class="nav-item">
+                                                        <li class="nav-item" onclick="test()">
                                                             <a href="/ChamCong/DateOffException" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Đi trễ, về sớm</p>
                                                             </a>
                                                         </li>
                                                     }
+
+                                                    @if (folderChild.folderChildID == 1)
+                                                    {
+                                                        <li class="nav-item" onclick="test()">
+                                                            <a href="/ChamCong/DateOffException" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Đi trễ, về sớm</p>
+                                                            </a>
+                                                        </li>
+                                                    }
+
                                                 }
                                             }
                                         </ul>
@@ -969,7 +1027,7 @@
                                 {
                                     <li class="nav-item has-treeview">
                                         <a href="#" class="nav-link">
-                                            <i class="nav-icon fas fa-th"></i>
+                                            <i class="nav-icon fa fa-plus-square"></i>
                                             <p>
                                                 Tăng ca
                                                 <i class="right fas fa-angle-left"></i>
@@ -982,19 +1040,19 @@
                                                 {
                                                     @if (folderChild.folderChildID == 0)
                                                     {
-                                                        <li class="nav-item">
+                                                        <li class="nav-item" onclick="test()">
                                                             <a href="/DateWork/Index" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Thông tin</p>
                                                             </a>
                                                         </li>
-                                                        <li class="nav-item">
+                                                        <li class="nav-item" onclick="test()">
                                                             <a href="/DateWork/RequestOT" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Đăng kí ca</p>
                                                             </a>
                                                         </li>
-                                                        <li class="nav-item">
+                                                        <li class="nav-item" onclick="test()">
                                                             <a href="/DateWork/Confirm" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Duyệt tăng ca</p>
@@ -1004,16 +1062,86 @@
 
                                                     @if (folderChild.folderChildID == 1)
                                                     {
-                                                        <li class="nav-item">
+                                                        <li class="nav-item" onclick="test()">
                                                             <a href="/DateWork/Index" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Thông tin</p>
                                                             </a>
                                                         </li>
-                                                        <li class="nav-item">
+                                                        <li class="nav-item" onclick="test()">
                                                             <a href="/DateWork/RequestOT" class="nav-link">
                                                                 <i class="far fa-circle nav-icon"></i>
                                                                 <p>Yêu cầu tăng ca</p>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                }
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                                @if (thumuc == 5)
+                                {
+                                    <li class="nav-item has-treeview">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon fa fa-plane"></i>
+                                            <p>
+                                                Công tác
+                                                <i class="right fas fa-angle-left"></i>
+                                            </p>
+                                        </a>
+                                        <ul class="nav nav-treeview">
+                                            @foreach (var folderChild in ViewBag.folderList)
+                                            {
+                                                @if (folderChild.folderID == thumuc)
+                                                {
+                                                    @if (folderChild.folderChildID == 0)
+                                                    {
+                                                        <li class="nav-item" onclick="test()">
+                                                            <a href="/CongTac/Index" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Thông tin</p>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item" onclick="test()">
+                                                            <a href="/CongTac/YeuCauCongTac" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Đăng kí công tác</p>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item" onclick="test()">
+                                                            <a href="/CongTac/XacNhanCongTac" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Duyệt công tác</p>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                }
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                                @if (thumuc == 6)
+                                {
+                                    <li class="nav-item has-treeview">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon fa fa-industry"></i>
+                                            <p>
+                                                Quy trình PTSP
+                                                <i class="right fas fa-angle-left"></i>
+                                            </p>
+                                        </a>
+                                        <ul class="nav nav-treeview">
+                                            @foreach (var folderChild in ViewBag.folderList)
+                                            {
+                                                @if (folderChild.folderID == thumuc)
+                                                {
+                                                    @if (folderChild.folderChildID == 0)
+                                                    {
+                                                        <li class="nav-item" onclick="test()">
+                                                            <a href="/QuyTrinhSP/Index" class="nav-link">
+                                                                <i class="far fa-circle nav-icon"></i>
+                                                                <p>Thông tin</p>
                                                             </a>
                                                         </li>
                                                     }
@@ -1041,20 +1169,16 @@
         </aside>
 
         @RenderBody()
-
         <footer class="main-footer">
             <strong>Copyright &copy; @DateTime.Now.Year ESSONS MIS </strong> All rights reserved.
         </footer>
-
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->
         </aside>
         <!-- /.control-sidebar -->
     </div>
-
-
-
+    <link href="~/Assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
     <!-- jQuery -->
     <script src="~/Assets/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
@@ -1097,6 +1221,17 @@
                 "responsive": true,
             });
         });
+        if (performance.navigation.type == 2) {
+            location.reload(true);
+        }
+
+        $(document).ready(function () {
+            $(".se-pre-con").fadeOut();
+        });
+
+        function test() {
+            $(".se-pre-con").fadeIn();
+        };
     </script>
     @RenderSection("Scripts", required: false)
 </body>

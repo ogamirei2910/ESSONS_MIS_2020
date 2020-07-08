@@ -19,7 +19,7 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="~/Assets/dist/css/adminlte.min.css">
 </head>
-<body class="hold-transition login-page" style="background-image: url('/images/pexels-photo-844297.jpeg'); 
+<body onclick="test()" class="hold-transition login-page" style="background-image: url('/images/pexels-photo-844297.jpeg'); 
                                                 background-position: center center;
                                                 background-repeat: no-repeat; background-attachment: fixed;
                                                 background-size: cover;">
@@ -59,6 +59,10 @@
                 $('#loginForm').submit();
             }
 
+        }
+
+        function test() {
+            $('#txtValue').focus();
         }
     </script>
     <script type="text/javascript">

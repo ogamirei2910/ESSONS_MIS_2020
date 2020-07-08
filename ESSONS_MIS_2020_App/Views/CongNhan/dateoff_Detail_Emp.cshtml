@@ -26,7 +26,7 @@
 
                                     <div class="form-group row">
                                         <b class="col-sm-3 col-form-label">Họ tên</b>
-                                        <a class="col-sm-5 col-form-label">@ViewBag.EmpName</a>
+                                        <a class="col-sm-5 col-form-label">@ViewBag.message</a>
                                     </div>
 
                                     <div class="form-group row">
@@ -79,24 +79,39 @@
                             <tbody>
                                 @foreach (var item in Model)
                                 {
-                                    <tr>
-                                        <td>@Html.DisplayFor(modelItem => item.dateoffID)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.dateoffType)</td>
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.dateoffID)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.dateoffType)</td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dateoffStart)
+                                    </td>
+                                    <td>@Html.DisplayFor(modelItem => item.dateoffEnd)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.dateoffStartTime)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.dateoffEndTime)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.dateoffNumber)</td>
+                                    @if (item.status == 2)
+                                    {
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.dateoffStart)
-                                        </td>
-                                        <td>@Html.DisplayFor(modelItem => item.dateoffEnd)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.dateoffStartTime)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.dateoffEndTime)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.dateoffNumber)</td>
-                                        <td>
-                                            @Html.ActionLink("Hủy", "dateoff_Delete", "CongNhan", new { dateoffID = item.dateoffID },
+                                            @Html.ActionLink("Hủy", "dateoff_Delete", "DateOff", new { dateoffID = item.dateoffID, page = 1 },
                                                                                                 new
                                                                                                 {
                                                                                                     @class = "btn btn-danger btn-sm"
                                                                                                 })
                                         </td>
-                                    </tr>
+                                    }
+                                    @if (item.status == 1)
+                                    {
+                                        <td>Đã xác nhận</td>
+                                    }
+                                    @if (item.status == 3)
+                                    {
+                                        <td>Đã hủy</td>
+                                    }
+                                    @if (item.status == 4)
+                                    {
+                                        <td>Chưa bổ sung giấy tờ</td>
+                                    }
+                                </tr>
                                 }
                         </table>
                     </div>

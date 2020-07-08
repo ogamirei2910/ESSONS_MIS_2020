@@ -46,6 +46,18 @@ namespace ESSONS_MIS_2020_App.Controllers
             
             getRole();
             HttpClient hc = _api.Initial();
+            DateTime dt;
+            DateTime.TryParseExact(um.dateoffStart,
+                            "dd-MM-yyyy",
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.None, out dt);
+
+            if (dt.Date < DateTime.Now.AddDays(2).Date)
+            {
+                ViewBag.Error = "Đăng kí phép trước 3 ngày mới có thể tạo đơn mới";
+                return PartialView("DisplayError");
+            }
+
             if (um.dateoffType == "0" || um.dateoffType == null)
             {
                 ViewBag.Error = "Chưa chọn loại nghỉ phép";
@@ -72,7 +84,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             number = (Total.TotalDays + 1) * 8;
             if (um.dateoffType == "4" || um.dateoffType == "1")
             {
-                if (um.dateoffEndTime != null && um.dateoffStartTime != null)
+                if (um.dateoffEndTime != null && um.dateoffStartTime != null && um.dateoffStart == um.dateoffEnd)
                 {
                     int yearS = int.Parse(um.dateoffStart.Substring(6, 4));
                     int monthS = int.Parse(um.dateoffStart.Substring(3, 2));
@@ -98,7 +110,6 @@ namespace ESSONS_MIS_2020_App.Controllers
                         number = Math.Ceiling(Total2.TotalHours);
                     if (number > 8)
                         number = 8;
-
                 }
             }
 
@@ -133,18 +144,22 @@ namespace ESSONS_MIS_2020_App.Controllers
                 {
                     var results2 = results.Content.ReadAsStringAsync().Result;
                     am = JsonConvert.DeserializeObject<EmpModel>(results2);
-                    SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
-                    client.UseDefaultCredentials = false;
-                    client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");
+                    if (am.empEmail != "" && am.empEmail != null)
+                    {
+                        SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
+                        client.UseDefaultCredentials = false;
+                        client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");
 
-                    MailMessage mailMessage = new MailMessage();
-                    mailMessage.From = new MailAddress("noreply@essons.vn");
-                    mailMessage.To.Add(am.empEmail);
-                    mailMessage.IsBodyHtml = true;
-                    mailMessage.Body = "Nhân viên " + ViewBag.message +"("+ViewBag.empid+")"+ " xin nghỉ " + dateoffName +
-                        "<br /> Từ ngày: " + um.dateoffStart + " Đến ngày: " + um.dateoffEnd + @" <br /> Đang chờ bạn xác nhận http://portal.essons.vn:456/DateOff/dateoff_Confirm";
-                    mailMessage.Subject = "Nhân viên xin nghỉ phép";
-                    client.Send(mailMessage);
+                        MailMessage mailMessage = new MailMessage();
+                        mailMessage.From = new MailAddress("noreply@essons.vn");
+                        mailMessage.To.Add(am.empEmail);
+                        mailMessage.IsBodyHtml = true;
+                        mailMessage.Body = "Nhân viên " + ViewBag.message + "(" + ViewBag.empid + ")" + " xin nghỉ " + dateoffName +
+                            "<br /> Từ ngày: " + um.dateoffStart + " Đến ngày: " + um.dateoffEnd + @" <br /> Đang chờ bạn xác nhận http://portal.essons.vn:456/DateOff/dateoff_Confirm";
+                        mailMessage.Subject = "Nhân viên xin nghỉ phép";
+                        try { client.Send(mailMessage); }
+                        catch { }
+                    }
                 }
                 HttpContext.Session.SetString("notice", "Đăng kí phép thành công");
                 ViewBag.Error = "OK";
@@ -183,7 +198,68 @@ namespace ESSONS_MIS_2020_App.Controllers
             var res = hc.PostAsJsonAsync<DateOffModel>($"api/dateoff/Update", em);
             res.Wait();
 
+            EmpModel am = new EmpModel();
+            res = hc.GetAsync($"api/emp/GetEmailEmpInManager?dateoffID={dateoffID}");
+            res.Wait();
+            var results = res.Result;
+            if (results.IsSuccessStatusCode)
+            {
+                var results2 = results.Content.ReadAsStringAsync().Result;
+                am = JsonConvert.DeserializeObject<EmpModel>(results2);
+                if (am.empEmail != "" && am.empEmail != null)
+                {
+                    SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");
+
+                    MailMessage mailMessage = new MailMessage();
+                    mailMessage.From = new MailAddress("noreply@essons.vn");
+                    mailMessage.To.Add(am.empEmail);
+                    mailMessage.IsBodyHtml = true;
+                    mailMessage.Body = "Mã phép "  + dateoffID + " đã được duyệt" + @" <br /> Kiểm tra thông tin xác nhận http://portal.essons.vn:456/User/Login";
+                    mailMessage.Subject = "Phản hồi nhân viên xin nghỉ phép";
+                    try { client.Send(mailMessage); }
+                    catch { }
+                }
+            }
             return RedirectToAction("dateoff_Confirm");
+        }
+
+        public IActionResult dateoff_UpdatePaper(string dateoffID)
+        {
+            getRole();
+            DateOffModel em = new DateOffModel();
+            em.status = 1;
+            em.dateoffID = dateoffID;
+            HttpClient hc = _api.Initial();
+            var res = hc.PostAsJsonAsync<DateOffModel>($"api/dateoff/UpdatePaper", em);
+            res.Wait();
+
+            EmpModel am = new EmpModel();
+            res = hc.GetAsync($"api/emp/GetEmailEmpInManager?dateoffID={dateoffID}");
+            res.Wait();
+            var results = res.Result;
+            if (results.IsSuccessStatusCode)
+            {
+                var results2 = results.Content.ReadAsStringAsync().Result;
+                am = JsonConvert.DeserializeObject<EmpModel>(results2);
+                if (am.empEmail != "" && am.empEmail != null)
+                {
+                    SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");
+
+                    MailMessage mailMessage = new MailMessage();
+                    mailMessage.From = new MailAddress("noreply@essons.vn");
+                    mailMessage.To.Add(am.empEmail);
+                    mailMessage.IsBodyHtml = true;
+                    mailMessage.Body = "Mã phép "  + dateoffID + " đã bổ sung giấy tờ." + @" <br /> Kiểm tra thông tin xác nhận http://portal.essons.vn:456/User/Login";
+                    mailMessage.Subject = "Phản hồi nhân viên xin nghỉ phép";
+                    try { client.Send(mailMessage); }
+                    catch { }
+                }
+            }
+            return RedirectToAction("dateoff_Detail");
         }
 
         public IActionResult dateoff_Delete(string dateoffID, int page)
@@ -195,6 +271,32 @@ namespace ESSONS_MIS_2020_App.Controllers
             HttpClient hc = _api.Initial();
             var res = hc.PostAsJsonAsync<DateOffModel>($"api/dateoff/Delete", em);
             res.Wait();
+
+            EmpModel am = new EmpModel();
+            res = hc.GetAsync($"api/emp/GetEmailEmpInManager?dateoffID={dateoffID}");
+            res.Wait();
+            var results = res.Result;
+            if (results.IsSuccessStatusCode)
+            {
+                var results2 = results.Content.ReadAsStringAsync().Result;
+                am = JsonConvert.DeserializeObject<EmpModel>(results2);
+                if (am.empEmail != "" && am.empEmail != null)
+                {
+                    SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");
+
+                    MailMessage mailMessage = new MailMessage();
+                    mailMessage.From = new MailAddress("noreply@essons.vn");
+                    mailMessage.To.Add(am.empEmail);
+                    mailMessage.IsBodyHtml = true;
+                    mailMessage.Body = "Mã phép " + dateoffID + " đã bị hủy." + @" <br /> Kiểm tra thông tin xác nhận http://portal.essons.vn:456/User/Login";
+                    mailMessage.Subject = "Phản hồi nhân viên xin nghỉ phép";
+                    try { client.Send(mailMessage); }
+                    catch { }
+                }
+            }
+
 
             if (page == 1)
                 return RedirectToAction("Index", "Home");

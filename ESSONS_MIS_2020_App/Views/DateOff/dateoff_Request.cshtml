@@ -219,6 +219,7 @@
             var dtDenNgay = $('#dtDenNgay');
             var tpTuGio = $('#tpTuGio');
             var tpDenGio = $('#tpDenGio');
+            var txtKm = $('#txtKm');
             if (x == '2' || x == '3' || x == '10' || x == '11' || x == '12' || x == '13' || x == '16') {
                 if (x == '11' || x == '12') {
                     if (x == '12') 
@@ -229,6 +230,8 @@
                 else
                     document.getElementById("giaycanco").innerHTML = 'Cần giấy nghỉ bệnh của bệnh viện xác nhận';
 
+                if (x == '16')
+                    document.getElementById("giaycanco").innerHTML = 'Không';
                 dtDenNgay.prop('hidden', false);
                 tpTuGio.prop('hidden', true);
                 tpDenGio.prop('hidden', true);
@@ -242,6 +245,14 @@
                     tpDenGio.prop('hidden', false);
                 }
             }
+
+            if (x == '15') {
+                document.getElementById("giaycanco").innerHTML = 'Không';
+                dtDenNgay.prop('hidden', false);
+                tpTuGio.prop('hidden', false);
+                tpDenGio.prop('hidden', false);
+            }
+                
 
             switch (x) {
                 case "1": content = "Là phép được hưởng nguyên lương, 01 tháng NLĐ sẽ được hưởng 01 ngày phép.<br />" +
@@ -277,13 +288,5 @@
         }
 
         $(".selectpicker").selectpicker()
-        var title = [];
-        $('#loainghiphept option').each(function () {
-            title.push($(this).attr('title'));
-        });
-
-        $("ul.selectpicker li").each(function (i) {
-            $(this).attr('title', title[i]).tooltip({ container: "#tooltipBox" });
-        })
     </script>
 }

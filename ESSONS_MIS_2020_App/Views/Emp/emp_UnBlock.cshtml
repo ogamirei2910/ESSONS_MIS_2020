@@ -1,0 +1,95 @@
+﻿@model IEnumerable<ESSONS_MIS_2020_App.Models.EmpModel>
+@{
+    ViewData["Title"] = "emp_UnBlock";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Danh sách nhân viên bị khóa</h3>
+                        <br />
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Số thẻ</th>
+                                    <th>Họ tên</th>
+                                    <th>Chức vụ</th>
+                                    <th>CMND</th>
+                                    <th>Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.empID)
+                                            @if (item.empIDTemp != "" && item.empIDTemp != null)
+                                            {
+                                                <label> - </label>
+                                                @Html.DisplayFor(modelItem => item.empIDTemp)
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.empName)
+                                        </td>
+                                        <td>@Html.DisplayFor(modelItem => item.positionName)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.empIdentityCard)</td>
+                                        <td>
+                                            @Html.ActionLink("Mở Khóa", "UnBlock", "Emp", new { empID = item.empID },
+                                                                                         new
+                                                                                         {
+                                                                                             @class = "btn btn-info btn-sm"
+                                                                                         })
+                                        </td>
+                                    </tr>
+                                }
+                        </table>
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+       var a = '@ViewBag.notice';
+        if (a != '') {
+            let dia = bs4pop.dialog({
+
+                title: 'Thông báo',
+                content: '@ViewBag.notice',
+
+                closeBtn: true,
+                backdrop: 'static',
+                btns: [
+                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                ],
+                onDragStart: function () {
+                    console.log('onDragStart');
+                },
+                onDrag: function () {
+                    console.log('onDrag');
+                }
+
+            });
+        }
+    </script>
+}
+

@@ -6,7 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using ESSONS_MIS_2020.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace ESSONS_MIS_2020.Controllers
 {
@@ -24,6 +26,9 @@ namespace ESSONS_MIS_2020.Controllers
         {
             string connection = _configuration.GetConnectionString("DefaultConnection");
 
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(model.childDateWork);
+            DataTable pDt = JsonConvert.DeserializeObject<DataTable>(json);
+
             using (SqlConnection sql = new SqlConnection(connection))
             {
                 using (SqlCommand sc = new SqlCommand("sp_datework", sql))
@@ -31,15 +36,9 @@ namespace ESSONS_MIS_2020.Controllers
                     sql.Open();
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
                     sc.Parameters.Add(
-                        new SqlParameter("@requestID", model.requestID));
-                    sc.Parameters.Add(
-                        new SqlParameter("@empID", model.empid));
-                    sc.Parameters.Add(
                         new SqlParameter("@datework", model.datework));
                     sc.Parameters.Add(
                         new SqlParameter("@dateworkend", model.dateworkend));
-                    sc.Parameters.Add(
-                       new SqlParameter("@isOT", model.isOT));
                     sc.Parameters.Add(
                         new SqlParameter("@shiftName", model.shiftName));
                     sc.Parameters.Add(
@@ -48,6 +47,8 @@ namespace ESSONS_MIS_2020.Controllers
                         new SqlParameter("@indat", model.indat));
                     sc.Parameters.Add(
                         new SqlParameter("@username", model.username));
+                    sc.Parameters.Add(
+                        new SqlParameter("@udt", pDt));
                     sc.Parameters.Add(
                         new SqlParameter("@type", "Insert"));
                     SqlParameter result = new SqlParameter("@result", SqlDbType.NVarChar, 50);
@@ -84,7 +85,7 @@ namespace ESSONS_MIS_2020.Controllers
                         em.datework = sdr["datework"].ToString();
                         em.dateworkend = sdr["dateworkend"].ToString();
                         em.shiftName = sdr["shiftName"].ToString();
-                        em.depName = sdr["depID"].ToString();
+                        em.depName = sdr["depName"].ToString();
                         em.isOT = int.Parse(sdr["isOT"].ToString());
                         em.status = sdr["status"].ToString();
                         em.indat = sdr["indat"].ToString();
@@ -124,9 +125,10 @@ namespace ESSONS_MIS_2020.Controllers
                         em.datework = sdr["datework"].ToString();
                         em.empid = sdr["empid"].ToString();
                         em.empidTemp = sdr["empIDTemp"].ToString();
+                        em.empName = sdr["empName"].ToString();
                         em.dateworkend = sdr["dateworkend"].ToString();
                         em.shiftName = sdr["shiftName"].ToString();
-                        em.depName = sdr["depID"].ToString();
+                        em.depName = sdr["depName"].ToString();
                         em.isOT = int.Parse(sdr["isOT"].ToString());
                         em.status = sdr["status"].ToString();
                         em.indat = sdr["indat"].ToString();
@@ -199,7 +201,7 @@ namespace ESSONS_MIS_2020.Controllers
                         em.datework = sdr["datework"].ToString();
                         em.dateworkend = sdr["dateworkend"].ToString();
                         em.shiftName = sdr["shiftName"].ToString();
-                        em.depName = sdr["depID"].ToString();
+                        em.depName = sdr["depName"].ToString();
                         em.isOT = int.Parse(sdr["isOT"].ToString());
                         em.status = sdr["status"].ToString();
                         em.indat = sdr["indat"].ToString();

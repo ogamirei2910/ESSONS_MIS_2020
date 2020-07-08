@@ -35,7 +35,7 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a class="nav-link" href="Index">Trang chủ</a>
+                    <a class="nav-link" href="/MainPage/Index">Trang chủ</a>
                 </li>
             </ul>
 
@@ -45,7 +45,7 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="Index" class="brand-link">
+            <a href="/MainPage/Index" class="brand-link">
                 <center><span class="brand-text font-weight-light">ESSONS MIS</span></center>
             </a>
 
@@ -58,7 +58,7 @@
                         {
                             <img class="img-circle elevation-2" alt="User Image" height="160" width="160" src="~/images/NhanVien/@ViewBag.EmpImage">
                         }
-                        <a>@ViewBag.EmpName</a>
+                        <a href="/CongNhan/dateoff_Detail_Emp">@ViewBag.message</a>
                     </div>
                 </div>
 
@@ -68,30 +68,40 @@
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                         <li class="nav-item">
                             <a href="/CongNhan/dateoff_Detail_Emp" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
-                                    Thông tin
+                                    Thông tin cá nhân
                                 </p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="/CongNhan/dateoff_Request" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
+                                <i class="nav-icon fa fa-calendar"></i>
                                 <p>
-                                    Xin nghỉ phép
+                                    Nghỉ phép - VR
                                 </p>
                             </a>
                         </li>
-                        @if (ViewBag.EmpRole != null)
+                        @foreach (var thumuc in ViewBag.folder)
                         {
-                            <li class="nav-item">
-                                <a href="/CongNhan/dateoff_Confirm" class="nav-link">
-                                    <i class="nav-icon fas fa-th"></i>
-                                    <p>
-                                        Duyệt phép
-                                    </p>
-                                </a>
-                            </li>
+                            @if (thumuc == 2)
+                            {
+                                @foreach (var folderChild in ViewBag.folderList)
+                                {
+                                    @if (folderChild.folderID == thumuc)
+                                    {
+                                        @if (folderChild.folderChildID == 2 || folderChild.folderChildID == 0)
+                                        {
+                                            <li class="nav-item">
+                                                <a href="/CongNhan/dateoff_Confirm" class="nav-link">
+                                                    <i class="nav-icon fa fa-share"></i>
+                                                    <p>Duyệt yêu cầu</p>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                }
+                            }
                         }
                         <li class="nav-item">
                             <a href="/CongNhan/Index" class="nav-link">
@@ -165,6 +175,9 @@
                 "responsive": true,
             });
         });
+        if (performance.navigation.type == 2) {
+            location.reload(true);
+        }
     </script>
 
     @RenderSection("Scripts", required: false)

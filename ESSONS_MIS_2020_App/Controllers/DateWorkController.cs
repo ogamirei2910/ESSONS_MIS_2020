@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
 using ESSONS_MIS_2020_App.Helper;
@@ -17,6 +22,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+
 
 namespace ESSONS_MIS_2020_App.Controllers
 {
@@ -39,8 +45,11 @@ namespace ESSONS_MIS_2020_App.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            HttpContext.Session.SetString("resultPage", "datework_Index");
+            if (HttpContext.Session.GetString("isLogin") is null || HttpContext.Session.GetString("isLogin") == "")
+                return RedirectToAction("Login", "User");
+
             getRole();
-            HttpContext.Session.SetString("requestID", "");
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");
             List<EmpDateWorkModel> um = new List<EmpDateWorkModel>();
@@ -56,7 +65,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Detail(string requestID, int isOT, string shiftName)
+        public async Task<IActionResult> Detail(string requestID, int isOT, string shiftName, int page)
         {
             getRole();
             HttpContext.Session.SetString("requestID", "");
@@ -68,13 +77,17 @@ namespace ESSONS_MIS_2020_App.Controllers
                 var results = res.Content.ReadAsStringAsync().Result;
                 um = JsonConvert.DeserializeObject<List<EmpDateWorkModel>>(results);
             }
-
+            ViewBag.page = page;
             ViewBag.requestList = um;
             return View();
         }
 
         public async Task<IActionResult> Confirm()
         {
+            HttpContext.Session.SetString("resultPage", "datework_Confirm");
+            if (HttpContext.Session.GetString("isLogin") is null || HttpContext.Session.GetString("isLogin") == "")
+                return RedirectToAction("Login", "User");
+
             getRole();
             HttpContext.Session.SetString("requestID", "");
             ViewBag.notice = HttpContext.Session.GetString("notice");
@@ -115,8 +128,8 @@ namespace ESSONS_MIS_2020_App.Controllers
                 worksheet.Cells["A3"].Value = "Của bộ lao động-Thương binh và xã hội";
                 worksheet.Cells["A4"].Value = "DOANH NGHIỆP CÔNG TY:TNHH CÔNG NGHIỆP TOÀN CẦU ESSONS";
                 worksheet.Cells["A5"].Value = "BIÊN BẢN THỎA THUẬN CỦA NGƯỜI LÀM THÊM GIỜ";
-                worksheet.Cells["A6"].Value = "Thời gian làm thêm: Từ ngày " +um.First().datework.Substring(8,2)+ " tháng  "+ um.First().datework.Substring(5, 2) + "  " +
-                    "đến ngày  " + um.First().dateworkend.Substring(8, 2) + "  tháng " + um.First().dateworkend.Substring(5, 2) + "  năm " +um.First().datework.Substring(0,4);
+                worksheet.Cells["A6"].Value = "Thời gian làm thêm: Từ ngày " + um.First().datework.Substring(8, 2) + " tháng  " + um.First().datework.Substring(5, 2) + "  " +
+                    "đến ngày  " + um.First().dateworkend.Substring(8, 2) + "  tháng " + um.First().dateworkend.Substring(5, 2) + "  năm " + um.First().datework.Substring(0, 4);
                 //worksheet.Cells["A7"].Value = "Địa điểm làm thêm BỘ PHẬN: CHẾ BIẾN NL";
                 ExcelRange rg = worksheet.Cells["A7"];
                 rg.IsRichText = true;
@@ -145,7 +158,7 @@ namespace ESSONS_MIS_2020_App.Controllers
 
                 int cell = 9;
                 int i = 1;
-                foreach(var item in um)
+                foreach (var item in um)
                 {
                     worksheet.Cells["A" + cell.ToString()].Value = i.ToString();
                     worksheet.Cells["B" + cell.ToString()].Value = item.empid;
@@ -190,10 +203,10 @@ namespace ESSONS_MIS_2020_App.Controllers
                 worksheet.Cells["A5:I5"].Merge = true;
                 worksheet.Cells["A6:I6"].Merge = true;
                 worksheet.Cells["A7:I7"].Merge = true;
-                worksheet.Cells["A"+ (cell + 3).ToString() +":B" + (cell + 3).ToString()].Merge = true;
-                worksheet.Cells["C"+ (cell + 3).ToString() +":D" + (cell + 3).ToString()].Merge = true;
-                worksheet.Cells["E" + (cell + 3).ToString() +":F" + (cell + 3).ToString()].Merge = true;
-                worksheet.Cells["H" + (cell + 3).ToString() +":I" + (cell + 3).ToString()].Merge = true;
+                worksheet.Cells["A" + (cell + 3).ToString() + ":B" + (cell + 3).ToString()].Merge = true;
+                worksheet.Cells["C" + (cell + 3).ToString() + ":D" + (cell + 3).ToString()].Merge = true;
+                worksheet.Cells["E" + (cell + 3).ToString() + ":F" + (cell + 3).ToString()].Merge = true;
+                worksheet.Cells["H" + (cell + 3).ToString() + ":I" + (cell + 3).ToString()].Merge = true;
 
                 //Set cao rong
                 worksheet.Row(8).Height = 111.50;
@@ -263,14 +276,14 @@ namespace ESSONS_MIS_2020_App.Controllers
         {
             getRole();
             ViewBag.Error = "";
-            List<EmpModel> um = new List<EmpModel>();
+            EmpDateWorkModel um = new EmpDateWorkModel();
             HttpClient hc = _api.Initial();
 
-            HttpResponseMessage res = await hc.GetAsync($"api/emp/GetEmpInManager?empid={ViewBag.empid}");
+            HttpResponseMessage res = await hc.GetAsync($"api/emp/GetEmpInManager_DateWork?empid={ViewBag.empid}");
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
-                um = JsonConvert.DeserializeObject<List<EmpModel>>(results);
+                um = JsonConvert.DeserializeObject<EmpDateWorkModel>(results);
             }
 
             List<TimeWorkModel> em = new List<TimeWorkModel>();
@@ -281,26 +294,28 @@ namespace ESSONS_MIS_2020_App.Controllers
                 em = JsonConvert.DeserializeObject<List<TimeWorkModel>>(results);
             }
 
-            string requestID = "";
-            res = await hc.GetAsync($"api/datework/GetDateWorkSTT");
-            if (res.IsSuccessStatusCode)
-            {
-                requestID = res.Content.ReadAsStringAsync().Result;
-                if (HttpContext.Session.GetString("requestID") == null || HttpContext.Session.GetString("requestID") == "")
-                    HttpContext.Session.SetString("requestID", requestID);
-            }
-
             ViewBag.timeworkList = em;
-            ViewBag.emp = um;
-            return View();
+            return View(um);
         }
 
         [HttpPost]
         public async Task<IActionResult> RequestOT(EmpDateWorkModel um)
         {
             getRole();
+            DateTime dt;
+            DateTime.TryParseExact(um.datework,
+                            "dd-MM-yyyy",
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.None, out dt);
+
+            if (dt.Date < DateTime.Now.Date)
+            {
+                ViewBag.Error = "Đăng kí tăng ca trong ngày hoặc trước 1 ngày";
+                return PartialView("DisplayError");
+            }
+
+
             HttpClient hc = _api.Initial();
-            um.requestID = HttpContext.Session.GetString("requestID");
             um.indat = DateTime.Now.ToString("dd-MM-yyyy");
             um.username = ViewBag.empid;
             var res = await hc.PostAsJsonAsync<EmpDateWorkModel>("api/DateWork/RequestOT", um);
@@ -308,8 +323,35 @@ namespace ESSONS_MIS_2020_App.Controllers
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
-
                 ViewBag.Error = results;
+                EmpModel am = new EmpModel();
+                res = await hc.GetAsync($"api/emp/GetEmailEmpManager?empid={ViewBag.empid}");
+                if (res.IsSuccessStatusCode)
+                {
+                    var results2 = res.Content.ReadAsStringAsync().Result;
+                    am = JsonConvert.DeserializeObject<EmpModel>(results2);
+                    if (am.empEmail != "" && am.empEmail != null)
+                    {
+                        SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
+                        client.UseDefaultCredentials = false;
+                        client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");
+
+                        MailMessage mailMessage = new MailMessage();
+                        mailMessage.From = new MailAddress("noreply@essons.vn");
+
+                        DateTime dtRequest = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 16, 30, 0);
+                        if (DateTime.Now.TimeOfDay < dtRequest.TimeOfDay)
+                            mailMessage.To.Add(am.empEmail);
+                        else
+                            mailMessage.To.Add("dungtran@essons.vn");
+                        mailMessage.IsBodyHtml = true;
+                        mailMessage.Body = "Nhân viên " + ViewBag.message + " (" + ViewBag.empid + ")" + " yêu cầu đăng kí tăng ca." +
+                            "<br /> Từ ngày: " + um.datework + " Đến ngày: " + um.dateworkend + @" <br /> Đang chờ bạn xác nhận http://portal.essons.vn:456/DateWork/Confirm";
+                        mailMessage.Subject = "Nhân viên đăng kí ca và yêu cầu tăng ca";
+                        try { client.Send(mailMessage); }
+                        catch { }
+                    }
+                }
                 return PartialView("DisplayError");
             }
 
@@ -332,6 +374,28 @@ namespace ESSONS_MIS_2020_App.Controllers
                 var results = res.Content.ReadAsStringAsync().Result;
                 if (results == "OK")
                 {
+                    EmpModel am = new EmpModel();
+                    res = await hc.GetAsync($"api/emp/GetEmailEmpInManager?requestID={requestID}");
+                    if (res.IsSuccessStatusCode)
+                    {
+                        var results2 = res.Content.ReadAsStringAsync().Result;
+                        am = JsonConvert.DeserializeObject<EmpModel>(results2);
+                        if (am.empEmail != "" && am.empEmail != null)
+                        {
+                            SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
+                            client.UseDefaultCredentials = false;
+                            client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");
+
+                            MailMessage mailMessage = new MailMessage();
+                            mailMessage.From = new MailAddress("noreply@essons.vn");
+                            mailMessage.To.Add(am.empEmail);
+                            mailMessage.IsBodyHtml = true;
+                            mailMessage.Body = "Mã yêu cầu " + requestID + " đã bị hủy." + @" <br /> Kiểm tra thông tin xác nhận http://portal.essons.vn:456/DateWork/Index";
+                            mailMessage.Subject = "Phản hồi nhân viên yêu cầu đăng kí ca và tăng ca";
+                            try { client.Send(mailMessage); }
+                            catch { }
+                        }
+                    }
                     HttpContext.Session.SetString("notice", "Hủy yêu cầu tăng ca thành công");
                     if (page == 1)
                         return RedirectToAction("Index", "DateWork");
@@ -359,7 +423,30 @@ namespace ESSONS_MIS_2020_App.Controllers
                 var results = res.Content.ReadAsStringAsync().Result;
                 if (results == "OK")
                 {
-                    HttpContext.Session.SetString("notice", "Cập nhật loại tăng ca thành công");
+                    EmpModel am = new EmpModel();
+                    res = await hc.GetAsync($"api/emp/GetEmailEmpInManager?requestID={requestID}");
+                    if (res.IsSuccessStatusCode)
+                    {
+                        var results2 = res.Content.ReadAsStringAsync().Result;
+                        am = JsonConvert.DeserializeObject<EmpModel>(results2);
+                        if (am.empEmail != "" && am.empEmail != null)
+                        {
+                            SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
+                            client.UseDefaultCredentials = false;
+                            client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");
+
+                            MailMessage mailMessage = new MailMessage();
+                            mailMessage.From = new MailAddress("noreply@essons.vn");
+                            mailMessage.To.Add(am.empEmail);
+                            mailMessage.IsBodyHtml = true;
+                            mailMessage.Body = "Mã tăng ca " + requestID + " đã được duyệt" + @" <br /> Kiểm tra thông tin xác nhận http://portal.essons.vn:456/DateWork/Index";
+                            mailMessage.Subject = "Phản hồi nhân viên đăng kí ca và tăng ca";
+                            try { client.Send(mailMessage); }
+                            catch { }
+                        }
+                    }
+
+                    HttpContext.Session.SetString("notice", "Xác nhận tăng ca thành công");
                     if (page == 1)
                         return RedirectToAction("Index", "DateWork");
                     else
