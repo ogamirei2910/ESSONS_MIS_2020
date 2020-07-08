@@ -34,8 +34,6 @@ namespace ESSONS_MIS_2020_App.Controllers
             //    i++;
             //}
 
-            ViewBag.loginPage = HttpContext.Session.GetString("loginPage");
-            HttpContext.Session.SetString("loginPage", "");
             var urm = HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList");
             HttpClient hc = _api.Initial();
 

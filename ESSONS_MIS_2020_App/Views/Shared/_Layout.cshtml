@@ -49,10 +49,7 @@
     </style> 
 </head>
 <body class="hold-transition sidebar-mini">
-    @if (ViewBag.loginPage == null || ViewBag.loginPage == "")
-    {
-        <div class="se-pre-con"></div>
-    }
+    <div class="se-pre-con"></div>
     <div class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -1121,7 +1118,7 @@
                                         </ul>
                                     </li>
                                 }
-                                @if (thumuc == 6)
+                                @*@if (thumuc == 6)
                                 {
                                     <li class="nav-item has-treeview">
                                         <a href="#" class="nav-link">
@@ -1149,11 +1146,27 @@
                                             }
                                         </ul>
                                     </li>
-                                }
+                                }*@
                             }
                         }
                         <!---->
-
+                        <li class="nav-item has-treeview">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon fa fa-industry"></i>
+                                            <p>
+                                                Quy trình PTSP
+                                                <i class="right fas fa-angle-left"></i>
+                                            </p>
+                                        </a>
+                                        <ul class="nav nav-treeview">
+                                            <li class="nav-item" onclick="test()">
+                                                <a href="/QuyTrinhSP/Index" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>Thông tin</p>
+                                                </a>
+                                            </li>
+                                        </ul>
+                        </li>
                         <li class="nav-item has-treeview">
                             <a href="/User/Logout" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
@@ -1226,7 +1239,7 @@
         }
 
         $(document).ready(function () {
-            $(".se-pre-con").fadeOut();
+            $(".se-pre-con").fadeOut('slow');
         });
 
         function test() {

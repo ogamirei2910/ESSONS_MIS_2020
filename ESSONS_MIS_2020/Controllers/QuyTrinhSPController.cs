@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace ESSONS_MIS_2020.Controllers
         {
             _configuration = configuration;
         }
-        public IActionResult QuyTrinh_Insert([FromBody]QuyTrinhModel model)
+        public ActionResult QuyTrinh_Insert([FromBody]QuyTrinhModel model)
         {
             string connection = _configuration.GetConnectionString("DefaultConnection");
 
@@ -31,47 +32,46 @@ namespace ESSONS_MIS_2020.Controllers
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
                     sc.Parameters.Add(
                         new SqlParameter("@SoChungTu", model.SoChungTu));
-                    sc.Parameters.Add(
-                        new SqlParameter("@NgayDuyet", model.NgayDuyet));
-                    sc.Parameters.Add(
-                        new SqlParameter("@NgayPhatHanh", model.NgayPhatHanh));
-                    sc.Parameters.Add(
-                        new SqlParameter("@Noi", model.Noi));
-                    sc.Parameters.Add(
-                       new SqlParameter("@CodeKH", model.CodeKH));
+                    //sc.Parameters.Add(
+                    //    new SqlParameter("@NgayDuyet", model.NgayDuyet));
+                    //sc.Parameters.Add(
+                    //    new SqlParameter("@NgayPhatHanh", model.NgayPhatHanh));
+                    //sc.Parameters.Add(
+                    //    new SqlParameter("@Noi", model.Noi));
+                    //sc.Parameters.Add(
+                    //   new SqlParameter("@CodeKH", model.CodeKH));
                     sc.Parameters.Add(
                         new SqlParameter("@CodeSP", model.CodeSP));
-                    sc.Parameters.Add(
-                        new SqlParameter("@TenQU", model.TenQU));
-                    sc.Parameters.Add(
-                        new SqlParameter("@MaKhuonTW", model.MaKhuonTW));
-                    sc.Parameters.Add(
-                        new SqlParameter("@QuyCachKH", model.QuyCachKH));
-                    sc.Parameters.Add(
-                       new SqlParameter("@QuyCachEssons", model.QuyCachEssons ));
-                    sc.Parameters.Add(
-                        new SqlParameter("@ChatKeo", model.ChatKeo));
-                    sc.Parameters.Add(
-                        new SqlParameter("@Mau", model.Mau));
-                    sc.Parameters.Add(
-                       new SqlParameter("@MaKeo", model.MaKeo));
-                    sc.Parameters.Add(
-                        new SqlParameter("@SoLoKhuonKH", model.SoLoKhuonKH));
-                    sc.Parameters.Add(
-                       new SqlParameter("@CoRutTheoDonKhuon", model.CoRutTheoDonKhuon));
-                    sc.Parameters.Add(
-                        new SqlParameter("@UocTinhKLSP", model.UocTinhKLSP));
-                    sc.Parameters.Add(
-                        new SqlParameter("@ThoiGianHoanTat1k", model.ThoiGianHoanTat1k));
-                    sc.Parameters.Add(
-                       new SqlParameter("@LoaiKhuonMau", model.LoaiKhuonMau));
-                    sc.Parameters.Add(
-                       new SqlParameter("@NgayGiaoMau", model.NgayGiaoMau));
-                    sc.Parameters.Add(
-                       new SqlParameter("@GhiChuKHSX", model.GhiChuKHSX));
+                    //sc.Parameters.Add(
+                    //    new SqlParameter("@TenQU", model.TenQU));
+                    //sc.Parameters.Add(
+                    //    new SqlParameter("@MaKhuonTW", model.MaKhuonTW));
+                    //sc.Parameters.Add(
+                    //    new SqlParameter("@QuyCachKH", model.QuyCachKH));
+                    //sc.Parameters.Add(
+                    //   new SqlParameter("@QuyCachEssons", model.QuyCachEssons ));
+                    //sc.Parameters.Add(
+                    //    new SqlParameter("@ChatKeo", model.ChatKeo));
+                    //sc.Parameters.Add(
+                    //    new SqlParameter("@Mau", model.Mau));
+                    //sc.Parameters.Add(
+                    //   new SqlParameter("@MaKeo", model.MaKeo));
+                    //sc.Parameters.Add(
+                    //    new SqlParameter("@SoLoKhuonKH", model.SoLoKhuonKH));
+                    //sc.Parameters.Add(
+                    //   new SqlParameter("@CoRutTheoDonKhuon", model.CoRutTheoDonKhuon));
+                    //sc.Parameters.Add(
+                    //    new SqlParameter("@UocTinhKLSP", model.UocTinhKLSP));
+                    //sc.Parameters.Add(
+                    //    new SqlParameter("@ThoiGianHoanTat1k", model.ThoiGianHoanTat1k));
+                    //sc.Parameters.Add(
+                    //   new SqlParameter("@LoaiKhuonMau", model.LoaiKhuonMau));
+                    //sc.Parameters.Add(
+                    //   new SqlParameter("@NgayGiaoMau", model.NgayGiaoMau));
+                    //sc.Parameters.Add(
+                    //   new SqlParameter("@GhiChuKHSX", model.GhiChuKHSX));
                     sc.Parameters.Add(
                         new SqlParameter("@type", "Insert"));
-
                     SqlDataReader sdr = sc.ExecuteReader();
                     if (sdr.RecordsAffected > 0)
                         return Ok();

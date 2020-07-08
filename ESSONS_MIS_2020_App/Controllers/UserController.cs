@@ -128,40 +128,11 @@ namespace ESSONS_MIS_2020_App.Controllers
                 if (HttpContext.Session.GetString("resultPage") is null || HttpContext.Session.GetString("resultPage") == "")
                 {
                     HttpContext.Session.SetString("isLogin", "true");
-                    HttpContext.Session.SetString("loginPage", "true");
                     return RedirectToAction("Index", "Home");
                 }
                 else
                 {
-                    if(HttpContext.Session.GetString("resultPage") == "dateoff_Confirm")
-                    {
-                        HttpContext.Session.SetString("isLogin", "true");
-                        return RedirectToAction("dateoff_confirm", "dateoff");
-                    }
-
-                    if (HttpContext.Session.GetString("resultPage") == "XacNhanCongTac")
-                    {
-                        HttpContext.Session.SetString("isLogin", "true");
-                        return RedirectToAction("XacNhanCongTac", "CongTac");
-                    }
-
-                    if (HttpContext.Session.GetString("resultPage") == "CongTacIndex")
-                    {
-                        HttpContext.Session.SetString("isLogin", "true");
-                        return RedirectToAction("Index", "CongTac");
-                    }
-
-                    if (HttpContext.Session.GetString("resultPage") == "datework_Confirm")
-                    {
-                        HttpContext.Session.SetString("isLogin", "true");
-                        return RedirectToAction("Confirm", "DateWork");
-                    }
-
-                    if (HttpContext.Session.GetString("resultPage") == "datework_Index")
-                    {
-                        HttpContext.Session.SetString("isLogin", "true");
-                        return RedirectToAction("Index", "DateWork");
-                    }
+                    return Redirect(HttpContext.Session.GetString("resultPage"));
                 }
             }
 

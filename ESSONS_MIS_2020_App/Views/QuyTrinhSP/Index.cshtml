@@ -1,4 +1,4 @@
-﻿@model List<ESSONS_MIS_2020_App.Models.ChildQuyTrinh>
+﻿@model ESSONS_MIS_2020_App.Models.ChildQuyTrinh
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,8 +11,23 @@
                 <div class="card-header">
                     <h3 class="card-title">
                         <i class="fa fa-info"></i>
-                        Quy trình phát triển sản phẩm
+                        Quy trình sản xuất phát triển sản phẩm mới
                     </h3>
+                </div>
+                <div class="card-body">
+                    <form id="formData" method="post" asp-action="Create">
+                        <div class="form-group row">
+                            <div class="col-2">
+                                <input asp-for="SoChungTu" type="text" maxlength="7" class="form-control" placeholder="Số chứng từ" value="">
+                            </div>
+                            <div class="col-2">
+                                <input asp-for="CodeSP" type="text" maxlength="10" class="form-control" placeholder="Code SP" value="">
+                            </div>
+                            <button type="submit" class="btn btn-primary float-right">
+                                Tạo mới
+                            </button>
+                        </div>
+                    </form>
                 </div>
                 <div class="card-body">
                     <table id="example1" class="table table-bordered table-hover">
@@ -28,19 +43,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
+                            @foreach (var item in ViewBag.quytrinhList)
                             {
                                 <tr>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.SoChungTu)
+                                        @item.SoChungTu
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.NgayDuyet)
+                                        @item.NgayDuyet
                                     </td>
-                                    <td>@Html.DisplayFor(modelItem => item.NgayPhatHanh)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.CodeKH)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.CodeSP)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.MaKhuonTW)</td>
+                                    <td>@item.NgayPhatHanh</td>
+                                    <td>@item.CodeKH</td>
+                                    <td>@item.CodeSP</td>
+                                    <td>@item.MaKhuonTW</td>
                                     <td>
                                         @Html.ActionLink("Chi tiết", "Detail", "QuyTrinhSP", new { codeSP = item.CodeSP }, new { @class = "btn btn-primary btn-sm", @target = "_blank" })
                                     </td>
@@ -55,8 +70,31 @@
 </div>
 @section scripts{
     <script type="text/javascript">
-        $(document).ready(function () {
-            $(".se-pre-con").fadeOut('slow');
+         $(document).ready(function () {
+             $("#formData").submit(function (e) {
+                 var sochungtu = $('#SoChungTu');
+                 var codesp = $('#CodeSP');
+                 if (codesp.val() == '' || sochungtu.val() == '') {
+                     let dia = bs4pop.dialog({
+
+                         title: 'Thông báo',
+                         content: 'Kiểm tra lại số chứng từ hoặc code SP',
+
+                         closeBtn: true,
+                         backdrop: 'static',
+                         btns: [
+                             { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                         ],
+                         onDragStart: function () {
+                             console.log('onDragStart');
+                         },
+                         onDrag: function () {
+                             console.log('onDrag');
+                         }
+                     });
+                     e.preventDefault();
+                 }               
+            });
         });
 
         $.fn.dataTable.ext.errMode = 'throw';

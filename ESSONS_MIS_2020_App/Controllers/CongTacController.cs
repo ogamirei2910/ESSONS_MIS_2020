@@ -33,9 +33,12 @@ namespace ESSONS_MIS_2020_App.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            HttpContext.Session.SetString("resultPage", "CongTacIndex");
-            if (HttpContext.Session.GetString("isLogin") is null || HttpContext.Session.GetString("isLogin") == "")
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
                 return RedirectToAction("Login", "User");
+            }
 
             getRole();
             HttpClient hc = _api.Initial();
@@ -67,6 +70,12 @@ namespace ESSONS_MIS_2020_App.Controllers
         [HttpPost]
         public IActionResult YeuCauCongTac(CongTacModel um)
         {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
             getRole();
             HttpClient hc = _api.Initial();
             var test = um.empid.Split(',');
@@ -118,9 +127,12 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public async Task<IActionResult> XacNhanCongTac()
         {
-            HttpContext.Session.SetString("resultPage", "XacNhanCongTac");
-            if (HttpContext.Session.GetString("isLogin") is null || HttpContext.Session.GetString("isLogin") == "")
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
                 return RedirectToAction("Login", "User");
+            }
 
             getRole();
             HttpClient hc = _api.Initial();
@@ -216,6 +228,12 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public async Task<IActionResult> Detail(string congtacID, int page)
         {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
             getRole();
             HttpClient hc = _api.Initial();
             ViewBag.notice = HttpContext.Session.GetString("notice");
@@ -239,6 +257,12 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public IActionResult Edit(CongTacModel model)
         {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
             getRole();
             HttpClient hc = _api.Initial();
             var test = model.empid.Split(',');

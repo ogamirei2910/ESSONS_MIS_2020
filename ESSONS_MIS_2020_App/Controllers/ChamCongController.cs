@@ -18,9 +18,6 @@ namespace ESSONS_MIS_2020_App.Controllers
         EssonsApi _api = new EssonsApi();
         public void getRole()
         {
-            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
-                RedirectToAction("User", "Login");
-
             var role = HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList");
             ViewBag.message = role.First().empName.ToString();
             ViewBag.roleID = role.First().roleID.ToString();
@@ -32,7 +29,12 @@ namespace ESSONS_MIS_2020_App.Controllers
         }
         public async Task<IActionResult> Index(string date, string type)
         {
-            //Role
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
             getRole();
             //-----------------------------------
             List<ChamCongModel> um = new List<ChamCongModel>();
@@ -75,7 +77,12 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public async Task<IActionResult> DateOffException()
         {
-            //Role
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
             getRole();
             //-----------------------------------
             ViewBag.notice = HttpContext.Session.GetString("notice");
@@ -96,6 +103,12 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public async Task<IActionResult> BuPhep(string empid, string workdate)
         {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
             getRole();
             ViewBag.Error = "";
             DateOffExceptionModel um = new DateOffExceptionModel();

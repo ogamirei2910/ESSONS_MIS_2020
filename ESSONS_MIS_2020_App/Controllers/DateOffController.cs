@@ -21,9 +21,6 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public void getRole()
         {
-            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
-                RedirectToAction("User", "Login");
-
             var role = HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList");
             ViewBag.message = role.First().empName.ToString();
             ViewBag.empid = role.First().empID.ToString();
@@ -36,6 +33,12 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public IActionResult dateoff_Request()
         {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
             getRole();
             return View();
         }
@@ -172,9 +175,12 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public async Task<IActionResult> dateoff_Confirm()
         {
-            HttpContext.Session.SetString("resultPage", "dateoff_Confirm");
-            if (HttpContext.Session.GetString("isLogin") is null || HttpContext.Session.GetString("isLogin") == "")
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
                 return RedirectToAction("Login", "User");
+            }
 
             getRole();
             List<DateOffModel> um = new List<DateOffModel>();
@@ -306,6 +312,12 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public async Task<IActionResult> dateoff_Detail()
         {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
             getRole();
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");
@@ -323,6 +335,12 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public async Task<IActionResult> dateoff_yearoff()
         {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
             getRole();
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");
@@ -340,6 +358,12 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public async Task<IActionResult> dateoff_Detail_Emp()
         {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
             getRole();
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");

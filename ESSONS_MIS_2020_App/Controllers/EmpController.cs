@@ -20,9 +20,6 @@ namespace ESSONS_MIS_2020_App.Controllers
         EssonsApi _api = new EssonsApi();
         public void getRole()
         {
-            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
-                RedirectToAction("User", "Login");
-
             var role = HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList");
             ViewBag.message = role.First().empName.ToString();
             ViewBag.roleID = role.First().roleID.ToString();
@@ -37,6 +34,13 @@ namespace ESSONS_MIS_2020_App.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
+
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");
 
@@ -73,6 +77,13 @@ namespace ESSONS_MIS_2020_App.Controllers
         [HttpGet]
         public async Task<IActionResult> emp_Detail(string empID)
         {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
+
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");
 
@@ -90,6 +101,13 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public async Task<IActionResult> emp_Create()
         {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
+
             List<DepartmentModel> em = new List<DepartmentModel>();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.GetAsync("api/emp/GetDepartment");
@@ -305,6 +323,13 @@ namespace ESSONS_MIS_2020_App.Controllers
         [HttpGet]
         public async Task<IActionResult> emp_Update(string empID)
         {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
+
             EmpModel um = new EmpModel();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.GetAsync($"api/emp/GetEmpID/{empID}");
@@ -478,6 +503,13 @@ namespace ESSONS_MIS_2020_App.Controllers
         [HttpGet]
         public async Task<IActionResult> emp_UnBlock()
         {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
+
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");
 

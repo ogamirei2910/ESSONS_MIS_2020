@@ -31,9 +31,6 @@ namespace ESSONS_MIS_2020_App.Controllers
         EssonsApi _api = new EssonsApi();
         public void getRole()
         {
-            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
-                RedirectToAction("User", "Login");
-
             var role = HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList");
             ViewBag.message = role.First().empName.ToString();
             ViewBag.roleID = role.First().roleID.ToString();
@@ -45,9 +42,12 @@ namespace ESSONS_MIS_2020_App.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            HttpContext.Session.SetString("resultPage", "datework_Index");
-            if (HttpContext.Session.GetString("isLogin") is null || HttpContext.Session.GetString("isLogin") == "")
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
                 return RedirectToAction("Login", "User");
+            }
 
             getRole();
             ViewBag.notice = HttpContext.Session.GetString("notice");
@@ -67,6 +67,12 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public async Task<IActionResult> Detail(string requestID, int isOT, string shiftName, int page)
         {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
             getRole();
             HttpContext.Session.SetString("requestID", "");
             List<EmpDateWorkModel> um = new List<EmpDateWorkModel>();
@@ -84,9 +90,12 @@ namespace ESSONS_MIS_2020_App.Controllers
 
         public async Task<IActionResult> Confirm()
         {
-            HttpContext.Session.SetString("resultPage", "datework_Confirm");
-            if (HttpContext.Session.GetString("isLogin") is null || HttpContext.Session.GetString("isLogin") == "")
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
                 return RedirectToAction("Login", "User");
+            }
 
             getRole();
             HttpContext.Session.SetString("requestID", "");
@@ -274,6 +283,12 @@ namespace ESSONS_MIS_2020_App.Controllers
         [HttpGet]
         public async Task<IActionResult> RequestOT()
         {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
             getRole();
             ViewBag.Error = "";
             EmpDateWorkModel um = new EmpDateWorkModel();
