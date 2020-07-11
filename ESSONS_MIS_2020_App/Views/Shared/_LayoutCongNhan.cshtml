@@ -24,8 +24,32 @@
     <link rel="stylesheet" href="~/Assets/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="~/Assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="~/Assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <style>
+        .no-js #loader {
+            display: none;
+        }
+
+        .js #loader {
+            display: block;
+            position: absolute;
+            left: 100px;
+            top: 0;
+        }
+
+        .se-pre-con {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: url('/images/LogoEssons.png') center no-repeat #fff;
+        }
+    </style>
 </head>
 <body class="hold-transition sidebar-mini">
+    <div class="se-pre-con">
+    </div>
     <div class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -66,7 +90,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-                        <li class="nav-item">
+                        <li class="nav-item" onclick="test()">
                             <a href="/CongNhan/dateoff_Detail_Emp" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
@@ -74,7 +98,7 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" onclick="test()">
                             <a href="/CongNhan/dateoff_Request" class="nav-link">
                                 <i class="nav-icon fa fa-calendar"></i>
                                 <p>
@@ -92,7 +116,7 @@
                                     {
                                         @if (folderChild.folderChildID == 2 || folderChild.folderChildID == 0)
                                         {
-                                            <li class="nav-item">
+                                            <li class="nav-item" onclick="test()">
                                                 <a href="/CongNhan/dateoff_Confirm" class="nav-link">
                                                     <i class="nav-icon fa fa-share"></i>
                                                     <p>Duyệt yêu cầu</p>
@@ -178,6 +202,14 @@
         if (performance.navigation.type == 2) {
             location.reload(true);
         }
+
+        $(document).ready(function () {
+            $(".se-pre-con").fadeOut(1000, 'swing');
+        });
+
+        function test() {
+            $(".se-pre-con").fadeIn();
+        };
     </script>
 
     @RenderSection("Scripts", required: false)

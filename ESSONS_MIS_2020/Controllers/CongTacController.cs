@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using Newtonsoft.Json;
+using System.Globalization;
 
 namespace ESSONS_MIS_2020.Controllers
 {
@@ -51,6 +52,18 @@ namespace ESSONS_MIS_2020.Controllers
                         new SqlParameter("@planStart", model.planStart));
                     sc.Parameters.Add(
                         new SqlParameter("@planEnd", model.planEnd));
+                    sc.Parameters.Add(
+                        new SqlParameter("@planKM", model.planKM));
+                    sc.Parameters.Add(
+                       new SqlParameter("@DoiTuong", model.DoiTuong));
+                    sc.Parameters.Add(
+                        new SqlParameter("@CongTacPlace", model.congtacPlace));
+                    sc.Parameters.Add(
+                        new SqlParameter("@timeStart", model.timeStart));
+                    sc.Parameters.Add(
+                        new SqlParameter("@timeEnd", model.timeEnd));
+                    sc.Parameters.Add(
+                        new SqlParameter("@PhuongTien", model.PhuongTien));
                     sc.Parameters.Add(
                        new SqlParameter("@intime", DateTime.Now.ToString("HH:mm:ss")));
                     sc.Parameters.Add(
@@ -100,6 +113,18 @@ namespace ESSONS_MIS_2020.Controllers
                         new SqlParameter("@planStart", model.planStart));
                     sc.Parameters.Add(
                         new SqlParameter("@planEnd", model.planEnd));
+                    sc.Parameters.Add(
+                        new SqlParameter("@planKM", model.planKM));
+                    sc.Parameters.Add(
+                       new SqlParameter("@DoiTuong", model.DoiTuong));
+                    sc.Parameters.Add(
+                        new SqlParameter("@CongTacPlace", model.congtacPlace));
+                    sc.Parameters.Add(
+                        new SqlParameter("@timeStart", model.timeStart));
+                    sc.Parameters.Add(
+                        new SqlParameter("@timeEnd", model.timeEnd));
+                    sc.Parameters.Add(
+                        new SqlParameter("@PhuongTien", model.PhuongTien));
                     sc.Parameters.Add(
                        new SqlParameter("@intime", DateTime.Now.ToString("HH:mm:ss")));
                     sc.Parameters.Add(
@@ -259,14 +284,23 @@ namespace ESSONS_MIS_2020.Controllers
                         em.planEstimatedBudget = decimal.Parse(sdr["planEstimatedBudget"].ToString());
                         em.planSpentBudget = decimal.Parse(sdr["planSpentBudget"].ToString());
                         em.planKM = int.Parse(sdr["planKM"].ToString());
-                        em.planStart = sdr["planStart"].ToString();
-                        em.planEnd = sdr["planEnd"].ToString();
+                        DateTime d = DateTime.ParseExact(sdr["planStart"].ToString(), "yyyy-mm-dd", CultureInfo.InvariantCulture);
+                        em.planStart = d.ToString("dd-mm-yyyy");
+                        d = DateTime.ParseExact(sdr["planEnd"].ToString(), "yyyy-mm-dd", CultureInfo.InvariantCulture);
+                        em.planEnd = d.ToString("dd-mm-yyyy");
+                        em.DoiTuong = sdr["DoiTuong"].ToString();
+                        em.congtacPlace = sdr["CongTacPlace"].ToString();
+                        em.timeStart = sdr["timeStart"].ToString();
+                        em.timeEnd = sdr["timeEnd"].ToString();
+                        em.PhuongTien = sdr["PhuongTien"].ToString();
                         em.status = int.Parse(sdr["status"].ToString());
                         em.username = sdr["username"].ToString();
+                        em.empid = em.empid + sdr["empid"].ToString() + ',';
                         ChildCongTac cm = new ChildCongTac();
                         cm.empid = sdr["empid"].ToString();
                         lcm.Add(cm);
                     }
+                    em.empid = em.empid.Substring(0, em.empid.Length - 1);
                     em.empmodel = lcm;
                 }
                 return em;

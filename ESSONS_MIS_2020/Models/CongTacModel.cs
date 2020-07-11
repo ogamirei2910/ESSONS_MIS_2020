@@ -17,6 +17,11 @@ namespace ESSONS_MIS_2020.Models
         public decimal planSpentBudget { get; set; }
         public string planStart { get; set; }
         public string planEnd { get; set; }
+        public string DoiTuong { get; set; }
+        public string congtacPlace { get; set; }
+        public string timeStart { get; set; }
+        public string timeEnd { get; set; }
+        public string PhuongTien { get; set; }
         public int planKM { get; set; }
         public int status { get; set; }
         public string indat { get; set; }

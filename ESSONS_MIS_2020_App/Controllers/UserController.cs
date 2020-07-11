@@ -103,7 +103,6 @@ namespace ESSONS_MIS_2020_App.Controllers
                 ViewBag.Message = "Kiểm tra lại tài khoản hoặc mật khẩu";
                 return View();
             }
-
             HttpClient hc = _api.Initial();
             EmpModel em = new EmpModel();
             hc = _api.Initial();
@@ -111,7 +110,6 @@ namespace ESSONS_MIS_2020_App.Controllers
             em.empEmail = mail;
             var res = hc.PostAsJsonAsync<EmpModel>($"api/emp/UpdateMail/", em);
             res.Wait();
-
 
             List<UserRoleModel> urm = new List<UserRoleModel>();
             hc = _api.Initial();
@@ -132,11 +130,13 @@ namespace ESSONS_MIS_2020_App.Controllers
                 }
                 else
                 {
-                    return Redirect(HttpContext.Session.GetString("resultPage"));
+                    string url = HttpContext.Session.GetString("resultPage");
+                    HttpContext.Session.SetString("resultPage", "");
+                    return Redirect(url);
                 }
             }
 
-            ViewBag.Message = "Tài khoản chưa đăng kí trên hệ thống. Liên hệ IT";
+            ViewBag.Message = "Lỗi đăng nhập. Liên hệ IT";
             return View();
         }
 
@@ -210,6 +210,7 @@ namespace ESSONS_MIS_2020_App.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.SetString("isLogin", "");
+            HttpContext.Session.SetObjectAsJson("folderList", null);
             return RedirectToAction("Index", "MainPage");
         }
     }

@@ -23,7 +23,11 @@ namespace ESSONS_MIS_2020_App.Models
         public string intime { get; set; }
         public string username { get; set; }
         public string empid { get; set; }
-
+        public string DoiTuong { get; set; }
+        public string congtacPlace { get; set; }
+        public string timeStart { get; set; }
+        public string timeEnd { get; set; }
+        public string PhuongTien { get; set; }
         public List<ChildCongTac> empmodel { get; set; }
     }
 }

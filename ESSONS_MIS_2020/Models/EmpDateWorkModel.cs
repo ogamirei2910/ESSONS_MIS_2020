@@ -15,7 +15,6 @@ namespace ESSONS_MIS_2020.Models
         public string empName { get; set; }
         public int isOT { get; set; }
         public string shiftName { get; set; }
-
         public string depName { get; set; }
         public string status { get; set; }
         public string indat { get; set; }

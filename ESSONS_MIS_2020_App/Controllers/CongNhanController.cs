@@ -72,6 +72,8 @@ namespace ESSONS_MIS_2020_App.Controllers
         public async Task<IActionResult> dateoff_Confirm()
         {
             getRole();
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
             List<DateOffModel> um = new List<DateOffModel>();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.GetAsync($"api/dateoff/GetEmpConfirm/{ViewBag.EmpID}");
@@ -87,17 +89,7 @@ namespace ESSONS_MIS_2020_App.Controllers
         public IActionResult dateoff_Request(DateOffModel um)
         {
             HttpClient hc = _api.Initial();
-            DateTime dt;
-            DateTime.TryParseExact(um.dateoffStart,
-                            "dd-MM-yyyy",
-                            CultureInfo.InvariantCulture,
-                            DateTimeStyles.None, out dt);
-
-            if (dt.Date < DateTime.Now.AddDays(2).Date)
-            {
-                ViewBag.Error = "Đăng kí phép trước 3 ngày";
-                return PartialView("DisplayError");
-            }
+          
 
             if (um.dateoffType == "0" || um.dateoffType == null)
             {
@@ -154,7 +146,53 @@ namespace ESSONS_MIS_2020_App.Controllers
 
                 }
             }
+            DateTime dt;
+            DateTime.TryParseExact(um.dateoffStart,
+                            "dd-MM-yyyy",
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.None, out dt);
 
+            if (dt.Date < DateTime.Now.Date)
+            {
+                ViewBag.Error = "Không thể đăng kí nghỉ phép ngày làm việc đã kết thúc";
+                return PartialView("DisplayError");
+            }
+
+            if (number <= 4)
+            {
+                if (dt.Date < DateTime.Now.Date)
+                {
+                    ViewBag.Error = "Không thể đăng kí nghỉ phép ngày làm việc đã kết thúc";
+                    return PartialView("DisplayError");
+                }
+            }
+
+            if (number >= 8 && number <= 16)
+            {
+                if (dt.Date <= DateTime.Now.Date)
+                {
+                    ViewBag.Error = "Đăng kí phép trước 1 ngày với trường hợp nghỉ 1-2 ngày";
+                    return PartialView("DisplayError");
+                }
+            }
+
+            if (number > 16 && number <= 24)
+            {
+                if (dt.Date <= DateTime.Now.AddDays(13).Date && dt.Date.AddDays(1).DayOfWeek != DayOfWeek.Sunday)
+                {
+                    ViewBag.Error = "Đăng kí phép trước 2 tuần với trường hợp nghỉ 3 ngày";
+                    return PartialView("DisplayError");
+                }
+            }
+
+            if (number >= 32)
+            {
+                if (dt.Date <= DateTime.Now.AddDays(29).Date)
+                {
+                    ViewBag.Error = "Đăng kí phép trước 1 tháng với trường hợp nghỉ 4 ngày";
+                    return PartialView("DisplayError");
+                }
+            }
             um.dateoffNumber = number;
 
             um.username = ViewBag.empid;
@@ -186,25 +224,26 @@ namespace ESSONS_MIS_2020_App.Controllers
                 {
                     var results2 = results.Content.ReadAsStringAsync().Result;
                     am = JsonConvert.DeserializeObject<EmpModel>(results2);
-                    //if (am.empEmail != "" && am.empEmail != null)
-                    //{
-                    //    SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
-                    //    client.UseDefaultCredentials = false;
-                    //    client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");
+                    if (am.empEmail != "" && am.empEmail != null)
+                    {
+                        //SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
+                        //client.UseDefaultCredentials = false;
+                        //client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");
 
-                    //    MailMessage mailMessage = new MailMessage();
-                    //    mailMessage.From = new MailAddress("noreply@essons.vn");
-                    //    mailMessage.To.Add(am.empEmail);
-                    //    mailMessage.IsBodyHtml = true;
-                    //    mailMessage.Body = "Nhân viên " + ViewBag.message + "(" + ViewBag.empid + ")" + " xin nghỉ " + dateoffName +
-                    //        "<br /> Từ ngày: " + um.dateoffStart + " Đến ngày: " + um.dateoffEnd + @" <br /> Đang chờ bạn xác nhận http://portal.essons.vn:456/DateOff/dateoff_Confirm";
-                    //    mailMessage.Subject = "Nhân viên xin nghỉ phép";
-                    //    try { client.Send(mailMessage); }
-                    //    catch { }
-                    //}
+                        //MailMessage mailMessage = new MailMessage();
+                        //mailMessage.From = new MailAddress("noreply@essons.vn");
+                        //mailMessage.To.Add(am.empEmail);
+                        //mailMessage.IsBodyHtml = true;
+                        //mailMessage.Body = "Nhân viên " + ViewBag.message + "(" + ViewBag.empid + ")" + " xin nghỉ " + dateoffName +
+                        //    "<br /> Từ ngày: " + um.dateoffStart + " Đến ngày: " + um.dateoffEnd + @" <br /> Đang chờ bạn xác nhận http://portal.essons.vn:456/DateOff/dateoff_Confirm";
+                        //mailMessage.Subject = "Nhân viên xin nghỉ phép";
+                        //try { client.Send(mailMessage); }
+                        //catch { }
+                    }
                 }
                 HttpContext.Session.SetString("notice", "Đăng kí phép thành công");
-                return RedirectToAction("dateoff_Detail_Emp", "CongNhan");
+                ViewBag.Error = "OK";
+                return PartialView("DisplayError");
             }
 
             ViewBag.Error = "Không đủ phép năm để nghỉ phép. Vui lòng kiểm tra lại phép năm.";
@@ -223,7 +262,44 @@ namespace ESSONS_MIS_2020_App.Controllers
             return RedirectToAction("dateoff_Detail_Emp");
         }
 
-       
+        public IActionResult dateoff_Update(string dateoffID)
+        {
+            getRole();
+            DateOffModel em = new DateOffModel();
+            em.status = 1;
+            em.dateoffID = dateoffID;
+            HttpClient hc = _api.Initial();
+            var res = hc.PostAsJsonAsync<DateOffModel>($"api/dateoff/Update", em);
+            res.Wait();
+
+            EmpModel am = new EmpModel();
+            res = hc.GetAsync($"api/emp/GetEmailEmpInManager?dateoffID={dateoffID}");
+            res.Wait();
+            var results = res.Result;
+            if (results.IsSuccessStatusCode)
+            {
+                var results2 = results.Content.ReadAsStringAsync().Result;
+                am = JsonConvert.DeserializeObject<EmpModel>(results2);
+                if (am.empEmail != "" && am.empEmail != null)
+                {
+                    SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");
+
+                    MailMessage mailMessage = new MailMessage();
+                    mailMessage.From = new MailAddress("noreply@essons.vn");
+                    mailMessage.To.Add(am.empEmail);
+                    mailMessage.IsBodyHtml = true;
+                    mailMessage.Body = "Mã phép " + dateoffID + " đã được duyệt" + @" <br /> Kiểm tra thông tin xác nhận http://portal.essons.vn:456/User/Login";
+                    mailMessage.Subject = "Phản hồi nhân viên xin nghỉ phép";
+                    try { client.Send(mailMessage); }
+                    catch { }
+                }
+            }
+            HttpContext.Session.SetString("notice", "Đã duyệt phép thành công");
+
+            return RedirectToAction("dateoff_Confirm");
+        }
         public async Task<IActionResult> dateoff_Detail_Emp()
         {
             getRole();

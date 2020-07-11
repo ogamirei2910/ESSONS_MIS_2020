@@ -1,7 +1,7 @@
 ﻿@model ESSONS_MIS_2020_App.Models.CongTacModel
 @{
     ViewData["Title"] = "Detail";
-    Layout = "~/Views/Shared/_LayoutCongNhan.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="content-wrapper">
@@ -37,27 +37,35 @@
                                 <input asp-for="congtacID" type="text" readonly id="inputName" class="form-control" value="@ViewBag.infoList.congtacID">
                             </div>
                             <div class="form-group">
-                                <label for="inputName">Tên kế hoạch</label>
+                                <label for="inputName">Tên công việc</label>
                                 <input asp-for="planName" type="text" id="inputName" class="form-control" value="@ViewBag.infoList.planName">
                             </div>
                             <div class="form-group">
-                                <label for="inputDescription">Mô tả kế hoạch</label>
-                                <textarea asp-for="planDescription" id="inputDescription" class="form-control" rows=""></textarea>
+                                <label for="inputDescription">Mô tả công việc</label>
+                                <textarea asp-for="planDescription" id="inputDescription" class="form-control"></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="inputStatus">Loại hình công tác</label>
+                                <label for="inputStatus">Vị trí</label>
                                 <select asp-for="planType" class="form-control custom-select">
-                                    @if (ViewBag.infoList.planType == "Trong nước")
-                                    {
-                                        <option selected>Trong nước</option>
-                                        <option>Nước ngoài</option>
-                                    }
-                                    else
-                                    {
-                                        <option>Trong nước</option>
-                                        <option selected>Nước ngoài</option>
-                                    }
+                                    <option disabled="">Vị trí</option>
+                                    <option value="TP. Biên Hòa">TP. Biên Hòa</option>
+                                    <option value="Trong nước">Trong nước</option>
+                                    <option value="Nước ngoài">Nước ngoài</option>
                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputStatus">Đối tượng làm việc</label>
+                                <select asp-for="DoiTuong" class="form-control custom-select">
+                                    <option disabled="">Chọn đối tượng</option>
+                                    <option value="Cơ quan chức năng">Cơ quan chức năng</option>
+                                    <option value="Ngân hàng">Ngân hàng</option>
+                                    <option value="Khách hàng">Khách hàng</option>
+                                    <option value=">Nội bộ">Nội bộ</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputName">Nơi công tác</label>
+                                <input asp-for="congtacPlace" type="text" id="inputName" class="form-control" value="@ViewBag.infoList.congtacPlace" placeholder="Nơi công tác">
                             </div>
                             <div class="form-group">
                                 <label for="inputDescription">Người công tác</label>
@@ -116,9 +124,36 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="bootstrap-timepicker">
+                                <div class="form-group row" id="tpTuGio">
+                                    <label class="col-sm-2 col-form-label">Từ giờ</label>
+                                    <div class="input-group date col-4" id="timepicker" data-target-input="nearest">
+                                        <input asp-for="timeStart" type="text" value="@ViewBag.infoList.timeStart" class="form-control datetimepicker-input" data-target="#timepicker" />
+                                        <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
+                                    <label class="col-sm-2 col-form-label">Đến giờ</label>
+                                    <div class="input-group date col-4" id="timepicker2" data-target-input="nearest">
+                                        <input asp-for="timeEnd" type="text" value="@ViewBag.infoList.timeEnd" class="form-control datetimepicker-input" data-target="#timepicker2" />
+                                        <div class="input-group-append" data-target="#timepicker2" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label>Số km</label>
                                 <input asp-for="planKM" value="@ViewBag.infoList.planKM" type="number" id="inputKM" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Phương tiện di chuyển</label>
+                                <select asp-for="PhuongTien" class="form-control custom-select">
+                                    <option disabled="">Chọn phương tiện</option>
+                                    <option value="Xe máy">Xe máy</option>
+                                    <option value="Xe ô tô/Taxi">Xe ô tô/Taxi</option>
+                                    <option value="Máy bay">Máy bay</option>
+                                </select>
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -131,12 +166,15 @@
                         {
                             <a href="/CongTac/XacNhanCongTac" class="btn btn-secondary">Quay Lại</a>
                         }
-                        @if (ViewBag.page == 1 && ViewBag.infoList.status == 2)
+                        @if (ViewBag.infoList.status == 2)
                         {
-                            <a href="/CongTac/Index" class="btn btn-secondary">Quay Lại</a>
                             <button id="btCreate" class="btn btn-primary float-right">
                                 Cập nhật
                             </button>
+                        }
+                        @if (ViewBag.page == 1)
+                        {
+                            <a href="/CongTac/Index" class="btn btn-secondary">Quay Lại</a>
                         }
                     </div>
                 </div>
@@ -165,6 +203,15 @@
                 var pickedDate = $('input').val();
                 $('#pickedDate').html(pickedDate);
             });
+
+            //Timepicker
+            $('#timepicker').datetimepicker({
+                format: 'HH:mm'
+            })
+
+            $('#timepicker2').datetimepicker({
+                format: 'HH:mm'
+            })
         })
 
         $('#test').on('change', function (e) {
@@ -177,7 +224,14 @@
             return obj.empid;
         });
         $('#test').val(finalArray).trigger('change');
+        $('#testinput').text = finalArray.toString();
+
         document.getElementById("inputDescription").innerHTML = '@ViewBag.infoList.planDescription';
+        $('#planType').text = '@Model.planType';
+        $('#DoiTuong').text = '@Model.DoiTuong';
+        $('#PhuongTien').text = '@Model.PhuongTien';
+
+
     </script>
 }
 

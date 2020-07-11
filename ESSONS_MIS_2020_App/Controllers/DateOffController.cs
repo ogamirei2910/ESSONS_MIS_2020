@@ -49,17 +49,6 @@ namespace ESSONS_MIS_2020_App.Controllers
             
             getRole();
             HttpClient hc = _api.Initial();
-            DateTime dt;
-            DateTime.TryParseExact(um.dateoffStart,
-                            "dd-MM-yyyy",
-                            CultureInfo.InvariantCulture,
-                            DateTimeStyles.None, out dt);
-
-            if (dt.Date < DateTime.Now.AddDays(2).Date)
-            {
-                ViewBag.Error = "Đăng kí phép trước 3 ngày mới có thể tạo đơn mới";
-                return PartialView("DisplayError");
-            }
 
             if (um.dateoffType == "0" || um.dateoffType == null)
             {
@@ -116,6 +105,53 @@ namespace ESSONS_MIS_2020_App.Controllers
                 }
             }
 
+            DateTime dt;
+            DateTime.TryParseExact(um.dateoffStart,
+                            "dd-MM-yyyy",
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.None, out dt);
+
+            if (dt.Date < DateTime.Now.Date)
+            {
+                ViewBag.Error = "Không thể đăng kí nghỉ phép ngày làm việc đã kết thúc";
+                return PartialView("DisplayError");
+            }
+
+            if (number <= 4)
+            {
+                if (dt.Date < DateTime.Now.Date)
+                {
+                    ViewBag.Error = "Không thể đăng kí nghỉ phép ngày làm việc đã kết thúc";
+                    return PartialView("DisplayError");
+                }
+            }
+
+            if (number >= 8 && number <= 16)
+            {
+                if (dt.Date <= DateTime.Now.Date)
+                {
+                    ViewBag.Error = "Đăng kí phép trước 1 ngày với trường hợp nghỉ 1-2 ngày";
+                    return PartialView("DisplayError");
+                }
+            }
+
+            if (number > 16 && number <= 24)
+            {
+                if (dt.Date <= DateTime.Now.AddDays(13).Date && dt.Date.AddDays(1).DayOfWeek != DayOfWeek.Sunday)
+                {
+                    ViewBag.Error = "Đăng kí phép trước 2 tuần với trường hợp nghỉ 3 ngày";
+                    return PartialView("DisplayError");
+                }
+            }
+
+            if (number >= 32)
+            {
+                if (dt.Date <= DateTime.Now.AddDays(29).Date)
+                {
+                    ViewBag.Error = "Đăng kí phép trước 1 tháng với trường hợp nghỉ 4 ngày";
+                    return PartialView("DisplayError");
+                }
+            }
             um.dateoffNumber = number;
 
             um.username = ViewBag.empid;
@@ -181,8 +217,9 @@ namespace ESSONS_MIS_2020_App.Controllers
                 HttpContext.Session.SetString("resultPage", path);
                 return RedirectToAction("Login", "User");
             }
-
             getRole();
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
             List<DateOffModel> um = new List<DateOffModel>();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.GetAsync($"api/dateoff/GetEmpConfirm/{ViewBag.empid}");
@@ -228,6 +265,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                     catch { }
                 }
             }
+            HttpContext.Session.SetString("notice", "Đăng kí phép thành công");
             return RedirectToAction("dateoff_Confirm");
         }
 

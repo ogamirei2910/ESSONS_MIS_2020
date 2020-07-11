@@ -25,7 +25,6 @@
                     <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title">Yêu cầu công tác</h3>
-
                             <div class="card-tools">
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
                                     <i class="fas fa-minus"></i>
@@ -34,22 +33,36 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="inputName">Tên kế hoạch</label>
-                                <input asp-for="planName" type="text" id="inputName" class="form-control">
+                                <label for="inputName">Tên công việc</label>
+                                <input asp-for="planName" type="text" id="inputName" class="form-control" placeholder="Tên công việc">
                             </div>
                             <div class="form-group">
-                                <label for="inputDescription">Mô tả kế hoạch</label>
-                                <textarea asp-for="planDescription" id="inputDescription" class="form-control" rows=""></textarea>
+                                <label for="inputDescription">Mô tả công việc</label>
+                                <textarea asp-for="planDescription" id="inputDescription" class="form-control" placeholder="Mô tả công việc"></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="inputStatus">Loại hình công tác</label>
+                                <label for="inputStatus">Vị trí</label>
                                 <select asp-for="planType" class="form-control custom-select">
-                                    <option disabled="" selected="">Chọn loại hình</option>
+                                    <option disabled="" selected="">Vị trí</option>
+                                    <option>TP. Biên Hòa</option>
                                     <option>Trong nước</option>
                                     <option>Nước ngoài</option>
                                 </select>
                             </div>
-
+                            <div class="form-group">
+                                <label for="inputStatus">Đối tượng làm việc</label>
+                                <select asp-for="DoiTuong" class="form-control custom-select">
+                                    <option disabled="" selected="">Chọn đối tượng</option>
+                                    <option>Cơ quan chức năng</option>
+                                    <option>Ngân hàng</option>
+                                    <option>Khách hàng</option>
+                                    <option>Nội bộ</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputName">Nơi công tác</label>
+                                <input asp-for="congtacPlace" type="text" id="inputName" class="form-control" placeholder="Nơi công tác">
+                            </div>
                             <div class="form-group">
                                 <label for="inputDescription">Người công tác</label>
                                 <select id="test" class="js-example-basic-multiple form-control" multiple="multiple">
@@ -97,9 +110,9 @@
                                         <input asp-for="planStart" type="text" class="form-control" id="reservationDate">
                                         <div class="input-group-append"><span class="input-group-text"></span></div>
                                     </div>
-                                </div>
+                                </div>                              
                             </div>
-                            <div class="form-group row" id="dtDenNgay">
+                            <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">Đến ngày</label>
                                 <div class="col-5">
                                     <div class="datepicker date input-group p-0 shadow-sm">
@@ -108,9 +121,36 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="bootstrap-timepicker">
+                                <div class="form-group row" id="tpTuGio">
+                                    <label class="col-sm-2 col-form-label">Từ giờ</label>
+                                    <div class="input-group date col-4" id="timepicker" data-target-input="nearest">
+                                        <input asp-for="timeStart" type="text" class="form-control datetimepicker-input" data-target="#timepicker" />
+                                        <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
+                                    <label class="col-sm-2 col-form-label">Đến giờ</label>
+                                    <div class="input-group date col-4" id="timepicker2" data-target-input="nearest">
+                                        <input asp-for="timeEnd" type="text" class="form-control datetimepicker-input" data-target="#timepicker2" />
+                                        <div class="input-group-append" data-target="#timepicker2" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label>Số km</label>
                                 <input asp-for="planKM" type="number" id="inputKM" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Phương tiện di chuyển</label>
+                                <select asp-for="PhuongTien" class="form-control custom-select">
+                                    <option disabled="" selected="">Chọn phương tiện</option>
+                                    <option>Xe máy</option>
+                                    <option>Xe ô tô/Taxi</option>
+                                    <option>Máy bay</option>
+                                </select>
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -151,6 +191,15 @@
                 var pickedDate = $('input').val();
                 $('#pickedDate').html(pickedDate);
             });
+
+            //Timepicker
+            $('#timepicker').datetimepicker({
+                format: 'HH:mm'
+            })
+
+            $('#timepicker2').datetimepicker({
+                format: 'HH:mm'
+            })
         })
 
         $('#test').on('change', function (e) {

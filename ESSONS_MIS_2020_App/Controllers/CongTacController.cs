@@ -236,6 +236,8 @@ namespace ESSONS_MIS_2020_App.Controllers
             }
             getRole();
             HttpClient hc = _api.Initial();
+            CongTacModel um = new CongTacModel();
+
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");
             HttpResponseMessage res = await hc.GetAsync("api/emp/Get");
@@ -249,10 +251,11 @@ namespace ESSONS_MIS_2020_App.Controllers
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
-                ViewBag.infoList = JsonConvert.DeserializeObject<CongTacModel>(results);
+                um = JsonConvert.DeserializeObject<CongTacModel>(results);
+                ViewBag.infoList = um;
             }
             ViewBag.page = page;
-            return View();
+            return View(um);
         }
 
         public IActionResult Edit(CongTacModel model)
