@@ -33,6 +33,12 @@ namespace ESSONS_MIS_2020_App.Controllers
             //    lstPrinterList[i] = mo["Name"].ToString();
             //    i++;
             //}
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
 
             var urm = HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList");
             HttpClient hc = _api.Initial();

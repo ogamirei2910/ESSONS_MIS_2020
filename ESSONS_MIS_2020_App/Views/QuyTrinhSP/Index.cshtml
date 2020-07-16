@@ -14,28 +14,45 @@
                         Quy trình sản xuất phát triển sản phẩm mới
                     </h3>
                 </div>
+
+                @if (ViewBag.depName == "KQL" || ViewBag.depName == "ITE")
+                {
+                    <div class="card-body">
+                        <form id="formData" method="post" asp-action="Create">
+                            <div class="form-group row">
+                                <div class="col-2">
+                                    <input asp-for="SoDonKhuon" type="text" maxlength="7" class="form-control" placeholder="Số đơn khuôn" value="">
+                                </div>
+                                <div class="col-2">
+                                    <select asp-for="CodeSP" class="custom-select selectpicker" id="loaiCodeSP">
+                                        <option data-toggle="popover" title="Ghi chú" data-content="Hàng EX" data-placement="left" value="EX" selected>EX</option>
+                                        <option data-toggle="popover" title="Ghi chú" data-content="Hàng hóa" data-placement="left" value="HH">HH</option>
+                                        <option data-toggle="popover" title="Ghi chú" data-content="Hàng nội địa" data-placement="left" value="ND">ND</option>
+                                    </select>
+                                </div>
+                                <div class="col-2">
+                                    <button type="submit" class="btn btn-primary">
+                                        Tạo mới
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                }
                 <div class="card-body">
-                    <form id="formData" method="post" asp-action="Create">
-                        <div class="form-group row">
-                            <div class="col-2">
-                                <input asp-for="SoChungTu" type="text" maxlength="7" class="form-control" placeholder="Số chứng từ" value="">
-                            </div>
-                            <div class="col-2">
-                                <input asp-for="CodeSP" type="text" maxlength="10" class="form-control" placeholder="Code SP" value="">
-                            </div>
-                            <button type="submit" class="btn btn-primary float-right">
-                                Tạo mới
-                            </button>
-                        </div>
-                    </form>
+                    <div class="form-group row">
+                        <label>Excel file &nbsp;&nbsp;</label>
+                        <a href="@Url.Action("Export", "QuyTrinhSP")" class="links">
+                            <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <table id="example1" class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>Số chứng từ</th>
+                                <th>Số đơn khuôn</th>
                                 <th>Ngày duyệt</th>
-                                <th>Ngày phát hành</th>
                                 <th>Code KH</th>
                                 <th>Code SP</th>
                                 <th>Mã khuônTW</th>
@@ -47,17 +64,16 @@
                             {
                                 <tr>
                                     <td>
-                                        @item.SoChungTu
+                                        @item.SoDonKhuon
                                     </td>
                                     <td>
                                         @item.NgayDuyet
                                     </td>
-                                    <td>@item.NgayPhatHanh</td>
                                     <td>@item.CodeKH</td>
                                     <td>@item.CodeSP</td>
                                     <td>@item.MaKhuonTW</td>
                                     <td>
-                                        @Html.ActionLink("Chi tiết", "Detail", "QuyTrinhSP", new { codeSP = item.CodeSP }, new { @class = "btn btn-primary btn-sm", @target = "_blank" })
+                                        @Html.ActionLink("Chi tiết", "Detail", "QuyTrinhSP", new { SoDonKhuon = item.SoDonKhuon, codeSP = item.CodeSP }, new { @class = "btn btn-primary btn-sm", @target = "_blank" })
                                     </td>
                                 </tr>
                             }
@@ -70,30 +86,30 @@
 </div>
 @section scripts{
     <script type="text/javascript">
-         $(document).ready(function () {
-             $("#formData").submit(function (e) {
-                 var sochungtu = $('#SoChungTu');
-                 var codesp = $('#CodeSP');
-                 if (codesp.val() == '' || sochungtu.val() == '') {
-                     let dia = bs4pop.dialog({
+        $(document).ready(function () {
+            $("#formData").submit(function (e) {
+                var sochungtu = $('#SoChungTu');
+                var codesp = $('#CodeSP');
+                if (codesp.val() == '' || sochungtu.val() == '') {
+                    let dia = bs4pop.dialog({
 
-                         title: 'Thông báo',
-                         content: 'Kiểm tra lại số chứng từ hoặc code SP',
+                        title: 'Thông báo',
+                        content: 'Kiểm tra lại số chứng từ hoặc code SP',
 
-                         closeBtn: true,
-                         backdrop: 'static',
-                         btns: [
-                             { label: 'OK', className: 'btn-primary', onClick(cb) { } }
-                         ],
-                         onDragStart: function () {
-                             console.log('onDragStart');
-                         },
-                         onDrag: function () {
-                             console.log('onDrag');
-                         }
-                     });
-                     e.preventDefault();
-                 }               
+                        closeBtn: true,
+                        backdrop: 'static',
+                        btns: [
+                            { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                        ],
+                        onDragStart: function () {
+                            console.log('onDragStart');
+                        },
+                        onDrag: function () {
+                            console.log('onDrag');
+                        }
+                    });
+                    e.preventDefault();
+                }
             });
         });
 
@@ -102,6 +118,21 @@
         $('#example1').dataTable({
             "aaSorting": [],
             // Your other options here...
+        });
+
+        $(function () {
+            $(function () {
+                $('[data-toggle="popover"]').popover();
+            })
+        })
+
+        $('body').on('click', function (e) {
+            $('[data-toggle=popover]').each(function () {
+                // hide any open popovers when the anywhere else in the body is clicked
+                if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                    $(this).popover('hide');
+                }
+            });
         });
     </script>
 }

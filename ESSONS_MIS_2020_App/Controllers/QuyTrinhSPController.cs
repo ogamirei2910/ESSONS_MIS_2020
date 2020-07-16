@@ -25,6 +25,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.message = role.First().empName.ToString();
             ViewBag.roleID = role.First().roleID.ToString();
             ViewBag.empid = role.First().empID.ToString();
+            ViewBag.depName = role.First().depName.ToString();
             if (role.First().empImage != null)
                 ViewBag.empImage = role.First().empImage.ToString();
             else
@@ -48,11 +49,11 @@ namespace ESSONS_MIS_2020_App.Controllers
             HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Insert", um);
             if (res.IsSuccessStatusCode)
             {
-                ViewBag.Error = "OK";
+                ViewBag.Error = "OK";          
             }
             else
                 ViewBag.Error = "Lỗi mã chứng từ và Code SP này đã tồn tại.";
-            return PartialView("DisplayError");
+            return RedirectToAction("Detail", new { um.SoDonKhuon, um.CodeSP });
         }
 
         public async Task<IActionResult> Index()
@@ -76,7 +77,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Detail(string SoChungTu)
+        public async Task<IActionResult> Detail(string SoDonKhuon, string codeSP)
         {
             if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
             {
@@ -88,7 +89,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             getRole();
             QuyTrinhModel um = new QuyTrinhModel();
             HttpClient hc = _api.Initial();
-            HttpResponseMessage res = await hc.GetAsync($"api/QuyTrinhSP/QuyTrinh_Get?SoChungTu={SoChungTu}");
+            HttpResponseMessage res = await hc.GetAsync($"api/QuyTrinhSP/QuyTrinh_Get?SoDonKhuon={SoDonKhuon}&&codeSP={codeSP}");
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
@@ -97,7 +98,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View(um);
         }
 
-        public async Task<IActionResult> ExportQLSX(CancellationToken cancellationToken)
+        public async Task<IActionResult> Export(CancellationToken cancellationToken)
         {
             getRole();
             // query data from database  
@@ -115,15 +116,78 @@ namespace ESSONS_MIS_2020_App.Controllers
             using (var package = new ExcelPackage(stream))
             {
                 var worksheet = package.Workbook.Worksheets.Add("Sheet1");
-                worksheet.Cells["A1"].Value = "Test1";
-                worksheet.Cells["B1"].Value = "Test2";
-                worksheet.Cells["C1"].Value = "Test3";
-                worksheet.Cells["D1"].Value = "Test4";
-                worksheet.Cells["E1"].Value = "Test5";
-                worksheet.Cells["F1"].Value = "Test6";
+                worksheet.Cells["A1"].Value = "BẢNG TỔNG HỢP QUI TRÌNH SẢN XUẤT PHÁT TRIỂN SẢN PHẨM MỚI";
+                worksheet.Cells["A3"].Value = "KINH DOANH";
+                worksheet.Cells["A4"].Value = "Số đơn khuôn";
+                worksheet.Cells["B4"].Value = "Ngày duyệt";
+                worksheet.Cells["C4"].Value = "Ngày phát hành";
+                worksheet.Cells["D4"].Value = "Biên bản";
+                worksheet.Cells["E4"].Value = "Số lỗ khuôn (lỗ)";
+                worksheet.Cells["F4"].Value = "% Co rút theo ĐK (%)";
+                worksheet.Cells["G4"].Value = "KLSP (theo ĐK) (g)";
+                worksheet.Cells["H4"].Value = "Time hoàn tất (LT)";
+                worksheet.Cells["I4"].Value = "Loại khuôn";
 
-                worksheet.View.FreezePanes(1, 7);
-                worksheet.Cells["A1:F1"].AutoFilter = true;
+
+                worksheet.Cells["A1"].Style.Font.Size = 22;
+                worksheet.Cells["A1"].Style.Font.Bold = true;
+                worksheet.Cells["A1"].Style.Font.Name = "Times New Roman";
+                worksheet.Cells["A3:I3"].Merge = true;
+                using (var range = worksheet.Cells["A3:I3"])
+                {
+                    range.Style.Font.Size = 18;
+                    range.Style.Font.Bold = true;
+                    range.Style.Font.Name = "Times New Roman";
+                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(32,55,100));
+                    range.Style.Font.Color.SetColor(Color.White);
+                    var border = range.Style.Border;
+                    border.Top.Style = border.Left.Style = border.Right.Style = border.Bottom.Style =
+                        OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                }
+                using (var range = worksheet.Cells["A4:E4"])
+                {
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 12;
+                    range.Style.Font.Name = "Times New Roman";
+                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(221, 235, 247));
+                    range.Style.Font.Color.SetColor(Color.Black);
+                    var border = range.Style.Border;
+                    border.Top.Style = border.Left.Style = border.Right.Style = border.Bottom.Style =
+                        OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                }
+
+                using (var range = worksheet.Cells["F4:I4"])
+                {
+                    range.Style.WrapText = true;
+                    range.Style.Font.Size = 12;
+                    range.Style.Font.Name = "Times New Roman";
+                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(142, 169, 219));
+                    range.Style.Font.Color.SetColor(Color.Black);
+                    var border = range.Style.Border;
+                    border.Top.Style = border.Left.Style = border.Right.Style = border.Bottom.Style =
+                        OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                }
+
+                worksheet.Cells["A3:I4"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                worksheet.Cells["A3:I4"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+
+                worksheet.Row(4).Height = 78.00;
+                worksheet.Column(1).Width = 16;
+                worksheet.Column(2).Width = 16;
+                worksheet.Column(3).Width = 16;
+                worksheet.Column(4).Width = 16;
+                worksheet.Column(5).Width = 16;
+                worksheet.Column(6).Width = 16;
+                worksheet.Column(7).Width = 16;
+                worksheet.Column(8).Width = 16;
+                worksheet.Column(9).Width = 16;
+
+
+                worksheet.View.FreezePanes(1, 10);
+                worksheet.Cells["A4:I4"].AutoFilter = true;
                 package.Save();
             }
             stream.Position = 0;

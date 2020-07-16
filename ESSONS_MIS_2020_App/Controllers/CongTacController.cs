@@ -27,6 +27,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.empid = role.First().empID.ToString();
             ViewBag.roleID = role.First().roleID.ToString();
             ViewBag.empImage = role.First().empImage.ToString();
+            ViewBag.depName = role.First().depName.ToString();
             var DistinctItems = role.Select(x => x.folderID).Distinct().ToList();
             ViewBag.folder = DistinctItems;
             ViewBag.folderList = role;
@@ -80,6 +81,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             HttpClient hc = _api.Initial();
             var test = um.empid.Split(',');
             um.planNumber = test.Length;
+
             List<ChildCongTac> lem = new List<ChildCongTac>();            
             for (int i = 0; i < test.Length; i++)
             {

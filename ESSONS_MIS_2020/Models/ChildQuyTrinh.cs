@@ -7,7 +7,7 @@ namespace ESSONS_MIS_2020.Models
 {
     public class ChildQuyTrinh
     {
-        public string SoChungTu { get; set; }
+        public string SoDonKhuon { get; set; }
         public string NgayDuyet { get; set; }
         public string NgayPhatHanh { get; set; }
         public string CodeKH { get; set; }

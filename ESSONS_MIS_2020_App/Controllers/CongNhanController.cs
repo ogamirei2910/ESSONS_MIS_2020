@@ -226,19 +226,19 @@ namespace ESSONS_MIS_2020_App.Controllers
                     am = JsonConvert.DeserializeObject<EmpModel>(results2);
                     if (am.empEmail != "" && am.empEmail != null)
                     {
-                        //SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
-                        //client.UseDefaultCredentials = false;
-                        //client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");
+                        SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
+                        client.UseDefaultCredentials = false;
+                        client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");
 
-                        //MailMessage mailMessage = new MailMessage();
-                        //mailMessage.From = new MailAddress("noreply@essons.vn");
-                        //mailMessage.To.Add(am.empEmail);
-                        //mailMessage.IsBodyHtml = true;
-                        //mailMessage.Body = "Nhân viên " + ViewBag.message + "(" + ViewBag.empid + ")" + " xin nghỉ " + dateoffName +
-                        //    "<br /> Từ ngày: " + um.dateoffStart + " Đến ngày: " + um.dateoffEnd + @" <br /> Đang chờ bạn xác nhận http://portal.essons.vn:456/DateOff/dateoff_Confirm";
-                        //mailMessage.Subject = "Nhân viên xin nghỉ phép";
-                        //try { client.Send(mailMessage); }
-                        //catch { }
+                        MailMessage mailMessage = new MailMessage();
+                        mailMessage.From = new MailAddress("noreply@essons.vn");
+                        mailMessage.To.Add(am.empEmail);
+                        mailMessage.IsBodyHtml = true;
+                        mailMessage.Body = "Nhân viên " + ViewBag.message + "(" + ViewBag.empid + ")" + " xin nghỉ " + dateoffName +
+                            "<br /> Từ ngày: " + um.dateoffStart + " Đến ngày: " + um.dateoffEnd + @" <br /> Đang chờ bạn xác nhận http://portal.essons.vn:456/DateOff/dateoff_Confirm";
+                        mailMessage.Subject = "Nhân viên xin nghỉ phép";
+                        try { client.Send(mailMessage); }
+                        catch { }
                     }
                 }
                 HttpContext.Session.SetString("notice", "Đăng kí phép thành công");

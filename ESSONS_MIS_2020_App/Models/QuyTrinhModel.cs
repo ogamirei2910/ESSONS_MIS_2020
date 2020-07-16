@@ -7,10 +7,21 @@ namespace ESSONS_MIS_2020_App.Models
 {
     public class QuyTrinhModel
     {
-        public string SoChungTu { get; set; }
+        public string SoDonKhuon { get; set; }
         public string NgayDuyet { get; set; }
-        public string NgayPhatHanh { get; set; }
-        public string Noi { get; set; }
+        public string PhienBan1 { get; set; }
+        public string NgayPhatHanh1 { get; set; }
+        public string PhienBan2 { get; set; }
+        public string NgayPhatHanh2 { get; set; }
+        public string PhienBan3 { get; set; }
+        public string NgayPhatHanh3 { get; set; }
+        public string PhienBan4 { get; set; }
+        public string NgayPhatHanh4 { get; set; }
+        public int SoLoKhuonKH { get; set; }
+        public string CoRutTheoDonKhuon { get; set; }
+        public string UocTinhKLSP { get; set; }
+        public string ThoiGianHoanTat1k { get; set; }
+        public string LoaiKhuonMau { get; set; }
         public string CodeKH { get; set; }
         public string CodeSP { get; set; }
         public string TenQU { get; set; }
@@ -19,28 +30,106 @@ namespace ESSONS_MIS_2020_App.Models
         public string QuyCachEssons { get; set; }
         public string ChatKeo { get; set; }
         public string Mau { get; set; }
-        public string MaKeo { get; set; }
-        public string SoLoKhuonKH { get; set; }
-        public string CoRutTheoDonKhuon { get; set; }
-        public string UocTinhKLSP { get; set; }
-        public string ThoiGianHoanTat1k { get; set; }
-        public string LoaiKhuonMau { get; set; }
-        public string NgayGiaoMau { get; set; }
+        public string MaKeo1 { get; set; }
+        public string MaKeo2 { get; set; }
+        public string PantoneMau { get; set; }
         public string GhiChuKHSX { get; set; }
+        public string GocNL { get; set; }
+        public int SoPCSMoiBo { get; set; }
+        public string PhaKeo { get; set; }
+        public string NgayGiaoMau { get; set; }
+        public string NgayKHApprovedMau { get; set; }
         public string NgayPheDuyetMua { get; set; }
+        public string MaKeoKho1 { get; set; }
+        public string HoaChat1MK1 { get; set; }
+        public string KhoiLuongHC1MK1 { get; set; }
+        public string HoaChat2MK1 { get; set; }
+        public string KhoiLuongHC2MK1 { get; set; }
+        public string HoaChat3MK1 { get; set; }
+        public string KhoiLuongHC3MK1 { get; set; }
+        public string HoaChat4MK1 { get; set; }
+        public string KhoiLuongHC4MK1 { get; set; }
+        public string HoaChat5MK1 { get; set; }
+        public string KhoiLuongHC5MK1 { get; set; }
+        public string HoaChat6MK1 { get; set; }
+        public string KhoiLuongHC6MK1 { get; set; }
+        public string HoaChat7MK1 { get; set; }
+        public string KhoiLuongHC7MK1 { get; set; }
+        public string HoaChat1MK1KH { get; set; }
+        public string KhoiLuongHC1MK1KH { get; set; }
+        public string HoaChat2MK1KH { get; set; }
+        public string KhoiLuongHC2MK1KH { get; set; }
+        public string HoaChat3MK1KH { get; set; }
+        public string KhoiLuongHC3MK1KH { get; set; }
+        public string HoaChat4MK1KH { get; set; }
+        public string KhoiLuongHC4MK1KH { get; set; }
+        public string HoaChat5MK1KH { get; set; }
+        public string KhoiLuongHC5MK1KH { get; set; }
+        public string HoaChat6MK1KH { get; set; }
+        public string KhoiLuongHC6MK1KH { get; set; }
+        public string HoaChat7MK1KH { get; set; }
+        public string KhoiLuongHC7MK1KH { get; set; }
+        public string MaKeoKho2 { get; set; }
+        public string HoaChat1MK2 { get; set; }
+        public string KhoiLuongHC1MK2 { get; set; }
+        public string HoaChat2MK2 { get; set; }
+        public string KhoiLuongHC2MK2 { get; set; }
+        public string HoaChat3MK2 { get; set; }
+        public string KhoiLuongHC3MK2 { get; set; }
+        public string HoaChat4MK2 { get; set; }
+        public string KhoiLuongHC4MK2 { get; set; }
+        public string HoaChat5MK2 { get; set; }
+        public string KhoiLuongHC5MK2 { get; set; }
+        public string HoaChat6MK2 { get; set; }
+        public string KhoiLuongHC6MK2 { get; set; }
+        public string HoaChat7MK2 { get; set; }
+        public string KhoiLuongHC7MK2 { get; set; }
+        public string HoaChat1MK2KH { get; set; }
+        public string KhoiLuongHC1MK2KH { get; set; }
+        public string HoaChat2MK2KH { get; set; }
+        public string KhoiLuongHC2MK2KH { get; set; }
+        public string HoaChat3MK2KH { get; set; }
+        public string KhoiLuongHC3MK2KH { get; set; }
+        public string HoaChat4MK2KH { get; set; }
+        public string KhoiLuongHC4MK2KH { get; set; }
+        public string HoaChat5MK2KH { get; set; }
+        public string KhoiLuongHC5MK2KH { get; set; }
+        public string HoaChat6MK2KH { get; set; }
+        public string KhoiLuongHC6MK2KH { get; set; }
+        public string HoaChat7MK2KH { get; set; }
+        public string KhoiLuongHC7MK2KH { get; set; }
+        public string NgayDuyetPhoiThep { get; set; }
+        public string NgayMuaPhoiThep { get; set; }
+        public string SoCTMuaPhoi { get; set; }
+        public string NCCPhoiThep { get; set; }
         public string LoaiThepKhuon { get; set; }
         public string KichThuocKhuon { get; set; }
-        public string SoTam { get; set; }
+        public int SoTam { get; set; }
         public string CoRutThucTe { get; set; }
-        public string BLBNHCDK { get; set; }
-        public string BocTach { get; set; }
+        public string LoaiKhuon { get; set; }
+        public string PhuKienCTK { get; set; }
+        public string PPXuLyBTP { get; set; }
         public string NgaySXKhuon { get; set; }
         public string NgayHoanThanhDuKien { get; set; }
         public string NgayHoanThanh { get; set; }
-        public string RacBot { get; set; }
-        public string TronHoaChat { get; set; }
-        public string TongThoiGianTronCan { get; set; }
-        public string CatSoiEpDun { get; set; }
+        public string SuaChiTietLan1 { get; set; }
+        public string NgaySuaChiTietLan1 { get; set; }
+        public string SuaChiTietLan2 { get; set; }
+        public string NgaySuaChiTietLan2 { get; set; }
+        public string SuaChiTietLan3 { get; set; }
+        public string NgaySuaChiTietLan3 { get; set; }
+        public string SuaChiTietLan4 { get; set; }
+        public string NgaySuaChiTietLan4 { get; set; }
+        public string NgayNhanKhuon { get; set; }
+        public string ViTriKhuon { get; set; }
+        public int SoKhuonHienCo { get; set; }
+        public string ViTriPhuKien { get; set; }
+        public string XuLyBeMat { get; set; }
+        public string PPCheBienNL { get; set; }
+        public int ThoiGianTron { get; set; }
+        public int TongThoiGianCan { get; set; }
+        public string ChiTietCaiTien { get; set; }
+        public string PPCat { get; set; }
         public string DoDay { get; set; }
         public string ChieuDaiMin { get; set; }
         public string ChieuDaiMax { get; set; }
@@ -65,71 +154,63 @@ namespace ESSONS_MIS_2020_App.Models
         public string TLSoiMin4 { get; set; }
         public string TLSoiMax4 { get; set; }
         public string SoSoi4 { get; set; }
-        public string DoDay5 { get; set; }
-        public string ChieuDaiMin5 { get; set; }
-        public string ChieuDaiMax5 { get; set; }
-        public string TLSoiMin5 { get; set; }
-        public string TLSoiMax5 { get; set; }
-        public string SoSoi5 { get; set; }
         public string PPDatKeo { get; set; }
+        public string TheTichBom { get; set; }
         public string CachDat { get; set; }
-        public string SoLoKhuon { get; set; }
-        public string SoLoThucLam { get; set; }
-        public string Tren5 { get; set; }
-        public string Duoi5 { get; set; }
-        public string LucEp { get; set; }
-        public string SoLanThoatKhi { get; set; }
+        public int SoLoKhuon { get; set; }
+        public int SoLoThucLam { get; set; }
+        public int Tren5 { get; set; }
+        public int Duoi5 { get; set; }
+        public int LucEp { get; set; }
+        public int SoLanThoatKhi { get; set; }
         public string TongTLSat { get; set; }
         public string KLSPThucTe { get; set; }
         public string ThoiGianLuuHoa { get; set; }
         public string ThoiGianHoanTat { get; set; }
-        public string ChatLuongKhuon { get; set; }
-        public string RacBotSilicon { get; set; }
-        public string PPBocTachKiemTra { get; set; }
-        public string DungCuHoTro { get; set; }
-        public string ViTriKhuon { get; set; }
-        public string VitriBanKeo { get; set; }
-        public string SoTamTrenKhuon { get; set; }
-        public string NgayHoanThanhKhuon { get; set; }
-        public string KichThuocTruocLH { get; set; }
-        public string KichThuocSauLH { get; set; }
-        public string KichThuocLonTieuChuan { get; set; }
-        public string KichThuocNhoTieuChuan { get; set; }
-        public string KichThuocKhongDongNhat { get; set; }
+        public string ChatLuong { get; set; }
+        public string XuLyDinhDH { get; set; }
+        public string XuLyBTPTaiDH { get; set; }
+        public string DCBocTay { get; set; }
+        public string DCXuLyBeMat { get; set; }
+        public string NgayKTMau { get; set; }
+        public string KTXuatMau { get; set; }
+        public string KTTruocLH { get; set; }
+        public string KTSauLH { get; set; }
+        public string PPBocTachBTM { get; set; }
+        public string XuLyBeMatBTM { get; set; }
+        public string ThoiGian { get; set; }
+        public string TocDo { get; set; }
+        public string KL1LanBan { get; set; }
+        public string LoaiCatBi { get; set; }
+        public string NhietDo { get; set; }
+        public string ChatLuongBT { get; set; }
         public string PPLamSach { get; set; }
-        public string RacBotSiliconLH { get; set; }
-        public string LH2NhietDo { get; set; }
-        public string LH2ThoiGian { get; set; }
-        public string PPBocTach { get; set; }
-        public string DungCuBocTach { get; set; }
-        public string RacBotSiliconBT { get; set; }
-        public string MNThoiGian { get; set; }
-        public string MNTocDo { get; set; }
-        public string MNKL1LanBan { get; set; }
-        public string NNhietDo { get; set; }
-        public string NCB { get; set; }
-        public string BocTachDTK { get; set; }
-        public string BanNito { get; set; }
-        public string MaiHang { get; set; }
+        public string XuLyBeMatLH { get; set; }
+        public string NhietDoLH { get; set; }
+        public string ThoiGianLH { get; set; }
+        public string KL1LanMai { get; set; }
         public string ThoiGianMai { get; set; }
         public string LoaiDaMai { get; set; }
+        public string TronBot { get; set; }
+        public string ChamSon { get; set; }
         public string GanLinhKien { get; set; }
+        public string PhuTeflon { get; set; }
         public string BaviaKH { get; set; }
         public string BaviaCaiDat { get; set; }
-        public string KHYCKM { get; set; }
-        public string RacBotSiliconKM { get; set; }
-        public string KTDungCu { get; set; }
-        public string KiemPham { get; set; }
+        public string YeuCauKiemMay { get; set; }
+        public string XuLyBeMatKM { get; set; }
+        public string NgoaiQuanKM { get; set; }
         public string TyLeNG { get; set; }
-        public string GhiChuThayDoiBT { get; set; }
-        public string RacBotSiliconDG { get; set; }
         public string TrongLuong1SP { get; set; }
         public string TrongLuongLinhKien { get; set; }
-        public string SL1boc { get; set; }
+        public int SL1boc { get; set; }
         public string KichThuocBoc { get; set; }
-        public string SL1hop { get; set; }
+        public int SL1hop { get; set; }
         public string KichThuocThung { get; set; }
-        public string SL1thung { get; set; }
+        public int SL1thung { get; set; }
+        public string PPDongBoc { get; set; }
+        public string PPDongHoi { get; set; }
+        public string GhiChuKhacDG { get; set; }
         public string KichThuoc { get; set; }
         public string NgoaiQuan { get; set; }
         public string DongGoi { get; set; }
