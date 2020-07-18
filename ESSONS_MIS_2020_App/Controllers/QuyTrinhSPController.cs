@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -35,7 +36,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.folderList = role;
         }
 
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(ChildQuyTrinh um)
         {
             if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
             {
@@ -44,7 +45,6 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return RedirectToAction("Login", "User");
             }
             getRole();
-            ChildQuyTrinh um = new ChildQuyTrinh();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Insert", um);
             if (res.IsSuccessStatusCode)
@@ -54,6 +54,200 @@ namespace ESSONS_MIS_2020_App.Controllers
             else
                 ViewBag.Error = "Lỗi mã chứng từ và Code SP này đã tồn tại.";
             return RedirectToAction("Detail", new { um.SoDonKhuon, um.CodeSP });
+        }
+
+        public async Task<IActionResult> Update_KinhDoanh(QuyTrinhModel um)
+        {
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Update_KinhDoanh", um);
+
+            if (res.IsSuccessStatusCode)
+                ViewBag.Error = "OK";
+            else
+                ViewBag.Error = "Lỗi kết nối server.";
+
+            return PartialView("DisplayError");
+        }
+        public async Task<IActionResult> Update_KHSX(QuyTrinhModel um)
+        {
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Update_KHSX", um);
+
+            if (res.IsSuccessStatusCode)
+                ViewBag.Error = "OK";
+            else
+                ViewBag.Error = "Lỗi kết nối server.";
+
+            return PartialView("DisplayError");
+        }
+        public async Task<IActionResult> Update_Kho(QuyTrinhModel um)
+        {
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Update_Kho", um);
+
+            if (res.IsSuccessStatusCode)
+                ViewBag.Error = "OK";
+            else
+                ViewBag.Error = "Lỗi kết nối server.";
+
+            return PartialView("DisplayError");
+        }
+        public async Task<IActionResult> Update_ThuMua(QuyTrinhModel um)
+        {
+            HttpClient hc = _api.Initial();
+
+            HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Update_ThuMua", um);
+
+            if (res.IsSuccessStatusCode)
+                ViewBag.Error = "OK";
+            else
+                ViewBag.Error = "Lỗi kết nối server.";
+
+            return PartialView("DisplayError");
+        }
+        public async Task<IActionResult> Update_CTK(QuyTrinhModel um)
+        {
+            HttpClient hc = _api.Initial();     
+            HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Update_CTK", um);
+
+            if (res.IsSuccessStatusCode)
+                ViewBag.Error = "OK";
+            else
+                ViewBag.Error = "Lỗi kết nối server.";
+
+            return PartialView("DisplayError");
+        }
+        public async Task<IActionResult> Update_BTK(QuyTrinhModel um)
+        {
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Update_BTK", um);
+
+            if (res.IsSuccessStatusCode)
+                ViewBag.Error = "OK";
+            else
+                ViewBag.Error = "Lỗi kết nối server.";
+
+            return PartialView("DisplayError");
+        }
+        public async Task<IActionResult> Update_CBNL(QuyTrinhModel um)
+        {
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Update_CBNL", um);
+
+            if (res.IsSuccessStatusCode)
+                ViewBag.Error = "OK";
+            else
+                ViewBag.Error = "Lỗi kết nối server.";
+
+            return PartialView("DisplayError");
+        }
+        public async Task<IActionResult> Update_DHE(QuyTrinhModel um)
+        {
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Update_DHE", um);
+
+            if (res.IsSuccessStatusCode)
+                ViewBag.Error = "OK";
+            else
+                ViewBag.Error = "Lỗi kết nối server.";
+
+            return PartialView("DisplayError");
+        }
+        public async Task<IActionResult> Update_QCKN(QuyTrinhModel um)
+        {
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Update_QCKN", um);
+
+            if (res.IsSuccessStatusCode)
+                ViewBag.Error = "OK";
+            else
+                ViewBag.Error = "Lỗi kết nối server.";
+
+            return PartialView("DisplayError");
+        }
+        public async Task<IActionResult> Update_BT(QuyTrinhModel um)
+        {
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Update_BT", um);
+
+            if (res.IsSuccessStatusCode)
+                ViewBag.Error = "OK";
+            else
+                ViewBag.Error = "Lỗi kết nối server.";
+
+            return PartialView("DisplayError");
+        }
+        public async Task<IActionResult> Update_LH2(QuyTrinhModel um)
+        {
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Update_LH2", um);
+
+            if (res.IsSuccessStatusCode)
+                ViewBag.Error = "OK";
+            else
+                ViewBag.Error = "Lỗi kết nối server.";
+
+            return PartialView("DisplayError");
+        }
+        public async Task<IActionResult> Update_MH(QuyTrinhModel um)
+        {
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Update_MH", um);
+
+            if (res.IsSuccessStatusCode)
+                ViewBag.Error = "OK";
+            else
+                ViewBag.Error = "Lỗi kết nối server.";
+
+            return PartialView("DisplayError");
+        }
+        public async Task<IActionResult> Update_QTK(QuyTrinhModel um)
+        {
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Update_QTK", um);
+
+            if (res.IsSuccessStatusCode)
+                ViewBag.Error = "OK";
+            else
+                ViewBag.Error = "Lỗi kết nối server.";
+
+            return PartialView("DisplayError");
+        }
+        public async Task<IActionResult> Update_KM(QuyTrinhModel um)
+        {
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Update_KM", um);
+
+            if (res.IsSuccessStatusCode)
+                ViewBag.Error = "OK";
+            else
+                ViewBag.Error = "Lỗi kết nối server.";
+
+            return PartialView("DisplayError");
+        }
+        public async Task<IActionResult> Update_DG(QuyTrinhModel um)
+        {
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Update_DG", um);
+
+            if (res.IsSuccessStatusCode)
+                ViewBag.Error = "OK";
+            else
+                ViewBag.Error = "Lỗi kết nối server.";
+
+            return PartialView("DisplayError");
+        }
+        public async Task<IActionResult> Update_YCCL(QuyTrinhModel um)
+        {
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Update_YCCL", um);
+
+            if (res.IsSuccessStatusCode)
+                ViewBag.Error = "OK";
+            else
+                ViewBag.Error = "Lỗi kết nối server.";
+
+            return PartialView("DisplayError");
         }
 
         public async Task<IActionResult> Index()
@@ -94,6 +288,13 @@ namespace ESSONS_MIS_2020_App.Controllers
             {
                 var results = res.Content.ReadAsStringAsync().Result;
                 um = JsonConvert.DeserializeObject<QuyTrinhModel>(results);
+            }
+
+            res = await hc.GetAsync($"api/QuyTrinhSP/HoaChatSP_GetALL");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                ViewBag.HoaChat = JsonConvert.DeserializeObject<List<HoaChatSPModel>>(results);
             }
             return View(um);
         }

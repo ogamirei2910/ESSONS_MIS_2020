@@ -20,7 +20,7 @@ namespace ESSONS_MIS_2020.Controllers
         {
             _configuration = configuration;
         }
-        public ActionResult QuyTrinh_Insert([FromBody]QuyTrinhModel model)
+        public ActionResult QuyTrinh_Insert([FromBody]ChildQuyTrinh model)
         {
             string connection = _configuration.GetConnectionString("DefaultConnection");
 
@@ -43,8 +43,7 @@ namespace ESSONS_MIS_2020.Controllers
                 }
             }
         }
-
-        public ActionResult QuyTrinh_Update_KHSX([FromBody]QuyTrinhModel model, string typeUpdate)
+        public ActionResult QuyTrinh_Update_KinhDoanh([FromBody]QuyTrinhModel model)
         {
             string connection = _configuration.GetConnectionString("DefaultConnection");
 
@@ -56,6 +55,50 @@ namespace ESSONS_MIS_2020.Controllers
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
                     sc.Parameters.Add(
                         new SqlParameter("@NgayDuyet", model.NgayDuyet));
+                    sc.Parameters.Add(
+                        new SqlParameter("@PhienBan1", model.PhienBan1));
+                    sc.Parameters.Add(
+                        new SqlParameter("@NgayPhatHanh1", model.NgayPhatHanh1));
+                    sc.Parameters.Add(
+                       new SqlParameter("@PhienBan2", model.PhienBan2));
+                    sc.Parameters.Add(
+                        new SqlParameter("@NgayPhatHanh2", model.NgayPhatHanh2));
+                    sc.Parameters.Add(
+                       new SqlParameter("@PhienBan3", model.PhienBan3));
+                    sc.Parameters.Add(
+                        new SqlParameter("@NgayPhatHanh3", model.NgayPhatHanh3));
+                    sc.Parameters.Add(
+                       new SqlParameter("@SoLoKhuonKH", model.SoLoKhuonKH));
+                    sc.Parameters.Add(
+                       new SqlParameter("@CoRutTheoDonKhuon", model.CoRutTheoDonKhuon));
+                    sc.Parameters.Add(
+                        new SqlParameter("@UocTinhKLSP", model.UocTinhKLSP));
+                    sc.Parameters.Add(
+                        new SqlParameter("@ThoiGianHoanTat", model.ThoiGianHoanTat));
+                    sc.Parameters.Add(
+                       new SqlParameter("@LoaiKhuon", model.LoaiKhuon));
+
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Update"));
+                    sc.Parameters.Add(
+                        new SqlParameter("@typeUpdate", "KinhDoanh"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.RecordsAffected > 0)
+                        return Ok();
+                    else return NotFound();
+                }
+            }
+        }
+        public ActionResult QuyTrinh_Update_KHSX([FromBody]QuyTrinhModel model)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_quytrinhphattrien", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
                     sc.Parameters.Add(
                        new SqlParameter("@CodeKH", model.CodeKH));
                     sc.Parameters.Add(
@@ -71,23 +114,668 @@ namespace ESSONS_MIS_2020.Controllers
                     sc.Parameters.Add(
                         new SqlParameter("@Mau", model.Mau));
                     sc.Parameters.Add(
-                        new SqlParameter("@SoLoKhuonKH", model.SoLoKhuonKH));
+                        new SqlParameter("@MaKeo1", model.MaKeo1));
                     sc.Parameters.Add(
-                       new SqlParameter("@CoRutTheoDonKhuon", model.CoRutTheoDonKhuon));
+                        new SqlParameter("@MaKeo2", model.MaKeo2));
                     sc.Parameters.Add(
-                        new SqlParameter("@UocTinhKLSP", model.UocTinhKLSP));
+                       new SqlParameter("@PantoneMau", model.PantoneMau));
                     sc.Parameters.Add(
-                        new SqlParameter("@ThoiGianHoanTat1k", model.ThoiGianHoanTat1k));
+                       new SqlParameter("@GhiChuKHSX", model.GhiChuKHSX));
                     sc.Parameters.Add(
-                       new SqlParameter("@LoaiKhuonMau", model.LoaiKhuonMau));
+                       new SqlParameter("@GocNL", model.GocNL));
                     sc.Parameters.Add(
-                       new SqlParameter("@NgayGiaoMau", model.NgayGiaoMau));
+                       new SqlParameter("@SoPCSMoiBo", model.SoPCSMoiBo));
+                    sc.Parameters.Add(
+                       new SqlParameter("@PhaKeo", model.PhaKeo));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Update"));
+                    sc.Parameters.Add(
+                        new SqlParameter("@typeUpdate", "KHSX"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.RecordsAffected > 0)
+                        return Ok();
+                    else return NotFound();
+                }
+            }
+        }
+        public ActionResult QuyTrinh_Update_Kho([FromBody]QuyTrinhModel model)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_quytrinhphattrien", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@HoaChat1MK1", model.HoaChat1MK1));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC1MK1", model.KhoiLuongHC1MK1));
+                    sc.Parameters.Add(
+                         new SqlParameter("@HoaChat2MK1", model.HoaChat2MK1));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC2MK1", model.KhoiLuongHC2MK1));
+                    sc.Parameters.Add(
+                        new SqlParameter("@HoaChat3MK1", model.HoaChat3MK1));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC3MK1", model.KhoiLuongHC3MK1));
+                    sc.Parameters.Add(
+                         new SqlParameter("@HoaChat4MK1", model.HoaChat4MK1));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC4MK1", model.KhoiLuongHC4MK1));
+                    sc.Parameters.Add(
+                         new SqlParameter("@HoaChat5MK1", model.HoaChat5MK1));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC5MK1", model.KhoiLuongHC5MK1));
+                    sc.Parameters.Add(
+                        new SqlParameter("@HoaChat6MK1", model.HoaChat6MK1));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC6MK1", model.KhoiLuongHC6MK1));
+                    sc.Parameters.Add(
+                         new SqlParameter("@HoaChat7MK1", model.HoaChat7MK1));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC7MK1", model.KhoiLuongHC7MK1));
+                    sc.Parameters.Add(
+                        new SqlParameter("@HoaChat1MK1KH", model.HoaChat1MK1KH));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC1MK1KH", model.KhoiLuongHC1MK1KH));
+                    sc.Parameters.Add(
+                         new SqlParameter("@HoaChat2MK1KH", model.HoaChat2MK1KH));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC2MK1KH", model.KhoiLuongHC2MK1KH));
+                    sc.Parameters.Add(
+                        new SqlParameter("@HoaChat3MK1KH", model.HoaChat3MK1KH));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC3MK1KH", model.KhoiLuongHC3MK1KH));
+                    sc.Parameters.Add(
+                         new SqlParameter("@HoaChat4MK1KH", model.HoaChat4MK1KH));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC4MK1KH", model.KhoiLuongHC4MK1KH));
+                    sc.Parameters.Add(
+                         new SqlParameter("@HoaChat5MK1KH", model.HoaChat5MK1KH));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC5MK1KH", model.KhoiLuongHC5MK1KH));
+                    sc.Parameters.Add(
+                        new SqlParameter("@HoaChat6MK1KH", model.HoaChat6MK1KH));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC6MK1KH", model.KhoiLuongHC6MK1KH));
+                    sc.Parameters.Add(
+                         new SqlParameter("@HoaChat7MK1KH", model.HoaChat7MK1KH));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC7MK1KH", model.KhoiLuongHC7MK1KH));
+                    sc.Parameters.Add(
+                        new SqlParameter("@HoaChat1MK2", model.HoaChat1MK2));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC1MK2", model.KhoiLuongHC1MK2));
+                    sc.Parameters.Add(
+                         new SqlParameter("@HoaChat2MK2", model.HoaChat2MK2));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC2MK2", model.KhoiLuongHC2MK2));
+                    sc.Parameters.Add(
+                        new SqlParameter("@HoaChat3MK2", model.HoaChat3MK2));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC3MK2", model.KhoiLuongHC3MK2));
+                    sc.Parameters.Add(
+                         new SqlParameter("@HoaChat4MK2", model.HoaChat4MK2));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC4MK2", model.KhoiLuongHC4MK2));
+                    sc.Parameters.Add(
+                         new SqlParameter("@HoaChat5MK2", model.HoaChat5MK2));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC5MK2", model.KhoiLuongHC5MK2));
+                    sc.Parameters.Add(
+                        new SqlParameter("@HoaChat6MK2", model.HoaChat6MK2));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC6MK2", model.KhoiLuongHC6MK2));
+                    sc.Parameters.Add(
+                         new SqlParameter("@HoaChat7MK2", model.HoaChat7MK2));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC7MK2", model.KhoiLuongHC7MK2));
+                    sc.Parameters.Add(
+                        new SqlParameter("@HoaChat1MK2KH", model.HoaChat1MK2KH));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC1MK2KH", model.KhoiLuongHC1MK2KH));
+                    sc.Parameters.Add(
+                         new SqlParameter("@HoaChat2MK2KH", model.HoaChat2MK2KH));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC2MK2KH", model.KhoiLuongHC2MK2KH));
+                    sc.Parameters.Add(
+                        new SqlParameter("@HoaChat3MK2KH", model.HoaChat3MK2KH));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC3MK2KH", model.KhoiLuongHC3MK2KH));
+                    sc.Parameters.Add(
+                         new SqlParameter("@HoaChat4MK2KH", model.HoaChat4MK2KH));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC4MK2KH", model.KhoiLuongHC4MK2KH));
+                    sc.Parameters.Add(
+                         new SqlParameter("@HoaChat5MK2KH", model.HoaChat5MK2KH));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC5MK2KH", model.KhoiLuongHC5MK2KH));
+                    sc.Parameters.Add(
+                        new SqlParameter("@HoaChat6MK2KH", model.HoaChat6MK2KH));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC6MK2KH", model.KhoiLuongHC6MK2KH));
+                    sc.Parameters.Add(
+                         new SqlParameter("@HoaChat7MK2KH", model.HoaChat7MK2KH));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KhoiLuongHC7MK2KH", model.KhoiLuongHC7MK2KH));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Update"));
+                    sc.Parameters.Add(
+                        new SqlParameter("@typeUpdate", "Kho"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.RecordsAffected > 0)
+                        return Ok();
+                    else return NotFound();
+                }
+            }
+        }
+        public ActionResult QuyTrinh_Update_ThuMua([FromBody]QuyTrinhModel model)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_quytrinhphattrien", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@NgayDuyetPhoiThep", model.NgayDuyetPhoiThep));
+                    sc.Parameters.Add(
+                       new SqlParameter("@NgayMuaPhoiThep", model.NgayMuaPhoiThep));
+                    sc.Parameters.Add(
+                        new SqlParameter("@TenQU", model.TenQU));
+                    sc.Parameters.Add(
+                        new SqlParameter("@SoCTMuaPhoi", model.SoCTMuaPhoi));
+                    sc.Parameters.Add(
+                        new SqlParameter("@NCCPhoiThep", model.NCCPhoiThep));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Update"));
+                    sc.Parameters.Add(
+                        new SqlParameter("@typeUpdate", "ThuMua"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.RecordsAffected > 0)
+                        return Ok();
+                    else return NotFound();
+                }
+            }
+        }
+        public ActionResult QuyTrinh_Update_CTK([FromBody]QuyTrinhModel model)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_quytrinhphattrien", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@LoaiThepKhuon", model.LoaiThepKhuon));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KichThuocKhuon", model.KichThuocKhuon));
+                    sc.Parameters.Add(
+                        new SqlParameter("@SoTam", model.SoTam));
+                    sc.Parameters.Add(
+                        new SqlParameter("@CoRutThucTe", model.CoRutThucTe));
+                    sc.Parameters.Add(
+                        new SqlParameter("@LoaiKhuon", model.LoaiKhuon));
+                    sc.Parameters.Add(
+                       new SqlParameter("@PhuKienCTK", model.PhuKienCTK));
+                    sc.Parameters.Add(
+                        new SqlParameter("@PPXuLyBTP", model.PPXuLyBTP));
+                    sc.Parameters.Add(
+                        new SqlParameter("@NgaySXKhuon", model.NgaySXKhuon));
+                    sc.Parameters.Add(
+                        new SqlParameter("@NgayHoanThanhDuKien", model.NgayHoanThanhDuKien));
+                    sc.Parameters.Add(
+                       new SqlParameter("@NgayHoanThanh", model.NgayHoanThanh));
+                    sc.Parameters.Add(
+                        new SqlParameter("@SuaChiTietLan1", model.SuaChiTietLan1));
+                    sc.Parameters.Add(
+                        new SqlParameter("@SuaChiTietLan2", model.SuaChiTietLan2));
+                    sc.Parameters.Add(
+                       new SqlParameter("@SuaChiTietLan3", model.SuaChiTietLan3));
+                    sc.Parameters.Add(
+                       new SqlParameter("@SuaChiTietLan4", model.SuaChiTietLan4));
+                    sc.Parameters.Add(
+                        new SqlParameter("@NgaySuaChiTietLan1", model.NgaySuaChiTietLan1));
+                    sc.Parameters.Add(
+                        new SqlParameter("@NgaySuaChiTietLan2", model.NgaySuaChiTietLan2));
+                    sc.Parameters.Add(
+                       new SqlParameter("@NgaySuaChiTietLan3", model.NgaySuaChiTietLan3));
+                    sc.Parameters.Add(
+                       new SqlParameter("@NgaySuaChiTietLan4", model.NgaySuaChiTietLan4));
                     sc.Parameters.Add(
                        new SqlParameter("@GhiChuKHSX", model.GhiChuKHSX));
                     sc.Parameters.Add(
                         new SqlParameter("@type", "Update"));
                     sc.Parameters.Add(
-                        new SqlParameter("@typeUpdate", typeUpdate));
+                        new SqlParameter("@typeUpdate", "CTK"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.RecordsAffected > 0)
+                        return Ok();
+                    else return NotFound();
+                }
+            }
+        }
+        public ActionResult QuyTrinh_Update_BTK([FromBody]QuyTrinhModel model)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_quytrinhphattrien", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@NgayNhanKhuon", model.NgayNhanKhuon));
+                    sc.Parameters.Add(
+                       new SqlParameter("@ViTriKhuon", model.ViTriKhuon));
+                    sc.Parameters.Add(
+                        new SqlParameter("@SoKhuonHienCo", model.SoKhuonHienCo));
+                    sc.Parameters.Add(
+                        new SqlParameter("@ViTriPhuKien", model.ViTriPhuKien));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Update"));
+                    sc.Parameters.Add(
+                        new SqlParameter("@typeUpdate", "BTK"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.RecordsAffected > 0)
+                        return Ok();
+                    else return NotFound();
+                }
+            }
+        }
+        public ActionResult QuyTrinh_Update_CBNL([FromBody]QuyTrinhModel model)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_quytrinhphattrien", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@XuLyBeMat", model.XuLyBeMat));
+                    sc.Parameters.Add(
+                        new SqlParameter("@PPCheBienNL", model.PPCheBienNL));
+                    sc.Parameters.Add(
+                       new SqlParameter("@ThoiGianTron", model.ThoiGianTron));
+                    sc.Parameters.Add(
+                        new SqlParameter("@TongThoiGianCan", model.TongThoiGianCan));
+                    sc.Parameters.Add(
+                        new SqlParameter("@ChiTietCaiTien", model.ChiTietCaiTien));
+                    sc.Parameters.Add(
+                       new SqlParameter("@PPCat", model.PPCat));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Update"));
+                    sc.Parameters.Add(
+                        new SqlParameter("@typeUpdate", "CBNL"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.RecordsAffected > 0)
+                        return Ok();
+                    else return NotFound();
+                }
+            }
+        }
+        public ActionResult QuyTrinh_Update_DHE([FromBody]QuyTrinhModel model)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_quytrinhphattrien", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@DoDay", model.DoDay));
+                    sc.Parameters.Add(
+                       new SqlParameter("@DoDay2", model.DoDay2));
+                    sc.Parameters.Add(
+                        new SqlParameter("@DoDay3", model.DoDay3));
+                    sc.Parameters.Add(
+                        new SqlParameter("@DoDay4", model.DoDay4));
+                    sc.Parameters.Add(
+                        new SqlParameter("@ChieuDaiMin", model.ChieuDaiMin));
+                    sc.Parameters.Add(
+                       new SqlParameter("@ChieuDaiMin2", model.ChieuDaiMin2));
+                    sc.Parameters.Add(
+                        new SqlParameter("@ChieuDaiMin3", model.ChieuDaiMin3));
+                    sc.Parameters.Add(
+                        new SqlParameter("@ChieuDaiMin4", model.ChieuDaiMin4));
+                    sc.Parameters.Add(
+                       new SqlParameter("@ChieuDaiMax", model.ChieuDaiMax));
+                    sc.Parameters.Add(
+                        new SqlParameter("@ChieuDaiMax2", model.ChieuDaiMax2));
+                    sc.Parameters.Add(
+                        new SqlParameter("@ChieuDaiMax3", model.ChieuDaiMax3));
+                    sc.Parameters.Add(
+                       new SqlParameter("@ChieuDaiMax4", model.ChieuDaiMax4));
+                    sc.Parameters.Add(
+                       new SqlParameter("@TLSoiMin", model.TLSoiMin));
+                    sc.Parameters.Add(
+                     new SqlParameter("@TLSoiMin2", model.TLSoiMin2));
+                    sc.Parameters.Add(
+                     new SqlParameter("@TLSoiMin3", model.TLSoiMin3));
+                    sc.Parameters.Add(
+                     new SqlParameter("@TLSoiMin4", model.TLSoiMin4));
+                    sc.Parameters.Add(
+                       new SqlParameter("@TLSoiMax", model.TLSoiMax));
+                    sc.Parameters.Add(
+                       new SqlParameter("@TLSoiMax2", model.TLSoiMax2));
+                    sc.Parameters.Add(
+                       new SqlParameter("@TLSoiMax3", model.TLSoiMax3));
+                    sc.Parameters.Add(
+                       new SqlParameter("@TLSoiMax4", model.TLSoiMax4));
+                    sc.Parameters.Add(
+                      new SqlParameter("@SoSoi", model.SoSoi));
+                    sc.Parameters.Add(
+                      new SqlParameter("@SoSoi2", model.SoSoi2));
+                    sc.Parameters.Add(
+                      new SqlParameter("@SoSoi3", model.SoSoi3));
+                    sc.Parameters.Add(
+                      new SqlParameter("@SoSoi4", model.SoSoi4));
+                    sc.Parameters.Add(
+                      new SqlParameter("@PPDatKeo", model.PPDatKeo));
+                    sc.Parameters.Add(
+                      new SqlParameter("@TheTichBom", model.TheTichBom));
+                    sc.Parameters.Add(
+                      new SqlParameter("@CachDat", model.CachDat));
+                    sc.Parameters.Add(
+                      new SqlParameter("@SoLoKhuon", model.SoLoKhuon));
+                    sc.Parameters.Add(
+                      new SqlParameter("@SoLoThucLam", model.SoLoThucLam));
+                    sc.Parameters.Add(
+                      new SqlParameter("@Tren5", model.Tren5));
+                    sc.Parameters.Add(
+                      new SqlParameter("@Duoi5", model.Duoi5));
+                    sc.Parameters.Add(
+                      new SqlParameter("@LucEp", model.LucEp));
+                    sc.Parameters.Add(
+                      new SqlParameter("@SoLanThoatKhi", model.SoLanThoatKhi));
+                    sc.Parameters.Add(
+                      new SqlParameter("@TrongLuongLinhKien", model.TrongLuongLinhKien));
+                    sc.Parameters.Add(
+                      new SqlParameter("@KLSPThucTe", model.KLSPThucTe));
+                    sc.Parameters.Add(
+                      new SqlParameter("@ThoiGianLuuHoa", model.ThoiGianLuuHoa));
+                    sc.Parameters.Add(
+                      new SqlParameter("@ThoiGianHoanTat1k", model.ThoiGianHoanTat1k));
+                    sc.Parameters.Add(
+                      new SqlParameter("@ChatLuong", model.ChatLuong));
+                    sc.Parameters.Add(
+                      new SqlParameter("@XuLyDinhDH", model.XuLyDinhDH));
+                    sc.Parameters.Add(
+                      new SqlParameter("@XuLyBTPTaiDH", model.XuLyBTPTaiDH));
+                    sc.Parameters.Add(
+                      new SqlParameter("@DCBocTay", model.DCBocTay));
+                    sc.Parameters.Add(
+                     new SqlParameter("@DCXuLyBeMat", model.DCXuLyBeMat));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Update"));
+                    sc.Parameters.Add(
+                        new SqlParameter("@typeUpdate", "DHE"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.RecordsAffected > 0)
+                        return Ok();
+                    else return NotFound();
+                }
+            }
+        }
+        public ActionResult QuyTrinh_Update_QCKN([FromBody]QuyTrinhModel model)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_quytrinhphattrien", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                       new SqlParameter("@NgayKTMau", model.NgayKTMau));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KTTruocLH", model.KTTruocLH));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KTSauLH", model.KTSauLH));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Update"));
+                    sc.Parameters.Add(
+                        new SqlParameter("@typeUpdate", "QCKN"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.RecordsAffected > 0)
+                        return Ok();
+                    else return NotFound();
+                }
+            }
+        }
+        public ActionResult QuyTrinh_Update_BT([FromBody]QuyTrinhModel model)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_quytrinhphattrien", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@PPBocTachBTM", model.PPBocTachBTM));
+                    sc.Parameters.Add(
+                       new SqlParameter("@XuLyBeMatBTM", model.XuLyBeMatBTM));
+                    sc.Parameters.Add(
+                        new SqlParameter("@ThoiGian", model.ThoiGian));
+                    sc.Parameters.Add(
+                        new SqlParameter("@TocDo", model.TocDo));
+                    sc.Parameters.Add(
+                        new SqlParameter("@KL1LanBan", model.KL1LanBan));
+                    sc.Parameters.Add(
+                       new SqlParameter("@LoaiCatBi", model.LoaiCatBi));
+                    sc.Parameters.Add(
+                        new SqlParameter("@NhietDo", model.NhietDo));
+                    sc.Parameters.Add(
+                        new SqlParameter("@ChatLuongBT", model.ChatLuongBT));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Update"));
+                    sc.Parameters.Add(
+                        new SqlParameter("@typeUpdate", "BT"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.RecordsAffected > 0)
+                        return Ok();
+                    else return NotFound();
+                }
+            }
+        }
+        public ActionResult QuyTrinh_Update_LH2([FromBody]QuyTrinhModel model)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_quytrinhphattrien", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@PPLamSach", model.PPLamSach));
+                    sc.Parameters.Add(
+                       new SqlParameter("@XuLyBeMatLH", model.XuLyBeMatLH));
+                    sc.Parameters.Add(
+                        new SqlParameter("@NhietDoLH", model.NhietDoLH));
+                    sc.Parameters.Add(
+                        new SqlParameter("@ThoiGianLH", model.ThoiGianLH));
+
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Update"));
+                    sc.Parameters.Add(
+                        new SqlParameter("@typeUpdate", "LH2"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.RecordsAffected > 0)
+                        return Ok();
+                    else return NotFound();
+                }
+            }
+        }
+        public ActionResult QuyTrinh_Update_MH([FromBody]QuyTrinhModel model)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_quytrinhphattrien", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@KL1LanMai", model.KL1LanMai));
+                    sc.Parameters.Add(
+                       new SqlParameter("@ThoiGianMai", model.ThoiGianMai));
+                    sc.Parameters.Add(
+                      new SqlParameter("@LoaiDaMai", model.LoaiDaMai));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Update"));
+                    sc.Parameters.Add(
+                        new SqlParameter("@typeUpdate", "MH"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.RecordsAffected > 0)
+                        return Ok();
+                    else return NotFound();
+                }
+            }
+        }
+        public ActionResult QuyTrinh_Update_QTK([FromBody]QuyTrinhModel model)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_quytrinhphattrien", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@TronBot", model.TronBot));
+                    sc.Parameters.Add(
+                       new SqlParameter("@ChamSon", model.ChamSon));
+                    sc.Parameters.Add(
+                        new SqlParameter("@GanLinhKien", model.GanLinhKien));
+                    sc.Parameters.Add(
+                        new SqlParameter("@PhuTeflon", model.PhuTeflon));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Update"));
+                    sc.Parameters.Add(
+                        new SqlParameter("@typeUpdate", "QTK"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.RecordsAffected > 0)
+                        return Ok();
+                    else return NotFound();
+                }
+            }
+        }
+        public ActionResult QuyTrinh_Update_KM([FromBody]QuyTrinhModel model)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_quytrinhphattrien", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@BaviaKH", model.BaviaKH));
+                    sc.Parameters.Add(
+                       new SqlParameter("@BaviaCaiDat", model.BaviaCaiDat));
+                    sc.Parameters.Add(
+                        new SqlParameter("@YeuCauKiemMay", model.YeuCauKiemMay));
+                    sc.Parameters.Add(
+                        new SqlParameter("@XuLyBeMatKM", model.XuLyBeMatKM));
+                    sc.Parameters.Add(
+                        new SqlParameter("@NgoaiQuanKM", model.NgoaiQuanKM));
+                    sc.Parameters.Add(
+                       new SqlParameter("@TyLeNG", model.TyLeNG));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Update"));
+                    sc.Parameters.Add(
+                        new SqlParameter("@typeUpdate", "KM"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.RecordsAffected > 0)
+                        return Ok();
+                    else return NotFound();
+                }
+            }
+        }
+        public ActionResult QuyTrinh_Update_DG([FromBody]QuyTrinhModel model)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_quytrinhphattrien", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@TrongLuong1SP", model.TrongLuong1SP));
+                    sc.Parameters.Add(
+                       new SqlParameter("@TrongLuongLinhKien", model.TrongLuongLinhKien));
+                    sc.Parameters.Add(
+                        new SqlParameter("@SL1boc", model.SL1boc));
+                    sc.Parameters.Add(
+                        new SqlParameter("@KichThuocBoc", model.KichThuocBoc));
+                    sc.Parameters.Add(
+                        new SqlParameter("@SL1hop", model.SL1hop));
+                    sc.Parameters.Add(
+                       new SqlParameter("@KichThuocThung", model.KichThuocThung));
+                    sc.Parameters.Add(
+                        new SqlParameter("@SL1thung", model.SL1thung));
+                    sc.Parameters.Add(
+                        new SqlParameter("@PPDongBoc", model.PPDongBoc));
+                    sc.Parameters.Add(
+                        new SqlParameter("@PPDongHoi", model.PPDongHoi));
+                    sc.Parameters.Add(
+                       new SqlParameter("@GhiChuKhacDG", model.GhiChuKhacDG));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Update"));
+                    sc.Parameters.Add(
+                        new SqlParameter("@typeUpdate", "DG"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    if (sdr.RecordsAffected > 0)
+                        return Ok();
+                    else return NotFound();
+                }
+            }
+        }
+        public ActionResult QuyTrinh_Update_YCCL([FromBody]QuyTrinhModel model)
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_quytrinhphattrien", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@KichThuoc", model.KichThuoc));
+                    sc.Parameters.Add(
+                       new SqlParameter("@NgoaiQuan", model.NgoaiQuan));
+                    sc.Parameters.Add(
+                        new SqlParameter("@DongGoi", model.DongGoi));
+                    sc.Parameters.Add(
+                        new SqlParameter("@Khac", model.Khac));
+                    sc.Parameters.Add(
+                        new SqlParameter("@GhiChu", model.GhiChu));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Update"));
+                    sc.Parameters.Add(
+                        new SqlParameter("@typeUpdate", "YCCL"));
                     SqlDataReader sdr = sc.ExecuteReader();
                     if (sdr.RecordsAffected > 0)
                         return Ok();
@@ -100,6 +788,7 @@ namespace ESSONS_MIS_2020.Controllers
         public QuyTrinhModel QuyTrinh_Get(string SoDonKhuon, string codeSP)
         {
             string connection = _configuration.GetConnectionString("DefaultConnection");
+
             QuyTrinhModel em = new QuyTrinhModel();
             using (SqlConnection sql = new SqlConnection(connection))
             {
@@ -117,15 +806,30 @@ namespace ESSONS_MIS_2020.Controllers
                     while (sdr.Read())
                     {
                         em.SoDonKhuon = sdr["SoDonKhuon"].ToString();
-                        em.NgayDuyet = sdr["NgayDuyet"].ToString();
+                        if (sdr["NgayDuyet"] is null || sdr["NgayDuyet"].ToString() == "")
+                            em.NgayDuyet = "";
+                        else
+                            em.NgayDuyet = DateTime.ParseExact(sdr["NgayDuyet"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                                                    .ToString("MM-dd-yyyy");
                         em.PhienBan1 = sdr["PhienBan1"].ToString();
-                        em.NgayPhatHanh1 = sdr["NgayPhatHanh1"].ToString();
-                        em.PhienBan2 = sdr["PhienBan1"].ToString();
-                        em.NgayPhatHanh2 = sdr["NgayPhatHanh1"].ToString();
-                        em.PhienBan3 = sdr["PhienBan1"].ToString();
-                        em.NgayPhatHanh3 = sdr["NgayPhatHanh1"].ToString();
-                        
-                        if(sdr["SoLoKhuonKH"] is null || sdr["SoLoKhuonKH"].ToString() == "")
+                        if (sdr["NgayPhatHanh1"] is null || sdr["NgayPhatHanh1"].ToString() == "")
+                            em.NgayPhatHanh1 = "";                       
+                        else
+                            em.NgayPhatHanh1 = DateTime.ParseExact(sdr["NgayPhatHanh1"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                                                    .ToString("MM-dd-yyyy");
+                        em.PhienBan2 = sdr["PhienBan2"].ToString();
+                        if (sdr["NgayPhatHanh2"] is null || sdr["NgayPhatHanh2"].ToString() == "")
+                            em.NgayPhatHanh2 = "";
+                        else
+                            em.NgayPhatHanh2 = DateTime.ParseExact(sdr["NgayPhatHanh2"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                                                    .ToString("MM-dd-yyyy");
+                        em.PhienBan3 = sdr["PhienBan3"].ToString();
+                        if (sdr["NgayPhatHanh3"] is null || sdr["NgayPhatHanh3"].ToString() == "")
+                            em.NgayPhatHanh3 = "";
+                        else
+                            em.NgayPhatHanh3 = DateTime.ParseExact(sdr["NgayPhatHanh3"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                                                     .ToString("MM-dd-yyyy");
+                        if (sdr["SoLoKhuonKH"] is null || sdr["SoLoKhuonKH"].ToString() == "")
                             em.SoLoKhuonKH = 0;
                         else
                             em.SoLoKhuonKH = int.Parse(sdr["SoLoKhuonKH"].ToString());
@@ -151,9 +855,21 @@ namespace ESSONS_MIS_2020.Controllers
                         else
                             em.SoPCSMoiBo = int.Parse(sdr["SoPCSMoiBo"].ToString());
                         em.PhaKeo = sdr["PhaKeo"].ToString();
-                        em.NgayGiaoMau = sdr["NgayGiaoMau"].ToString();
-                        em.NgayKHApprovedMau = sdr["NgayGiaoMau"].ToString();
-                        em.NgayPheDuyetMua = sdr["NgayGiaoMau"].ToString();
+                        if (sdr["NgayGiaoMau"] is null || sdr["NgayGiaoMau"].ToString() == "")
+                            em.NgayGiaoMau = "";                        
+                        else
+                            em.NgayGiaoMau = DateTime.ParseExact(sdr["NgayGiaoMau"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                                                .ToString("MM-dd-yyyy");
+                        if (sdr["NgayKHApprovedMau"] is null || sdr["NgayKHApprovedMau"].ToString() == "")
+                            em.NgayKHApprovedMau = "";                       
+                        else
+                            em.NgayKHApprovedMau = DateTime.ParseExact(sdr["NgayKHApprovedMau"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                                                .ToString("MM-dd-yyyy");
+                        if (sdr["NgayPheDuyetMua"] is null || sdr["NgayPheDuyetMua"].ToString() == "")
+                            em.NgayPheDuyetMua = "";
+                        else
+                            em.NgayPheDuyetMua = DateTime.ParseExact(sdr["NgayPheDuyetMua"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                                                .ToString("MM-dd-yyyy");
                         em.MaKeoKho1 = sdr["MaKeoKho1"].ToString();
                         em.HoaChat1MK1 = sdr["HoaChat1MK1"].ToString();
                         em.KhoiLuongHC1MK1 = sdr["KhoiLuongHC1MK1"].ToString();
@@ -212,8 +928,16 @@ namespace ESSONS_MIS_2020.Controllers
                         em.KhoiLuongHC6MK2KH = sdr["KhoiLuongHC6MK2KH"].ToString();
                         em.HoaChat7MK2KH = sdr["HoaChat7MK2KH"].ToString();
                         em.KhoiLuongHC7MK2KH = sdr["KhoiLuongHC7MK2KH"].ToString();
-                        em.NgayDuyetPhoiThep = sdr["NgayDuyetPhoiThep"].ToString();
-                        em.NgayMuaPhoiThep = sdr["NgayMuaPhoiThep"].ToString();
+                        if (sdr["NgayDuyetPhoiThep"] is null || sdr["NgayDuyetPhoiThep"].ToString() == "")
+                            em.NgayDuyetPhoiThep = "";
+                        else
+                            em.NgayDuyetPhoiThep = DateTime.ParseExact(sdr["NgayDuyetPhoiThep"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                                                 .ToString("MM-dd-yyyy");
+                        if (sdr["NgayMuaPhoiThep"] is null || sdr["NgayMuaPhoiThep"].ToString() == "")
+                            em.NgayMuaPhoiThep = "";
+                        else
+                            em.NgayMuaPhoiThep = DateTime.ParseExact(sdr["NgayMuaPhoiThep"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                                                 .ToString("MM-dd-yyyy");
                         em.SoCTMuaPhoi = sdr["SoCTMuaPhoi"].ToString();
                         em.NCCPhoiThep = sdr["NCCPhoiThep"].ToString();
                         em.LoaiThepKhuon = sdr["LoaiThepKhuon"].ToString();
@@ -235,24 +959,28 @@ namespace ESSONS_MIS_2020.Controllers
                         em.NgaySuaChiTietLan3 = sdr["NgaySuaChiTietLan3"].ToString();
                         em.SuaChiTietLan4 = sdr["SuaChiTietLan4"].ToString();
                         em.NgaySuaChiTietLan4 = sdr["NgaySuaChiTietLan4"].ToString();
-                        em.NgayNhanKhuon = sdr["NgayNhanKhuon"].ToString();
+                        if (sdr["NgayNhanKhuon"] is null || sdr["NgayNhanKhuon"].ToString() == "")
+                            em.NgayNhanKhuon = "";                       
+                        else
+                            em.NgayNhanKhuon = DateTime.ParseExact(sdr["NgayNhanKhuon"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                                                .ToString("MM-dd-yyyy");
                         em.ViTriKhuon = sdr["ViTriKhuon"].ToString();
                         if (sdr["SoKhuonHienCo"] is null || sdr["SoKhuonHienCo"].ToString() == "")
                             em.SoKhuonHienCo = 0;
                         else
                             em.SoKhuonHienCo = int.Parse(sdr["SoKhuonHienCo"].ToString());
                         em.ViTriPhuKien = sdr["ViTriPhuKien"].ToString();
-                        em.XuLyBeMat = sdr["SuaChiTietLan3"].ToString();
-                        em.PPCheBienNL = sdr["NgaySuaChiTietLan3"].ToString();
+                        em.XuLyBeMat = sdr["XuLyBeMat"].ToString();
+                        em.PPCheBienNL = sdr["PPCheBienNL"].ToString();
                         if (sdr["ThoiGianTron"] is null || sdr["ThoiGianTron"].ToString() == "")
                             em.ThoiGianTron = 0;
                         else
                             em.ThoiGianTron = int.Parse(sdr["ThoiGianTron"].ToString());
-                        if(sdr["TongThoiGianCan"] is null || sdr["TongThoiGianCan"].ToString() == "")
+                        if (sdr["TongThoiGianCan"] is null || sdr["TongThoiGianCan"].ToString() == "")
                             em.TongThoiGianCan = 0;
                         else
                             em.TongThoiGianCan = int.Parse(sdr["TongThoiGianCan"].ToString());
-                        em.ChiTietCaiTien = sdr["NgaySuaChiTietLan4"].ToString();
+                        em.ChiTietCaiTien = sdr["ChiTietCaiTien"].ToString();
                         em.DoDay = sdr["DoDay"].ToString();
                         em.ChieuDaiMin = sdr["ChieuDaiMin"].ToString();
                         em.ChieuDaiMax = sdr["ChieuDaiMax"].ToString();
@@ -266,7 +994,7 @@ namespace ESSONS_MIS_2020.Controllers
                         em.TLSoiMax2 = sdr["TLSoiMax2"].ToString();
                         em.SoSoi2 = sdr["SoSoi2"].ToString();
                         em.DoDay3 = sdr["DoDay3"].ToString();
-                        em.ChieuDaiMin3= sdr["ChieuDaiMin3"].ToString();
+                        em.ChieuDaiMin3 = sdr["ChieuDaiMin3"].ToString();
                         em.ChieuDaiMax3 = sdr["ChieuDaiMax3"].ToString();
                         em.TLSoiMin3 = sdr["TLSoiMin3"].ToString();
                         em.TLSoiMax3 = sdr["TLSoiMax3"].ToString();
@@ -313,7 +1041,11 @@ namespace ESSONS_MIS_2020.Controllers
                         em.XuLyBTPTaiDH = sdr["XuLyBTPTaiDH"].ToString();
                         em.DCBocTay = sdr["DCBocTay"].ToString();
                         em.DCXuLyBeMat = sdr["DCXuLyBeMat"].ToString();
-                        em.NgayKTMau = sdr["NgayKTMau"].ToString();
+                        if (sdr["NgayKTMau"] is null || sdr["NgayKTMau"].ToString() == "")
+                            em.NgayKTMau = "";                       
+                        else
+                            em.NgayKTMau = DateTime.ParseExact(sdr["NgayKTMau"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                                                .ToString("MM-dd-yyyy");
                         em.KTTruocLH = sdr["KTTruocLH"].ToString();
                         em.KTSauLH = sdr["KTSauLH"].ToString();
                         em.PPBocTachBTM = sdr["PPBocTachBTM"].ToString();
@@ -394,6 +1126,32 @@ namespace ESSONS_MIS_2020.Controllers
                         em.CodeKH = sdr["CodeKH"].ToString();
                         em.MaKhuonTW = sdr["MaKhuonTW"].ToString();
                         em.CodeSP = sdr["CodeSP"].ToString();
+                        lem.Add(em);
+                    }
+                }
+                return lem;
+            }
+        }
+
+        [HttpGet]
+        public List<HoaChatSPModel> HoaChatSP_GetALL()
+        {
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+            List<HoaChatSPModel> lem = new List<HoaChatSPModel>();
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_HoaChatQT", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "GetAllHoaChat"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        HoaChatSPModel em = new HoaChatSPModel();
+                        em.TenHoaChat = sdr["TenHoaChat"].ToString();
                         lem.Add(em);
                     }
                 }
