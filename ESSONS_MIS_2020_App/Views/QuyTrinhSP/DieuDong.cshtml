@@ -1,0 +1,149 @@
+﻿@model ESSONS_MIS_2020_App.Models.MaKeoQuyTrinh
+@{
+    ViewData["Title"] = "DieuDong";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Điều động sản xuất keo</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <form id="dieudongForm" method="post">
+                        <table class="table">
+                            <tr>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 col-form-label">Chọn Code SP</label>
+                                        <select id="codesp" asp-for="CodeSP" class="custom-select col-sm-4"
+                                                asp-items="@(new SelectList(ViewBag.codeSP,"CodeSP","CodeSP"))">
+                                            <option value="0" disabled selected>Chọn codeSP</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 col-form-label">Mã keo</label>
+                                        <select id="makeo" asp-for="MaKeo1" class="custom-select col-sm-4"
+                                                asp-items="@(new SelectList(""))">
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Số mẻ</label>
+                                        <div class="col-3">
+                                            <input asp-for="BatchNo" type="number" maxlength="5" class="form-control" placeholder="Số thẻ" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Số KG</label>
+                                        <div class="col-3">
+                                            <input asp-for="Weight" type="text" maxlength="10" class="form-control" placeholder="Số thời vụ" value="0">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">
+                                Tạo điều động
+                            </button>
+                        </div>
+                        <div id="table">
+
+                        </div>
+
+                    </form>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var codeSP = $("#codesp");
+            var makeo = $("#makeo");
+            var table = $("#table");
+            makeo.prop('disabled', true);
+            debugger
+            codeSP.change(function () {
+                $.ajax({
+                    type: "GET",
+                    url: "/QuyTrinhSP/GetMaKeo?CodeSp=" + codeSP.val(),
+                    contentType: "html",
+                    success: function (data) {
+                        debugger
+                        makeo.empty();
+                        makeo.prop('disabled', false);
+                        makeo.append(data);
+                    }
+                })
+
+                table.empty();             
+
+                $.ajax({
+                    type: "GET",
+                    url: "/QuyTrinhSP/GetKhoHoaChat1?CodeSp=" + codeSP.val(),
+                    contentType: "html",
+                    success: function (data) {
+                        debugger
+                        table.append(data);
+                    }
+                })
+
+                $.ajax({
+                    type: "GET",
+                    url: "/QuyTrinhSP/GetKhoHoaChat2?CodeSp=" + codeSP.val(),
+                    contentType: "html",
+                    success: function (data) {
+                        debugger
+                        table.append(data);
+                    }
+                })
+            })
+
+            $("#dieudongForm").submit(function (e) {
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: '@Url.Action("DieuDong", "QuyTrinhSP")',
+                    data: $("#dieudongForm").serialize(),
+                    success: function (result) {
+                        debugger
+                            let dia = bs4pop.dialog({
+
+                                title: 'Thông báo',
+                                content: result,
+
+                                closeBtn: true,
+                                backdrop: 'static',
+                                btns: [
+                                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                                ],
+                                onDragStart: function () {
+                                    console.log('onDragStart');
+                                },
+                                onDrag: function () {
+                                    console.log('onDrag');
+                                }
+                            });
+                    }
+                })
+                e.preventDefault();
+            });
+        })
+    </script>
+
+}

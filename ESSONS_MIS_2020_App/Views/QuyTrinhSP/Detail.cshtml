@@ -111,11 +111,13 @@
                                 <div class="tab-content" id="custom-content-below-tabContent">
                                     <div class="tab-pane fade show active" id="custom-content-below-KinhDoanh" role="tabpanel" aria-labelledby="custom-content-below-KinhDoanh-tab">
                                         <form id="formKinhDoanh" method="post" asp-action="Update_KinhDoanh">
+                                            <input hidden asp-for="SoDonKhuon" type="text" value="@Model.SoDonKhuon" />
+                                            <input hidden asp-for="CodeSP" type="text" value="@Model.CodeSP" />
                                             <table id="tbKinhDoanh" class="table table-bordered">
                                                 <tr>
                                                     <th scope="row">Số đơn khuôn</th>
                                                     <td>
-                                                        <input asp-for="SoDonKhuon" type="text" class="form-control" value="@Model.SoDonKhuon" />
+                                                        <input name="sdk" type="text" class="form-control" value="@Model.SoDonKhuon" />
                                                     </td>
                                                     <th scope="row">Ngày duyệt</th>
                                                     <td>
@@ -163,7 +165,7 @@
                                                     </td>
                                                     <th scope="row">Số lỗ khuôn (lỗ)</th>
                                                     <td>
-                                                        <input asp-for="SoLoKhuon" type="number" class="form-control" value="@Model.SoLoKhuon" />
+                                                        <input asp-for="SoLoKhuonKH" type="number" class="form-control" value="@Model.SoLoKhuonKH" />
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -198,8 +200,10 @@
 
                                     </div>
                                     <div class="tab-pane fade" id="custom-content-below-QLSX" role="tabpanel" aria-labelledby="custom-content-below-QLSX-tab">
-                                        <form id="formQLSX" method="post" asp-action="Update_QLSX">
-                                            <table id="tbQLSX" class="table table-bordered">
+                                        <form id="formKHSX" method="post" asp-action="Update_QLSX">
+                                            <input hidden asp-for="SoDonKhuon" type="text" value="@Model.SoDonKhuon" />
+                                            <input hidden asp-for="CodeSP" type="text" value="@Model.CodeSP" />
+                                            <table id="tbKQL" class="table table-bordered">
                                                 <tr>
                                                     <th scope="row">Code KH</th>
                                                     <td>
@@ -207,7 +211,7 @@
                                                     </td>
                                                     <th scope="row">Code SP</th>
                                                     <td>
-                                                        <input asp-for="CodeSP" type="text" class="form-control" value="@Model.CodeSP" />
+                                                        <input name="csp" type="text" class="form-control" value="@Model.CodeSP" />
                                                     </td>
                                                     <th scope="row">Tên QU</th>
                                                     <td>
@@ -274,6 +278,22 @@
                                                         </select>
                                                     </td>
                                                 </tr>
+                                                <tr>
+                                                    <th scope="row">Ngày giao mẫu</th>
+                                                    <td colspan="2">
+                                                        <div class="datepicker date input-group p-0 shadow-sm">
+                                                            <input asp-for="NgayGiaoMau" type="text" class="form-control" id="reservationDate" value="@Model.NgayGiaoMau">
+                                                            <div class="input-group-append"><span class="input-group-text"></span></div>
+                                                        </div>
+                                                    </td>
+                                                    <th scope="row">Ngày KH Approved mẫu</th>
+                                                    <td colspan="2">
+                                                        <div class="datepicker date input-group p-0 shadow-sm">
+                                                            <input asp-for="NgayKHApprovedMau" type="text" class="form-control" id="reservationDate" value="@Model.NgayKHApprovedMau">
+                                                            <div class="input-group-append"><span class="input-group-text"></span></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                             </table>
                                             <button id="btQLSX" type="submit" class="btn btn-primary">
                                                 Cập nhật
@@ -283,6 +303,8 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-content-below-Kho" role="tabpanel" aria-labelledby="custom-content-below-Kho-tab">
                                         <form id="formKho" method="post" asp-action="Update_Kho">
+                                            <input hidden asp-for="SoDonKhuon" type="text" value="@Model.SoDonKhuon" />
+                                            <input hidden asp-for="CodeSP" type="text" value="@Model.CodeSP" />
                                             <table id="tbKho" class="table table-bordered">
                                                 <tr>
                                                     <th scope="row" colspan="2">Mã keo 1</th>
@@ -384,7 +406,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Hóa chất 7</th>
-                                                    <td colspan="3">
+                                                    <td>
                                                         <select asp-for="HoaChat7MK1" class="form-control custom-select">
                                                             <option disabled value="" selected>Chọn</option>
                                                             @foreach (var item in ViewBag.HoaChat)
@@ -394,8 +416,84 @@
                                                         </select>
                                                     </td>
                                                     <th scope="row">Khối lượng HC(g)</th>
-                                                    <td colspan="3">
+                                                    <td>
                                                         <input asp-for="KhoiLuongHC7MK1" type="text" class="form-control" value="@Model.KhoiLuongHC7MK1" />
+                                                    </td>
+                                                    <th scope="row">Hóa chất 8</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat8MK1" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC8MK1" type="text" class="form-control" value="@Model.KhoiLuongHC8MK1" />
+                                                    </td>
+
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Hóa chất 9</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat9MK1" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC9MK1" type="text" class="form-control" value="@Model.KhoiLuongHC9MK1" />
+                                                    </td>
+                                                    <th scope="row">Hóa chất 10</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat10MK1" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC10MK1" type="text" class="form-control" value="@Model.KhoiLuongHC10MK1" />
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Hóa chất 11</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat11MK1" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC11MK1" type="text" class="form-control" value="@Model.KhoiLuongHC11MK1" />
+                                                    </td>
+                                                    <th scope="row">Hóa chất 12</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat12MK1" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC12MK1" type="text" class="form-control" value="@Model.KhoiLuongHC12MK1" />
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -493,7 +591,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Hóa chất 7</th>
-                                                    <td colspan="3">
+                                                    <td>
                                                         <select asp-for="HoaChat7MK1KH" class="form-control custom-select">
                                                             <option disabled value="" selected>Chọn</option>
                                                             @foreach (var item in ViewBag.HoaChat)
@@ -503,8 +601,83 @@
                                                         </select>
                                                     </td>
                                                     <th scope="row">Khối lượng HC(g)</th>
-                                                    <td colspan="3">
+                                                    <td>
                                                         <input asp-for="KhoiLuongHC7MK1KH" type="text" class="form-control" value="@Model.KhoiLuongHC7MK1KH" />
+                                                    </td>
+                                                    <th scope="row">Hóa chất 8</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat8MK1KH" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC8MK1KH" type="text" class="form-control" value="@Model.KhoiLuongHC8MK1KH" />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Hóa chất 9</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat9MK1KH" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC9MK1KH" type="text" class="form-control" value="@Model.KhoiLuongHC9MK1KH" />
+                                                    </td>
+                                                    <th scope="row">Hóa chất 10</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat10MK1KH" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC10MK1KH" type="text" class="form-control" value="@Model.KhoiLuongHC10MK1KH" />
+                                                    </td>
+                                                   
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Hóa chất 11</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat11MK1KH" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC11MK1KH" type="text" class="form-control" value="@Model.KhoiLuongHC11MK1KH" />
+                                                    </td>
+                                                    <th scope="row">Hóa chất 12</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat12MK1KH" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC12MK1KH" type="text" class="form-control" value="@Model.KhoiLuongHC12MK1KH" />
                                                     </td>
                                                 </tr>
                                             </table>
@@ -610,7 +783,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Hóa chất 7</th>
-                                                    <td colspan="3">
+                                                    <td>
                                                         <select asp-for="HoaChat7MK2" class="form-control custom-select">
                                                             <option disabled value="" selected>Chọn</option>
                                                             @foreach (var item in ViewBag.HoaChat)
@@ -620,8 +793,84 @@
                                                         </select>
                                                     </td>
                                                     <th scope="row">Khối lượng HC(g)</th>
-                                                    <td colspan="3">
+                                                    <td>
                                                         <input asp-for="KhoiLuongHC7MK2" type="text" class="form-control" value="@Model.KhoiLuongHC7MK2" />
+                                                    </td>
+                                                    <th scope="row">Hóa chất 8</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat8MK2" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC8MK2" type="text" class="form-control" value="@Model.KhoiLuongHC8MK2" />
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Hóa chất 9</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat9MK2" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC9MK2" type="text" class="form-control" value="@Model.KhoiLuongHC9MK2" />
+                                                    </td>
+                                                    <th scope="row">Hóa chất 10</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat10MK2" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC10MK2" type="text" class="form-control" value="@Model.KhoiLuongHC10MK2" />
+                                                    </td>
+                                         
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Hóa chất 11</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat11MK2" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC11MK2" type="text" class="form-control" value="@Model.KhoiLuongHC11MK2" />
+                                                    </td>
+                                                    <th scope="row">Hóa chất 12</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat12MK2" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC12MK2" type="text" class="form-control" value="@Model.KhoiLuongHC12MK2" />
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -719,7 +968,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Hóa chất 7</th>
-                                                    <td colspan="3">
+                                                    <td>
                                                         <select asp-for="HoaChat7MK2KH" class="form-control custom-select">
                                                             <option disabled value="" selected>Chọn</option>
                                                             @foreach (var item in ViewBag.HoaChat)
@@ -729,8 +978,83 @@
                                                         </select>
                                                     </td>
                                                     <th scope="row">Khối lượng HC(g)</th>
-                                                    <td colspan="3">
+                                                    <td>
                                                         <input asp-for="KhoiLuongHC7MK2KH" type="text" class="form-control" value="@Model.KhoiLuongHC7MK2KH" />
+                                                    </td>
+                                                    <th scope="row">Hóa chất 8</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat8MK2KH" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC8MK2KH" type="text" class="form-control" value="@Model.KhoiLuongHC8MK2KH" />
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Hóa chất 9</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat9MK2KH" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC9MK2KH" type="text" class="form-control" value="@Model.KhoiLuongHC9MK2KH" />
+                                                    </td>
+                                                    <th scope="row">Hóa chất 10</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat10MK2KH" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC10MK2KH" type="text" class="form-control" value="@Model.KhoiLuongHC10MK2KH" />
+                                                    </td>                                                    
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Hóa chất 11</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat11MK2KH" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC11MK2KH" type="text" class="form-control" value="@Model.KhoiLuongHC11MK2KH" />
+                                                    </td>
+                                                    <th scope="row">Hóa chất 12</th>
+                                                    <td>
+                                                        <select asp-for="HoaChat12MK2KH" class="form-control custom-select">
+                                                            <option disabled value="" selected>Chọn</option>
+                                                            @foreach (var item in ViewBag.HoaChat)
+                                                            {
+                                                                <option value="@item.TenHoaChat">@item.TenHoaChat</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <th scope="row">Khối lượng HC(g)</th>
+                                                    <td>
+                                                        <input asp-for="KhoiLuongHC12MK2KH" type="text" class="form-control" value="@Model.KhoiLuongHC12MK2KH" />
                                                     </td>
                                                 </tr>
                                             </table>
@@ -742,6 +1066,8 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-content-below-ThuMua" role="tabpanel" aria-labelledby="custom-content-below-ThuMua-tab">
                                         <form id="formThuMua" method="post" asp-action="Update_ThuMua">
+                                            <input hidden asp-for="SoDonKhuon" type="text" value="@Model.SoDonKhuon" />
+                                            <input hidden asp-for="CodeSP" type="text" value="@Model.CodeSP" />
                                             <table id="tbThuMua" class="table table-bordered">
                                                 <tr>
                                                     <th scope="row">Ngày duyệt</th>
@@ -760,6 +1086,22 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
+                                                    <th scope="row">Ngày mua phôi thép 2</th>
+                                                    <td>
+                                                        <div class="datepicker date input-group p-0 shadow-sm">
+                                                            <input asp-for="NgayMuaPhoiThep2" type="text" class="form-control" id="reservationDate" value="@Model.NgayMuaPhoiThep2">
+                                                            <div class="input-group-append"><span class="input-group-text"></span></div>
+                                                        </div>
+                                                    </td>
+                                                    <th scope="row">Ngày mua phôi thép 3</th>
+                                                    <td>
+                                                        <div class="datepicker date input-group p-0 shadow-sm">
+                                                            <input asp-for="NgayMuaPhoiThep3" type="text" class="form-control" id="reservationDate" value="@Model.NgayMuaPhoiThep3">
+                                                            <div class="input-group-append"><span class="input-group-text"></span></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
                                                     <th scope="row">Số CT mua phôi</th>
                                                     <td>
                                                         <input asp-for="SoCTMuaPhoi" type="text" class="form-control" value="@Model.SoCTMuaPhoi" />
@@ -769,6 +1111,7 @@
                                                         <input asp-for="NCCPhoiThep" type="text" class="form-control" value="@Model.NCCPhoiThep" />
                                                     </td>
                                                 </tr>
+
                                             </table>
                                             <button id="btKinhDoanh" type="submit" class="btn btn-primary">
                                                 Cập nhật
@@ -778,6 +1121,8 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-content-below-CTK" role="tabpanel" aria-labelledby="custom-content-below-CTK-tab">
                                         <form id="formCTK" method="post" asp-action="Update_CTK">
+                                            <input hidden asp-for="SoDonKhuon" type="text" value="@Model.SoDonKhuon" />
+                                            <input hidden asp-for="CodeSP" type="text" value="@Model.CodeSP" />
                                             <table id="tbCTK" class="table table-bordered">
                                                 <tr>
                                                     <th scope="row" width="15%">Loại thép khuôn</th>
@@ -837,7 +1182,7 @@
                                                 <tr>
                                                     <th scope="row">PP xử lý BTP</th>
                                                     <td>
-                                                        <select asp-for="PhuKienCTK" class="form-control custom-select">
+                                                        <select asp-for="PPXuLyBTP" class="form-control custom-select">
                                                             <option value="" disabled selected>Chọn phụ kiện</option>
                                                             <option value="Bóc tách tay">Bóc tách tay</option>
                                                             <option value="Bóc tách máy">Bóc táy máy</option>
@@ -919,6 +1264,8 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-content-below-BTK" role="tabpanel" aria-labelledby="custom-content-below-BTK-tab">
                                         <form id="formBTK" method="post" asp-action="Update_BTK">
+                                            <input hidden asp-for="SoDonKhuon" type="text" value="@Model.SoDonKhuon" />
+                                            <input hidden asp-for="CodeSP" type="text" value="@Model.CodeSP" />
                                             <table id="tbBTK" class="table table-bordered">
                                                 <tr>
                                                     <th scope="row">Ngày nhận khuôn</th>
@@ -954,6 +1301,8 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-content-below-CTNL" role="tabpanel" aria-labelledby="custom-content-below-CTNL-tab">
                                         <form id="formCTNL" method="post" asp-action="Update_CBNL">
+                                            <input hidden asp-for="SoDonKhuon" type="text" value="@Model.SoDonKhuon" />
+                                            <input hidden asp-for="CodeSP" type="text" value="@Model.CodeSP" />
                                             <table id="tbCTNL" class="table table-bordered">
                                                 <tr>
                                                     <th scope="row">Xử lý bề mặt</th>
@@ -1015,6 +1364,8 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-content-below-DHE" role="tabpanel" aria-labelledby="custom-content-below-DHE-tab">
                                         <form id="formDHE" method="post" asp-action="Update_DHE">
+                                            <input hidden asp-for="SoDonKhuon" type="text" value="@Model.SoDonKhuon" />
+                                            <input hidden asp-for="CodeSP" type="text" value="@Model.CodeSP" />
                                             <table id="tbDHE" class="table table-bordered">
                                                 <tr>
                                                     <th scope="row">
@@ -1217,7 +1568,7 @@
                                                 <tr>
                                                     <th scope="row">Thời gian hoàn tất 1 khuôn(s)</th>
                                                     <td>
-                                                        <input asp-for="ThoiGianHoanTat" type="text" class="form-control" value="@Model.ThoiGianHoanTat" />
+                                                        <input asp-for="ThoiGianHoanTat1k" type="text" class="form-control" value="@Model.ThoiGianHoanTat1k" />
                                                     </td>
                                                     <th scope="row">Chất lượng</th>
                                                     <td>
@@ -1278,6 +1629,8 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-content-below-QCKN" role="tabpanel" aria-labelledby="custom-content-below-QCKN-tab">
                                         <form id="formQCKN" method="post" asp-action="Update_QCKN">
+                                            <input hidden asp-for="SoDonKhuon" type="text" value="@Model.SoDonKhuon" />
+                                            <input hidden asp-for="CodeSP" type="text" value="@Model.CodeSP" />
                                             <table id="tbQCKN" class="table table-bordered">
                                                 <tr>
                                                     <th scope="row">Ngày KT mẫu</th>
@@ -1323,6 +1676,8 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-content-below-BT" role="tabpanel" aria-labelledby="custom-content-below-BT-tab">
                                         <form id="formBT" method="post" asp-action="Update_BT">
+                                            <input hidden asp-for="SoDonKhuon" type="text" value="@Model.SoDonKhuon" />
+                                            <input hidden asp-for="CodeSP" type="text" value="@Model.CodeSP" />
                                             <table id="tbBT" class="table table-bordered">
                                                 <tr>
                                                     <th scope="row">PP bóc tách</th>
@@ -1396,6 +1751,8 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-content-below-LH2" role="tabpanel" aria-labelledby="custom-content-below-LH2-tab">
                                         <form id="formLH2" method="post" asp-action="Update_LH2">
+                                            <input hidden asp-for="SoDonKhuon" type="text" value="@Model.SoDonKhuon" />
+                                            <input hidden asp-for="CodeSP" type="text" value="@Model.CodeSP" />
                                             <table id="tbLH2" class="table table-bordered">
                                                 <tr>
                                                     <th scope="row">PP làm sạch</th>
@@ -1436,6 +1793,8 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-content-below-MH" role="tabpanel" aria-labelledby="custom-content-below-MH-tab">
                                         <form id="formMH" method="post" asp-action="Update_MH">
+                                            <input hidden asp-for="SoDonKhuon" type="text" value="@Model.SoDonKhuon" />
+                                            <input hidden asp-for="CodeSP" type="text" value="@Model.CodeSP" />
                                             <table id="tbMH" class="table table-bordered">
                                                 <tr>
                                                     <th scope="row">KL 1 lần mài(kg)</th>
@@ -1465,6 +1824,8 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-content-below-QTK" role="tabpanel" aria-labelledby="custom-content-below-QTK-tab">
                                         <form id="formQTK" method="post" asp-action="Update_QTK">
+                                            <input hidden asp-for="SoDonKhuon" type="text" value="@Model.SoDonKhuon" />
+                                            <input hidden asp-for="CodeSP" type="text" value="@Model.CodeSP" />
                                             <table id="tbQTK" class="table table-bordered">
                                                 <tr>
                                                     <th scope="row">Trộn bột</th>
@@ -1523,6 +1884,8 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-content-below-KM" role="tabpanel" aria-labelledby="custom-content-below-KM-tab">
                                         <form id="formKM" method="post" asp-action="Update_KM">
+                                            <input hidden asp-for="SoDonKhuon" type="text" value="@Model.SoDonKhuon" />
+                                            <input hidden asp-for="CodeSP" type="text" value="@Model.CodeSP" />
                                             <table id="tbKM" class="table table-bordered">
                                                 <tr>
                                                     <th scope="row">Bavia KH cho phép (mm)</th>
@@ -1574,6 +1937,8 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-content-below-DG" role="tabpanel" aria-labelledby="custom-content-below-DG-tab">
                                         <form id="formDG" method="post" asp-action="Update_DG">
+                                            <input hidden asp-for="SoDonKhuon" type="text" value="@Model.SoDonKhuon" />
+                                            <input hidden asp-for="CodeSP" type="text" value="@Model.CodeSP" />
                                             <table id="tbDG" class="table table-bordered">
                                                 <tr>
                                                     <th scope="row">TL 1 sản phẩm (g)</th>
@@ -1636,6 +2001,8 @@
                                     </div>
                                     <div class="tab-pane fade" id="custom-content-below-YCCL" role="tabpanel" aria-labelledby="custom-content-below-YCCL-tab">
                                         <form id="formYCCL" method="post" asp-action="Update_YCCL">
+                                            <input hidden asp-for="SoDonKhuon" type="text" value="@Model.SoDonKhuon" />
+                                            <input hidden asp-for="CodeSP" type="text" value="@Model.CodeSP" />
                                             <table id="tbYCCL" class="table table-bordered">
                                                 <tr>
                                                     <th scope="row" width="20%">Kích thước</th>
@@ -1688,6 +2055,27 @@
 @section scripts{
     <script type="text/javascript">
         $(document).ready(function () {
+             var a = '@ViewBag.notice';
+                if (a != '') {
+                    let dia = bs4pop.dialog({
+
+                        title: 'Thông báo',
+                        content: '@ViewBag.notice',
+
+                        closeBtn: true,
+                        backdrop: 'static',
+                        btns: [
+                            { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                        ],
+                        onDragStart: function () {
+                            console.log('onDragStart');
+                        },
+                        onDrag: function () {
+                            console.log('onDrag');
+                        }
+
+                    });
+            }
 
             $('.js-example-basic-multiple').select2();
 
@@ -1755,6 +2143,9 @@
             $('#tbCTK input[name=NgaySuaChiTietLan2]').prop("readonly", true);
             $('#tbCTK input[name=NgaySuaChiTietLan3]').prop("readonly", true);
             $('#tbCTK input[name=NgaySuaChiTietLan4]').prop("readonly", true);
+            $('#tbKinhDoanh input[name=sdk]').prop("readonly", true);
+            $('#tbKQL input[name=csp]').prop("readonly", true);
+
             $(function () {
                 // INITIALIZE DATEPICKER PLUGIN
                 $('.datepicker').datepicker({
@@ -1983,8 +2374,8 @@
                 $("#LoaiThepKhuon").val(data);
             })
 
-            $('#test').val('@Model.LoaiThepKhuon').trigger('change');
-            $('#testinput').text = finalArray.toString();
+            var ar = '@Model.LoaiThepKhuon'.split(',');
+            $('#test').val(ar).trigger('change');
         });
 
         function myFunction() {

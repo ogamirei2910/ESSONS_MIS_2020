@@ -124,6 +124,8 @@ namespace ESSONS_MIS_2020.Controllers
                     sc.Parameters.Add(
                         new SqlParameter("@timeEnd", model.timeEnd));
                     sc.Parameters.Add(
+                        new SqlParameter("@status", model.status));
+                    sc.Parameters.Add(
                         new SqlParameter("@PhuongTien", model.PhuongTien));
                     sc.Parameters.Add(
                        new SqlParameter("@intime", DateTime.Now.ToString("HH:mm:ss")));

@@ -112,86 +112,14 @@ namespace ESSONS_MIS_2020.Controllers
             }
         }
 
-        public List<UserRoleModel> GetAllRole()
+        public List<UserFolderModel> GetAllPer()
         {
-            List<UserRoleModel> em = new List<UserRoleModel>();
+            List<UserFolderModel> em = new List<UserFolderModel>();
             string connection = _configuration.GetConnectionString("DefaultConnection");
 
             using (SqlConnection sql = new SqlConnection(connection))
             {
-                using (SqlCommand sc = new SqlCommand("sp_userrole", sql))
-                {
-                    sql.Open();
-                    sc.CommandType = System.Data.CommandType.StoredProcedure;
-                    sc.Parameters.Add(
-                       new SqlParameter("@type", "GetAll"));
-                    SqlDataReader sdr = sc.ExecuteReader();
-                    while (sdr.Read())
-                    {
-                        UserRoleModel urm = new UserRoleModel();
-                        urm.empName = sdr["empName"].ToString();
-                        urm.depName = sdr["depID"].ToString();
-                        urm.empID = sdr["empID"].ToString();
-                        em.Add(urm);
-                    }
-                }
-                return em;
-            }
-        }
-
-        [HttpGet]
-        public UserRoleModel GetFolder()
-        {
-            UserRoleModel em = new UserRoleModel();
-            string connection = _configuration.GetConnectionString("DefaultConnection");
-
-            using (SqlConnection sql = new SqlConnection(connection))
-            {
-                using (SqlCommand sc = new SqlCommand("sp_folder", sql))
-                {
-                    sql.Open();
-                    sc.CommandType = System.Data.CommandType.StoredProcedure;
-                    SqlDataReader sdr = sc.ExecuteReader();
-                    while (sdr.Read())
-                    {
-                        FolderModel fm = new FolderModel();
-                        fm.folderID = int.Parse(sdr["folderID"].ToString());
-                        fm.folderName = sdr["folderName"].ToString();
-                        em.folderList.Add(fm);
-                    }
-                    sdr.Close();
-                    sql.Close();               
-                }
-
-                using (SqlCommand sc = new SqlCommand("sp_folderchild", sql))
-                {
-                    sql.Open();
-                    sc.CommandType = System.Data.CommandType.StoredProcedure;
-                    SqlDataReader sdr = sc.ExecuteReader();
-                    while (sdr.Read())
-                    {
-                        FolderChildModel fm = new FolderChildModel();
-                        fm.folderID = int.Parse(sdr["folderID"].ToString());
-                        fm.folderChildID = int.Parse(sdr["folderName"].ToString());
-                        fm.folderChildName = sdr["folderChildName"].ToString();
-                        em.folderchildList.Add(fm);
-                    }
-                    sdr.Close();
-                    sql.Close();
-                }
-                return em;
-            }
-        }
-
-        [HttpGet]
-        public List<UserModel> GetUser()
-        {
-            List<UserModel> lum = new List<UserModel>();
-            string connection = _configuration.GetConnectionString("DefaultConnection");
-
-            using (SqlConnection sql = new SqlConnection(connection))
-            {
-                using (SqlCommand sc = new SqlCommand("sp_createuser", sql))
+                using (SqlCommand sc = new SqlCommand("sp_userfolder", sql))
                 {
                     sql.Open();
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
@@ -200,18 +128,24 @@ namespace ESSONS_MIS_2020.Controllers
                     SqlDataReader sdr = sc.ExecuteReader();
                     while (sdr.Read())
                     {
-                        UserModel um = new UserModel();
+                        UserFolderModel um = new UserFolderModel();
                         um.empID = sdr["empID"].ToString();
-                        um.username = sdr["username"].ToString();
-                        lum.Add(um);
+                        um.empName = sdr["empName"].ToString();
+                        um.depName = sdr["depName"].ToString();
+                        um.depchildName = sdr["depchildName"].ToString();
+                        um.requestOT = int.Parse(sdr["requestOT"].ToString());
+                        um.confirmOT = int.Parse(sdr["confirmOT"].ToString());
+                        um.confirmDO = int.Parse(sdr["confirmDO"].ToString());
+                        um.confirmCT = int.Parse(sdr["confirmCT"].ToString());
+                        em.Add(um);
                     }
                 }
-                return lum;
+                return em;
             }
         }
 
         [HttpPost]
-        public string SetFolder([FromBody]UserRoleModel value)
+        public string SetPer([FromBody]UserFolderModel value)
         {
             string connection = _configuration.GetConnectionString("DefaultConnection");
 
@@ -224,7 +158,19 @@ namespace ESSONS_MIS_2020.Controllers
                     sc.Parameters.Add(
                         new SqlParameter("@empID", value.empID));
                     sc.Parameters.Add(
-                        new SqlParameter("@type", "Insert"));
+                        new SqlParameter("@depID", value.depName));
+                    sc.Parameters.Add(
+                        new SqlParameter("@depchildID", value.depchildName));
+                    sc.Parameters.Add(
+                        new SqlParameter("@isRequestOT", value.requestOT));
+                    sc.Parameters.Add(
+                        new SqlParameter("@isConfirmOT", value.confirmOT));
+                    sc.Parameters.Add(
+                        new SqlParameter("@isConfirmDO", value.confirmDO));
+                    sc.Parameters.Add(
+                        new SqlParameter("@isConfirmCT", value.confirmCT));
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Update"));
                     SqlParameter result = new SqlParameter("@result", SqlDbType.NVarChar, 50);
                     result.Direction = ParameterDirection.Output;
                     sc.Parameters.Add(result);
@@ -237,7 +183,7 @@ namespace ESSONS_MIS_2020.Controllers
         }
 
         [HttpPost]
-        public string Block([FromBody]UserRoleModel value)
+        public string Block([FromBody]UserFolderModel value)
         {
             string connection = _configuration.GetConnectionString("DefaultConnection");
 

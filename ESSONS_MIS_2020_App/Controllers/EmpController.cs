@@ -543,7 +543,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult emp_UnBlock(string empID)
+        public IActionResult UnBlock(string empID)
         {
             EmpModel em = new EmpModel();
             em.empID = empID;
@@ -554,7 +554,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             if (results.IsSuccessStatusCode)
             {
                 HttpContext.Session.SetString("notice", "Đã mở khóa nhân viên " + empID);
-                return PartialView("Index");
+                return RedirectToAction("Index");
             }
 
             HttpContext.Session.SetString("notice", "Lỗi chưa mở khóa nhân viên " + empID);

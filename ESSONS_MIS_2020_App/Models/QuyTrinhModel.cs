@@ -55,6 +55,16 @@ namespace ESSONS_MIS_2020_App.Models
         public string KhoiLuongHC6MK1 { get; set; }
         public string HoaChat7MK1 { get; set; }
         public string KhoiLuongHC7MK1 { get; set; }
+        public string HoaChat8MK1 { get; set; }
+        public string KhoiLuongHC8MK1 { get; set; }
+        public string HoaChat9MK1 { get; set; }
+        public string KhoiLuongHC9MK1 { get; set; }
+        public string HoaChat10MK1 { get; set; }
+        public string KhoiLuongHC10MK1 { get; set; }
+        public string HoaChat11MK1 { get; set; }
+        public string KhoiLuongHC11MK1 { get; set; }
+        public string HoaChat12MK1 { get; set; }
+        public string KhoiLuongHC12MK1 { get; set; }
         public string HoaChat1MK1KH { get; set; }
         public string KhoiLuongHC1MK1KH { get; set; }
         public string HoaChat2MK1KH { get; set; }
@@ -69,6 +79,16 @@ namespace ESSONS_MIS_2020_App.Models
         public string KhoiLuongHC6MK1KH { get; set; }
         public string HoaChat7MK1KH { get; set; }
         public string KhoiLuongHC7MK1KH { get; set; }
+        public string HoaChat8MK1KH { get; set; }
+        public string KhoiLuongHC8MK1KH { get; set; }
+        public string HoaChat9MK1KH { get; set; }
+        public string KhoiLuongHC9MK1KH { get; set; }
+        public string HoaChat10MK1KH { get; set; }
+        public string KhoiLuongHC10MK1KH { get; set; }
+        public string HoaChat11MK1KH { get; set; }
+        public string KhoiLuongHC11MK1KH { get; set; }
+        public string HoaChat12MK1KH { get; set; }
+        public string KhoiLuongHC12MK1KH { get; set; }
         public string MaKeoKho2 { get; set; }
         public string HoaChat1MK2 { get; set; }
         public string KhoiLuongHC1MK2 { get; set; }
@@ -84,6 +104,16 @@ namespace ESSONS_MIS_2020_App.Models
         public string KhoiLuongHC6MK2 { get; set; }
         public string HoaChat7MK2 { get; set; }
         public string KhoiLuongHC7MK2 { get; set; }
+        public string HoaChat8MK2 { get; set; }
+        public string KhoiLuongHC8MK2 { get; set; }
+        public string HoaChat9MK2 { get; set; }
+        public string KhoiLuongHC9MK2 { get; set; }
+        public string HoaChat10MK2 { get; set; }
+        public string KhoiLuongHC10MK2 { get; set; }
+        public string HoaChat11MK2 { get; set; }
+        public string KhoiLuongHC11MK2 { get; set; }
+        public string HoaChat12MK2 { get; set; }
+        public string KhoiLuongHC12MK2 { get; set; }
         public string HoaChat1MK2KH { get; set; }
         public string KhoiLuongHC1MK2KH { get; set; }
         public string HoaChat2MK2KH { get; set; }
@@ -98,8 +128,20 @@ namespace ESSONS_MIS_2020_App.Models
         public string KhoiLuongHC6MK2KH { get; set; }
         public string HoaChat7MK2KH { get; set; }
         public string KhoiLuongHC7MK2KH { get; set; }
+        public string HoaChat8MK2KH { get; set; }
+        public string KhoiLuongHC8MK2KH { get; set; }
+        public string HoaChat9MK2KH { get; set; }
+        public string KhoiLuongHC9MK2KH { get; set; }
+        public string HoaChat10MK2KH { get; set; }
+        public string KhoiLuongHC10MK2KH { get; set; }
+        public string HoaChat11MK2KH { get; set; }
+        public string KhoiLuongHC11MK2KH { get; set; }
+        public string HoaChat12MK2KH { get; set; }
+        public string KhoiLuongHC12MK2KH { get; set; }
         public string NgayDuyetPhoiThep { get; set; }
         public string NgayMuaPhoiThep { get; set; }
+        public string NgayMuaPhoiThep2 { get; set; }
+        public string NgayMuaPhoiThep3 { get; set; }
         public string SoCTMuaPhoi { get; set; }
         public string NCCPhoiThep { get; set; }
         public string LoaiThepKhuon { get; set; }

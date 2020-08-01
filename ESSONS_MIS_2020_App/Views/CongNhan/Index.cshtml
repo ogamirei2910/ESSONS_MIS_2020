@@ -19,30 +19,59 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="~/Assets/dist/css/adminlte.min.css">
 </head>
-<body onclick="test()" class="hold-transition login-page" style="background-image: url('/images/pexels-photo-844297.jpeg'); 
-                                                background-position: center center;
-                                                background-repeat: no-repeat; background-attachment: fixed;
-                                                background-size: cover;">
-    <div class="login-box">
-        <div class="login-logo">
-            <a href="#"><b>ESSONS</b>MIS</a>
-        </div>
-        <!-- /.login-logo -->
-        <div class="card">
-            <form method="post" id="loginForm" name="loginForm" asp-action="Login">
-                <div class="card-body login-card-body">
-                    <p class="login-box-msg">Đăng nhập hệ thống</p>
-                    <div class="row">
-                        <input id="txtValue" asp-for="empID" autocomplete="off" autofocus type="text" maxlength="5" onkeyup="return myFunction()" class="form-control col-12" placeholder="Số thẻ" value="@ViewBag.sothe">
+<body onclick="test()" class="hold-transition">
+    <div class="card">
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12 border-dark">
+                    <div class="card-header">
+                        <form method="post" id="loginForm" name="loginForm" asp-action="Login">
+                            <div class="card-body">
+                                <p class="login-box-msg" style="font-size:40px">Đăng nhập hệ thống xin nghỉ phép</p>
+                                <div class="row">
+                                    <input id="txtValue" asp-for="empID" autocomplete="off" autofocus type="text" maxlength="5" onkeyup="return myFunction()" class="form-control col-12" placeholder="Số thẻ" value="@ViewBag.sothe">
+                                </div>
+                            </div>
+                        </form>
+                        <p class="text-danger login-box-msg"> @ViewBag.message</p>
+                        <!-- /.login-card-body -->
+                    </div>
+                    <div class="card-body border-info">
+                        <div class="card card-secondary">
+                            <div class="card-header">
+                                <h3 class="card-title">Giải thích chi tiết các loại nghỉ phép</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p>
+                                &#9679; Nghỉ phép năm là phép được hưởng nguyên lương, 01 tháng NLĐ sẽ được hưởng 01 ngày phép.<br />
+                                Nếu trong tháng NLĐ không nghỉ sẽ được cộng dồn phép vào tháng kế tiếp.
+                            </p>
+                            <p>
+                                &#9679; Nghỉ bệnh, nghỉ con bệnh (BHXH) là khi NLĐ nghỉ bệnh, con bệnh, khám thai định kỳ có giấy nghỉ bệnh của bệnh viện sẽ được BHXH chi trả bằng 75% mức lương đóng BHXH đối với nghỉ bệnh, con bệnh và 100% mức lương đóng BHXH đối với khám thai định kỳ.
+                            </p>
+                            <p>
+                                &#9679; Nghỉ thai sản là NLĐ sẽ được nghỉ 06 tháng và được BHXH chi trả tiền thai sản bằng 6 tháng lương bình quân của 6 tháng cuối và 02 tháng lương cơ sở (gửi giấy chứng sinh photo công chứng, giấy khai sinh cho phòng Nhân sự).
+                            </p>
+                            <p>
+                                &#9679; Nghỉ (vợ sinh/khám/dưỡng), dưỡng sức là NLĐ hết chế độ thai sản đi làm lại, sau đó sẽ được nghỉ dưỡng sức và lao động nam có vợ sinh con thì được nghỉ 05 ngày nếu sinh thường và 07 ngày nếu sinh mổ.
+                            </p>
+                            <p>
+                                &#9679; Nghỉ việc riêng là NLĐ nghỉ việc riêng sẽ không được tính lương ngày nghỉ, nghỉ việc riêng sẽ ảnh hưởng đến việc xét thi đua cuối năm.
+                            </p>
+                            <p>
+                                &#9679; Nghỉ kết hôn là NLĐ kết hôn sẽ được nghỉ 03 ngày, con kết hôn được nghỉ 01 ngày hưởng nguyên lương ( gửi giấy chứng nhận kết hôn bản sao cho phòng nhân sự).
+                            </p>
+                            <p>
+                                &#9679; Nghỉ tang là khi Cha Mẹ ( bên chồng, bên vợ); vợ, chồng, con chết thì được nghỉ 03 ngày hưởng nguyên lương (gửi giấy chứng tử).
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </form>
-            <p class="text-danger login-box-msg"> @ViewBag.message</p>
-            <!-- /.login-card-body -->
-            
-        </div>
+            </div>
+          
+        </section>
     </div>
-    <!-- /.login-box -->
     <!-- jQuery -->
     <script src="~/Assets/plugins/jquery/jquery.js"></script>
     <script src="~/Assets/plugins/jquery/jquery.min.js"></script>

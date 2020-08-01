@@ -110,6 +110,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             em.empEmail = mail;
             var res = hc.PostAsJsonAsync<EmpModel>($"api/emp/UpdateMail/", em);
             res.Wait();
+            //empid = "03903";
 
             List<UserRoleModel> urm = new List<UserRoleModel>();
             hc = _api.Initial();
@@ -145,14 +146,28 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");
 
-            List<UserRoleModel> um = new List<UserRoleModel>();
+            List<UserFolderModel> um = new List<UserFolderModel>();
             HttpClient hc = _api.Initial();
-            HttpResponseMessage res = await hc.GetAsync($"api/user/GetAllRole");
+            HttpResponseMessage res = await hc.GetAsync($"api/user/GetAllPer");
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
-                um = JsonConvert.DeserializeObject<List<UserRoleModel>>(results);
+                um = JsonConvert.DeserializeObject<List<UserFolderModel>>(results);
                 ViewBag.perList = um;
+            }
+
+            res = await hc.GetAsync("api/emp/Get");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                ViewBag.emp = JsonConvert.DeserializeObject<List<EmpModel>>(results);
+            }
+
+            res = await hc.GetAsync("api/emp/GetDepartment");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                ViewBag.departmentList = JsonConvert.DeserializeObject<List<DepartmentModel>>(results);
             }
 
             getRole();
@@ -160,7 +175,7 @@ namespace ESSONS_MIS_2020_App.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SetFolder(UserRoleModel urm)
+        public async Task<IActionResult> SetFolder(UserFolderModel urm)
         {
             if (urm.empID == null)
             {
@@ -168,10 +183,15 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return PartialView("DisplayError");
             }
 
-            HttpClient hc = _api.Initial();
-            var res = await hc.PostAsJsonAsync<UserRoleModel>("api/user/setfolder", urm);
+            if (urm.depName == null)
+            {
+                ViewBag.Error = "Chưa chọn bộ phận";
+                return PartialView("DisplayError");
+            }
 
-            urm.empID = int.Parse(urm.empID).ToString("D5");
+            HttpClient hc = _api.Initial();
+            var res = await hc.PostAsJsonAsync<UserFolderModel>("api/user/setper", urm);
+
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
@@ -192,10 +212,10 @@ namespace ESSONS_MIS_2020_App.Controllers
         public IActionResult user_Block(string empid)
         {
             ViewBag.Error = "";
-            UserRoleModel em = new UserRoleModel();
+            UserFolderModel em = new UserFolderModel();
             em.empID = empid;
             HttpClient hc = _api.Initial();
-            var res = hc.PostAsJsonAsync<UserRoleModel>($"api/user/Block", em);
+            var res = hc.PostAsJsonAsync<UserFolderModel>($"api/user/Block", em);
             res.Wait();
 
             var result = res.Result;

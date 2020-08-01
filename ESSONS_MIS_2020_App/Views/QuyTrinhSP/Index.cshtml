@@ -11,7 +11,7 @@
                 <div class="card-header">
                     <h3 class="card-title">
                         <i class="fa fa-info"></i>
-                        Quy trình sản xuất phát triển sản phẩm mới
+                        Qui trình sản xuất phát triển sản phẩm mới
                     </h3>
                 </div>
 
@@ -25,7 +25,7 @@
                                 </div>
                                 <div class="col-2">
                                     <select asp-for="CodeSP" class="custom-select selectpicker" id="loaiCodeSP">
-                                        <option data-toggle="popover" title="Ghi chú" data-content="Hàng EX" data-placement="left" value="EX" selected>EX</option>
+                                        <option data-toggle="popover" title="Ghi chú" data-content="Hàng xuất khẩu" data-placement="left" value="EX" selected>EX</option>
                                         <option data-toggle="popover" title="Ghi chú" data-content="Hàng hóa" data-placement="left" value="HH">HH</option>
                                         <option data-toggle="popover" title="Ghi chú" data-content="Hàng nội địa" data-placement="left" value="ND">ND</option>
                                     </select>
@@ -39,14 +39,6 @@
                         </form>
                     </div>
                 }
-                <div class="card-body">
-                    <div class="form-group row">
-                        <label>Excel file &nbsp;&nbsp;</label>
-                        <a href="@Url.Action("Export", "QuyTrinhSP")" class="links">
-                            <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
-                        </a>
-                    </div>
-                </div>
                 <div class="card-body">
                     <table id="example1" class="table table-bordered table-hover">
                         <thead>
@@ -79,6 +71,136 @@
                             }
                         </tbody>
                     </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Export Excel File</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Kinh Doanh</th>
+                                        <th>KHSX</th>
+                                        <th>Kho</th>
+                                        <th>Thu Mua</th>
+                                        <th>Chê tạo khuôn</th>
+                                        <th>Bảo trì khuôn</th>
+                                        <th>Kiểm máy</th>
+                                        <th>Đóng gói</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td width="13%">
+                                            <a href="@Url.Action("ExportKinhDoanh", "QuyTrinhSP")" class="links">
+                                                <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                                            </a>
+                                        </td>
+                                        <td width="13%">
+                                            <a href="@Url.Action("ExportKHSX", "QuyTrinhSP")" class="links">
+                                                <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                                            </a>
+                                        </td>
+                                        <td width="13%">
+                                            <a href="@Url.Action("ExportKho", "QuyTrinhSP")" class="links">
+                                                <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                                            </a>
+                                        </td>
+                                        <td width="13%">
+                                            <a href="@Url.Action("ExportThuMua", "QuyTrinhSP")" class="links">
+                                                <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                                            </a>
+                                        </td>
+                                        <td width="13%">
+                                            <a href="@Url.Action("ExportCTK", "QuyTrinhSP")" class="links">
+                                                <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                                            </a>
+                                        </td>
+                                        <td width="13%">
+                                            <a href="@Url.Action("ExportBTK", "QuyTrinhSP")" class="links">
+                                                <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                                            </a>
+                                        </td>
+                                        <td width="13%">
+                                            <a href="@Url.Action("ExportKM", "QuyTrinhSP")" class="links">
+                                                <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                                            </a>
+                                        </td>
+                                        <td width="13%">
+                                            <a href="@Url.Action("ExportDG", "QuyTrinhSP")" class="links">
+                                                <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Cán trộn</th>
+                                        <th>Định hình</th>
+                                        <th>QCKN</th>
+                                        <th>Bóc tách máy</th>
+                                        <th>Lưu hóa 2</th>
+                                        <th>Mài hàng</th>
+                                        <th>Quy trình khác</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td width="13%">
+                                            <a href="@Url.Action("ExportCTNL", "QuyTrinhSP")" class="links">
+                                                <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                                            </a>
+                                        </td>
+                                        <td width="13%">
+                                            <a href="@Url.Action("ExportDHE", "QuyTrinhSP")" class="links">
+                                                <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                                            </a>
+                                        </td>
+                                        <td width="13%">
+                                            <a href="@Url.Action("ExportQCKN", "QuyTrinhSP")" class="links">
+                                                <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                                            </a>
+                                        </td>
+                                        <td width="13%">
+                                            <a href="@Url.Action("ExportBT", "QuyTrinhSP")" class="links">
+                                                <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                                            </a>
+                                        </td>
+                                        <td width="13%">
+                                            <a href="@Url.Action("ExportLH2", "QuyTrinhSP")" class="links">
+                                                <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                                            </a>
+                                        </td>
+                                        <td width="13%">
+                                            <a href="@Url.Action("ExportMH", "QuyTrinhSP")" class="links">
+                                                <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                                            </a>
+                                        </td>
+                                        <td width="13%">
+                                            <a href="@Url.Action("ExportQTK", "QuyTrinhSP")" class="links">
+                                                <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
+                                            </a>
+                                        </td>
+                                        <td width="13%">
+                                            
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
