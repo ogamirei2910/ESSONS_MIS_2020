@@ -12,13 +12,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using OfficeOpenXml.FormulaParsing.Utilities;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
 
 namespace ESSONS_MIS_2020_App.Controllers
 {
     public class DateOffController : Controller
     {
+        //Lấy đường dẫn đến kết tới API
         EssonsApi _api = new EssonsApi();
 
+        //Lấy thông tin cơ bản của nhân viên và quyền truy cập thư mục
         public void getRole()
         {
             var role = HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList");
@@ -76,7 +79,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             number = (Total.TotalDays + 1) * 8;
             if (um.dateoffType == "4" || um.dateoffType == "1")
             {
-                if (um.dateoffEndTime != null && um.dateoffStartTime != null && um.dateoffStart == um.dateoffEnd)
+                if (um.dateoffEndTime != null && um.dateoffStartTime != null && um.dateoffStart == um.dateoffEnd && number == 1)
                 {
                     int yearS = int.Parse(um.dateoffStart.Substring(6, 4));
                     int monthS = int.Parse(um.dateoffStart.Substring(3, 2));
@@ -175,15 +178,15 @@ namespace ESSONS_MIS_2020_App.Controllers
                     case "16": dateoffName = "Dưỡng sức"; break;
                 }
 
-                EmpModel am = new EmpModel();
+                List<EmpModel> am = new List<EmpModel>();
                 res = hc.GetAsync($"api/emp/GetEmailEmpManager?empid={ViewBag.empid}");
                 res.Wait();
                 results = res.Result;
                 if (results.IsSuccessStatusCode)
                 {
                     var results2 = results.Content.ReadAsStringAsync().Result;
-                    am = JsonConvert.DeserializeObject<EmpModel>(results2);
-                    if (am.empEmail != "" && am.empEmail != null)
+                    am = JsonConvert.DeserializeObject<List<EmpModel>>(results2);
+                    if (am.Count > 0)
                     {
                         SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
                         client.UseDefaultCredentials = false;
@@ -191,7 +194,8 @@ namespace ESSONS_MIS_2020_App.Controllers
 
                         MailMessage mailMessage = new MailMessage();
                         mailMessage.From = new MailAddress("noreply@essons.vn");
-                        mailMessage.To.Add(am.empEmail);
+                        foreach (var item in am)
+                            mailMessage.To.Add(item.empEmail);
                         mailMessage.IsBodyHtml = true;
                         mailMessage.Body = "Nhân viên " + ViewBag.message + "(" + ViewBag.empid + ")" + " xin nghỉ " + dateoffName +
                             "<br /> Từ ngày: " + um.dateoffStart + " Đến ngày: " + um.dateoffEnd + @" <br /> Đang chờ bạn xác nhận http://portal.essons.vn:456/DateOff/dateoff_Confirm";
@@ -249,7 +253,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             {
                 var results2 = results.Content.ReadAsStringAsync().Result;
                 am = JsonConvert.DeserializeObject<EmpModel>(results2);
-                if (am.empEmail != "" && am.empEmail != null)
+                if (am.empEmail != "")
                 {
                     SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
                     client.UseDefaultCredentials = false;
@@ -371,18 +375,25 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View(um);
         }
 
+        //Lấy thông tin toàn bộ nhân viên công ty trừ thời vụ
         public async Task<IActionResult> dateoff_yearoff()
         {
+            //Kiểm tra quyền truy cập nếu chưa lấy danh sách mục quản lý thì trở về trang đăng nhập
             if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
             {
                 string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
                 HttpContext.Session.SetString("resultPage", path);
                 return RedirectToAction("Login", "User");
             }
+
+            //Lấy danh sách những mục được phép truy cập
             getRole();
+
+            //Lấy nội dung thông báo trả về từ các Controller khác và set session về rỗng
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");
 
+            //Lấy danh sách nhân viên trong công ty trừ thời vụ
             List<YearOffModel> um = new List<YearOffModel>();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.GetAsync($"api/emp/GetAllYearOff");

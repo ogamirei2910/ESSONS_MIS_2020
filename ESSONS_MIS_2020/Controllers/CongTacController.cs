@@ -257,6 +257,37 @@ namespace ESSONS_MIS_2020.Controllers
                 return lem;
             }
         }
+        public List<CongTacModel> GetAllCongTac2()
+        {
+            List<CongTacModel> lem = new List<CongTacModel>();
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_congtac", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "SelectAll2"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        CongTacModel em = new CongTacModel();
+                        em.congtacID = sdr["congtacID"].ToString();
+                        em.depName = sdr["depName"].ToString();
+                        em.empid = sdr["empid"].ToString();
+                        em.planName = sdr["planName"].ToString();
+                        em.planStart = sdr["planStart"].ToString();
+                        em.planEnd = sdr["planEnd"].ToString();
+                        em.timeStart = sdr["timeStart"].ToString();
+                        em.timeEnd = sdr["timeEnd"].ToString();
+                        lem.Add(em);
+                    }
+                }
+                return lem;
+            }
+        }
 
         public CongTacModel GetCongTacDetail(string congtacID)
         {

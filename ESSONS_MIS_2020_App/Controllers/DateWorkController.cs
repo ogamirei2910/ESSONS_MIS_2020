@@ -339,13 +339,13 @@ namespace ESSONS_MIS_2020_App.Controllers
             {
                 var results = res.Content.ReadAsStringAsync().Result;
                 ViewBag.Error = results;
-                EmpModel am = new EmpModel();
+                List<EmpModel> am = new List<EmpModel>();
                 res = await hc.GetAsync($"api/emp/GetEmailEmpManager?empid={ViewBag.empid}");
                 if (res.IsSuccessStatusCode)
                 {
                     var results2 = res.Content.ReadAsStringAsync().Result;
-                    am = JsonConvert.DeserializeObject<EmpModel>(results2);
-                    if (am.empEmail != "" && am.empEmail != null)
+                    am = JsonConvert.DeserializeObject<List<EmpModel>>(results2);
+                    if (am.Count > 0)
                     {
                         SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
                         client.UseDefaultCredentials = false;
@@ -356,9 +356,15 @@ namespace ESSONS_MIS_2020_App.Controllers
 
                         DateTime dtRequest = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 16, 30, 0);
                         if (DateTime.Now.TimeOfDay < dtRequest.TimeOfDay)
-                            mailMessage.To.Add(am.empEmail);
+                        {
+                            foreach (var item in am)
+                                mailMessage.To.Add(item.empEmail);
+                        }
                         else
+                        {
                             mailMessage.To.Add("dungtran@essons.vn");
+                            mailMessage.To.Add("kaiyiyu@essons.vn");
+                        }
                         mailMessage.IsBodyHtml = true;
                         mailMessage.Body = "Nhân viên " + ViewBag.message + " (" + ViewBag.empid + ")" + " yêu cầu đăng kí tăng ca." +
                             "<br /> Từ ngày: " + um.datework + " Đến ngày: " + um.dateworkend + @" <br /> Đang chờ bạn xác nhận http://portal.essons.vn:456/DateWork/Confirm";

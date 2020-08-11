@@ -303,7 +303,7 @@ namespace ESSONS_MIS_2020.Controllers
             return ldm;
         }
 
-        [HttpGet]
+        [HttpGet] 
         public List<EmpModel> GetEmpManager(string groupID)
         {
             List<EmpModel> ldm = new List<EmpModel>();
@@ -420,9 +420,9 @@ namespace ESSONS_MIS_2020.Controllers
         }
 
         [HttpGet]
-        public EmpModel GetEmailEmpManager(string empid)
+        public List<EmpModel> GetEmailEmpManager(string empid)
         {
-            EmpModel dm = new EmpModel();
+            List<EmpModel> lem = new List<EmpModel>();   
             string connection = _configuration.GetConnectionString("DefaultConnection");
 
             using (SqlConnection sql = new SqlConnection(connection))
@@ -438,11 +438,13 @@ namespace ESSONS_MIS_2020.Controllers
                     SqlDataReader sdr = sc.ExecuteReader();
                     while (sdr.Read())
                     {
+                        EmpModel dm = new EmpModel();
                         dm.empEmail = sdr["empEmail"].ToString();
+                        lem.Add(dm);
                     }
                 }
             }
-            return dm;
+            return lem;
         }
 
         [HttpGet]

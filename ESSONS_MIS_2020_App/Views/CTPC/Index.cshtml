@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="se-pre-con"></div>
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fa fa-info"></i>
+                        Công thức pha chế hóa chất
+                    </h3>
+                    <br />
+                    <a class="btn btn-primary" href="/CTPC/Create">
+                        Tạo mới
+                    </a>
+                </div>              
+                <div class="card-body">
+                    <table id="example1" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Số thẻ</th>
+                                <th>Chất keo</th>
+                                <th>Mã keo 1</th>
+                                <th>Mã keo 2</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.ctpcList)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.sothe
+                                    </td>
+                                    <td>
+                                        @item.chatkeo
+                                    </td>
+                                    <td>@item.MaKeo1</td>
+                                    <td>@item.MaKeo2</td>
+                                    <td>
+                                        @Html.ActionLink("Chi tiết", "Detail", "CTPC", new { SoThe = item.sothe }, new { @class = "btn btn-primary btn-sm", @target = "_blank" })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>      
+        </div>
+    </section>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $.fn.dataTable.ext.errMode = 'throw';
+
+        $('#example1').dataTable({
+            "aaSorting": [],
+            // Your other options here...
+        });
+
+    </script>
+}

@@ -152,7 +152,7 @@
                     url: '@Url.Action("dateoff_Request", "DateOff")',
                     data: $("#formPhep").serialize(),
                     success: function (result) {
-                        debugger
+                        debugger                    
                         if (result != '\r\nOK\r\n') {
                             let dia = bs4pop.dialog({
 
@@ -175,7 +175,6 @@
                         else {
                             window.location.href = "/Home/Index";
                         }
-
                     }
                 })
                 e.preventDefault();

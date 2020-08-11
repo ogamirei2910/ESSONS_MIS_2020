@@ -54,6 +54,28 @@ namespace ESSONS_MIS_2020_App.Controllers
             }
             return View();
         }
+        public async Task<IActionResult> CongTac_All()
+        {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
+
+            getRole();
+            HttpClient hc = _api.Initial();
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
+
+            var res = await hc.GetAsync($"api/CongTac/GetAllCongTac2");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                ViewBag.requestList = JsonConvert.DeserializeObject<List<CongTacModel>>(results);
+            }
+            return View();
+        }
 
         public async Task<IActionResult> YeuCauCongTac()
         {
@@ -96,15 +118,15 @@ namespace ESSONS_MIS_2020_App.Controllers
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
-                EmpModel am = new EmpModel();
+                List<EmpModel> am = new List<EmpModel>();
                 res = hc.GetAsync($"api/emp/GetEmailEmpManager?empid={ViewBag.empid}");
                 res.Wait();
                 results = res.Result;
                 if (results.IsSuccessStatusCode)
                 {
                     var results2 = results.Content.ReadAsStringAsync().Result;
-                    am = JsonConvert.DeserializeObject<EmpModel>(results2);
-                    if (am.empEmail != "" && am.empEmail != null)
+                    am = JsonConvert.DeserializeObject<List<EmpModel>>(results2);
+                    if (am.Count > 0)
                     {
                         SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
                         client.UseDefaultCredentials = false;
@@ -112,7 +134,8 @@ namespace ESSONS_MIS_2020_App.Controllers
 
                         MailMessage mailMessage = new MailMessage();
                         mailMessage.From = new MailAddress("noreply@essons.vn");
-                        mailMessage.To.Add(am.empEmail);
+                        foreach(var item in am)
+                            mailMessage.To.Add(item.empEmail);
                         mailMessage.IsBodyHtml = true;
                         mailMessage.Body = "Nhân viên " + ViewBag.message + "(" + ViewBag.empid + ")" + " xin đi công tác " + um.planName +
                             "<br /> Từ ngày: " + um.planStart + " Đến ngày: " + um.planEnd + @" <br /> Đang chờ bạn xác nhận http://portal.essons.vn:456/CongTac/XacNhanCongTac";

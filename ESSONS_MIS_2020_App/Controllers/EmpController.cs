@@ -12,12 +12,14 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using QRCoder;
 
-
 namespace ESSONS_MIS_2020_App.Controllers
 {
     public class EmpController : Controller
     {
+        //Lấy đường dẫn đến kết tới API
         EssonsApi _api = new EssonsApi();
+
+        //Lấy thông tin cơ bản của nhân viên và quyền truy cập thư mục
         public void getRole()
         {
             var role = HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList");
@@ -32,8 +34,11 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.folder = DistinctItems;
             ViewBag.folderList = role;
         }
+
+        //Giao diện mặc định quản lý nhân viên
         public async Task<IActionResult> Index()
         {
+            //Kiểm tra quyền truy cập nếu chưa lấy danh sách mục quản lý thì trở về trang đăng nhập
             if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
             {
                 string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
@@ -41,9 +46,11 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return RedirectToAction("Login", "User");
             }
 
+            //Lấy nội dung thông báo trả về từ các Controller khác và set session về rỗng
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");
 
+            //Lấy thông tin cơ bản của tất cả nhân viên đang còn làm việc 
             List<EmpModel> um = new List<EmpModel>();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.GetAsync("api/emp/Get");
@@ -52,12 +59,14 @@ namespace ESSONS_MIS_2020_App.Controllers
                 var results = res.Content.ReadAsStringAsync().Result;
                 um = JsonConvert.DeserializeObject<List<EmpModel>>(results);
             }
+
             //Role
             getRole();
             //-----------------------------------
             return View(um);
         }
 
+        //Giao diện mặc định xuất danh sách vị trí của nhân viên qua từng thời gian
         public async Task<IActionResult> emp_Position()
         {
             getRole();
@@ -99,8 +108,10 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View(um);
         }
 
+        //Load thông tin cho giao diện tạo mới nhân viên
         public async Task<IActionResult> emp_Create()
         {
+            //Kiểm tra quyền truy cập nếu chưa lấy danh sách mục quản lý thì trở về trang đăng nhập
             if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
             {
                 string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
@@ -108,6 +119,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return RedirectToAction("Login", "User");
             }
 
+            //Lấy danh sách Nhóm bộ phận
             List<DepartmentModel> em = new List<DepartmentModel>();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.GetAsync("api/emp/GetDepartment");
@@ -117,6 +129,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 em = JsonConvert.DeserializeObject<List<DepartmentModel>>(results);
             }
 
+            //Lấy danh sách nhóm bộ phận định hình => Để thêm người quản lý nhóm bộ phận này
             List<PositionDepEmpModel> am = new List<PositionDepEmpModel>();
             res = await hc.GetAsync("api/emp/GetGroupID");
             if (res.IsSuccessStatusCode)
@@ -125,6 +138,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 am = JsonConvert.DeserializeObject<List<PositionDepEmpModel>>(results);
             }
 
+            //Lấy số thứ tự tiếp theo của nhân viên
             string empid = "";
             res = await hc.GetAsync("api/emp/GetEmpSTT");
             if (res.IsSuccessStatusCode)
@@ -136,22 +150,28 @@ namespace ESSONS_MIS_2020_App.Controllers
 
             ViewBag.departmentList = em;
             ViewBag.groupList = am;
+
+            //Lấy danh sách những mục được phép truy cập
             getRole();
 
             return View();
         }
 
+        //Chỉnh kích thước ảnh phù hợp với khung hình thẻ nhân viên
         public static Image ResizeImage(Image imgToResize, Size size)
         {
             return (Image)(new Bitmap(imgToResize, size));
         }
 
+        //Gửi thông tin đến api để tiến hành thêm mới nhân viên
         [HttpPost]
         public IActionResult emp_Create(EmpModel um)
         {
             getRole();
-            HttpClient hc = _api.Initial();
-            um.empID = int.Parse(um.empID).ToString("D5");
+            HttpClient hc = _api.Initial(); //thiết lập đường dẫn đến web api
+            um.empID = int.Parse(um.empID).ToString("D5"); //Chuyển số thứ tự theo mẫu 00001 00002 00003
+
+            //Xử lý hình ảnh của nhân viên và lưu trữ trên IIS
             var image = um.ProfileImage;
             if (image != null)
             {
@@ -203,40 +223,21 @@ namespace ESSONS_MIS_2020_App.Controllers
                 QRCode qrCode = new QRCode(_qrCodeData);
                 Bitmap qrCodeImage = qrCode.GetGraphic(20);
 
-                //var filePath2 = Path.Combine("wwwroot/images/NhanVien", int.Parse(um.empID).ToString("D5") + "_QR.png");
-                //qrCodeImage.Save(filePath2, System.Drawing.Imaging.ImageFormat.Png);
                 //-----------------------------------------------------
                 g.DrawImage(qrCodeImage, 790, 300, 220, 220);
 
                 img.Save($"wwwroot/images/NhanVien/Card_{um.empImage}");
 
             }
-
-            //Save excel file
-            //string folder = "wwwroot/images/NhanVien";
-            //string excelName = $"UserList-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
-            //FileInfo file = new FileInfo(Path.Combine(folder, excelName));
-            //if (file.Exists)
-            //{
-            //    file.Delete();
-            //    file = new FileInfo(Path.Combine(folder, excelName));
-            //}
-
-            //// query data from database  
-            //using (var package = new ExcelPackage(file))
-            //{
-            //    var workSheet = package.Workbook.Worksheets.Add("Sheet1");
-
-            //    package.Save();
-            //}
+            //------------------------------------------------------------------------------ End xử lý hình ảnh
 
             um.username = ViewBag.empid;
             um.status = 1;
             um.indat = DateTime.Now.ToString("dd-mm-yyyy");
             um.intime = DateTime.Now.ToString("HH:mm:ss");
 
+            //Chuyển dữ liệu đến web API để xử lý
             var res = hc.PostAsJsonAsync<EmpModel>("api/emp/Create", um);
-
             res.Wait();
 
             var results = res.Result;
@@ -250,6 +251,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View();
         }
 
+        //Dùng để in QR tất cả nhân viên
         [HttpGet]
         public async Task<IActionResult> emp_Create_QR()
         {
@@ -318,8 +320,9 @@ namespace ESSONS_MIS_2020_App.Controllers
 
 
             return View();
-        }
+        } 
 
+        //Lấy thông tin của nhân viên để sửa
         [HttpGet]
         public async Task<IActionResult> emp_Update(string empID)
         {
@@ -411,6 +414,8 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View(um);
         }
 
+
+        //Gửi thông tin đến api để tiền hành cập nhật nhân viên
         [HttpPost]
         public IActionResult emp_Update(EmpModel um)
         {
@@ -499,7 +504,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View(um.empID);
         }
 
-
+        //Lấy thông tin nhân viên đã khóa trước đó
         [HttpGet]
         public async Task<IActionResult> emp_UnBlock()
         {
@@ -525,6 +530,8 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View(um);
         }
 
+
+        //Khóa nhân viên
         public IActionResult emp_Block(string empID)
         {
             EmpModel em = new EmpModel();
@@ -543,6 +550,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return RedirectToAction("Index");
         }
 
+        //Mở khóa nhân viên
         public IActionResult UnBlock(string empID)
         {
             EmpModel em = new EmpModel();
@@ -561,6 +569,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return RedirectToAction("Index");
         }
 
+        //Lấy thông tin bộ phận con cho Nhóm bộ phận truyền đến combobox của View
         public async Task<IActionResult> DepartmentChild(string depID)
         {
             List<DepartmentChildModel> em = new List<DepartmentChildModel>();
@@ -575,6 +584,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return PartialView("DisplayDEpartmentChild");
         }
 
+        //Lấy thông tin người quản lý cho Nhóm bộ phận định hình truyền đến combobox của View
         public async Task<IActionResult> EmpManager(string groupID)
         {
             List<EmpModel> em = new List<EmpModel>();
@@ -589,6 +599,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return PartialView("DisplayEmpManager");
         }
 
+        //Lấy thông tin chức vụ của nhân viên truyền đến combobox của View
         public async Task<IActionResult> Position(string depchildID)
         {
             List<PositionModel> em = new List<PositionModel>();

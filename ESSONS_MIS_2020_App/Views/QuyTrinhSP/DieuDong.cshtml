@@ -20,10 +20,10 @@
                             <tr>
                                 <td>
                                     <div class="form-group row">
-                                        <label class="col-sm-4 col-form-label">Chọn Code SP</label>
-                                        <select id="codesp" asp-for="CodeSP" class="custom-select col-sm-4"
-                                                asp-items="@(new SelectList(ViewBag.codeSP,"CodeSP","CodeSP"))">
-                                            <option value="0" disabled selected>Chọn codeSP</option>
+                                        <label class="col-sm-4 col-form-label">Chọn Số Thẻ</label>
+                                        <select id="sothe" asp-for="sothe" class="custom-select col-sm-4"
+                                                asp-items="@(new SelectList(ViewBag.sothe,"sothe","sothe"))">
+                                            <option value="0" disabled selected>Chọn số thẻ</option>
                                         </select>
                                     </div>
                                     <div class="form-group row">
@@ -73,15 +73,14 @@
 @section scripts{
     <script type="text/javascript">
         $(document).ready(function () {
-            var codeSP = $("#codesp");
+            var sothe = $("#sothe");
             var makeo = $("#makeo");
-            var table = $("#table");
             makeo.prop('disabled', true);
             debugger
-            codeSP.change(function () {
+            sothe.change(function () {
                 $.ajax({
                     type: "GET",
-                    url: "/QuyTrinhSP/GetMaKeo?CodeSp=" + codeSP.val(),
+                    url: "/QuyTrinhSP/GetMaKeo?sothe=" + sothe.val(),
                     contentType: "html",
                     success: function (data) {
                         debugger
@@ -89,29 +88,7 @@
                         makeo.prop('disabled', false);
                         makeo.append(data);
                     }
-                })
-
-                table.empty();             
-
-                $.ajax({
-                    type: "GET",
-                    url: "/QuyTrinhSP/GetKhoHoaChat1?CodeSp=" + codeSP.val(),
-                    contentType: "html",
-                    success: function (data) {
-                        debugger
-                        table.append(data);
-                    }
-                })
-
-                $.ajax({
-                    type: "GET",
-                    url: "/QuyTrinhSP/GetKhoHoaChat2?CodeSp=" + codeSP.val(),
-                    contentType: "html",
-                    success: function (data) {
-                        debugger
-                        table.append(data);
-                    }
-                })
+                })          
             })
 
             $("#dieudongForm").submit(function (e) {

@@ -1,0 +1,299 @@
+﻿@model ESSONS_MIS_2020_App.Models.CongThucPhaChe
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Thêm mới thẻ hóa chất</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form id="formData" method="post">
+                            <table class="table">
+                                <tr>
+                                    <td>
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label">Số thẻ</label>
+                                            <input type="text" class="form-control" readonly asp-for="sothe" value="@ViewBag.SoThe" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label">Chất keo</label>
+                                            <input asp-for="chatkeo" id="chatkeo" type="text" class="form-control" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label">Màu</label>
+                                            <select disabled id="slMau" class="form-control custom-select">
+                                                <option value="" selected>Không</option>
+                                                <option value="B">Đen</option>
+                                                <option value="W">Trắng</option>
+                                                <option value="Y">Vàng</option>
+                                                <option value="R">Đỏ</option>
+                                                <option value="U">Xanh dương</option>
+                                                <option value="G">Xanh lá</option>
+                                                <option value="E">Xám</option>
+                                                <option value="V">Tím</option>
+                                                <option value="P">Hồng</option>
+                                                <option value="O">Nâu</option>
+                                                <option value="T">Trắng trong</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">Công thức pha chế theo yêu cầu khách hàng/ nhà cung cấp (Standard)</h3>
+                                </div>
+                            </div>
+                            <table id="tbk" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Mã keo 1 KH</th>
+                                        <th>Tên Hóa Chất</th>
+                                        <th>Khối lượng</th>
+                                        <th>Mã keo 2 KH</th>
+                                        <th>Tên Hóa Chất</th>
+                                        <th>Khối lượng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < 12; i++)
+                                    {
+                                        <tr>
+                                            <td width="7%">
+                                                <input type="text" class="form-control" readonly asp-for="@Model.ctpck[i].STT" value="@(i+1)" />
+                                            </td>
+                                            <td width="15%">
+                                                <input type="text" class="form-control" asp-for="@Model.ctpck[i].MaKeo1" />
+                                            </td>
+                                            <td width="15%">
+                                                <select asp-for="@Model.ctpck[i].TenHoaChatMK1" class="custom-select"
+                                                        asp-items="@(new SelectList(ViewBag.HoaChat,"TenHoaChat","TenHoaChat"))">
+                                                    <option value="0" selected>Chọn chất</option>
+                                                </select>
+                                            </td>
+                                            <td width="15%">
+                                                <input type="text" class="form-control" asp-for="@Model.ctpck[i].KhoiLuongMK1" />
+                                            </td>
+                                            <td width="15%">
+                                                <input type="text" class="form-control" asp-for="@Model.ctpck[i].MaKeo2" />
+                                            </td>
+                                            <td width="15%">
+                                                <select asp-for="@Model.ctpck[i].TenHoaChatMK2" class="custom-select"
+                                                        asp-items="@(new SelectList(ViewBag.HoaChat,"TenHoaChat","TenHoaChat"))">
+                                                    <option value="0" selected>Chọn chất</option>
+                                                </select>
+                                            </td>
+                                            <td width="15%">
+                                                <input type="text" class="form-control" asp-for="@Model.ctpck[i].KhoiLuongMK2" />
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <br />
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">Công thức pha chế Essons Global</h3>
+                                </div>
+                            </div>
+                            <table id="tbe" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Mã keo 1</th>
+                                        <th>Tên Hóa Chất</th>
+                                        <th>Khối lượng</th>
+                                        <th>Mã keo 2</th>
+                                        <th>Tên Hóa Chất</th>
+                                        <th>Khối lượng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < 14; i++)
+                                    {
+                                        <tr>
+                                            <td width="7%">
+                                                <input type="text" class="form-control" readonly asp-for="@Model.ctpce[i].STT" value="@(i+1)" />
+                                            </td>
+                                            <td width="15%">
+                                                <input type="text" class="form-control" asp-for="@Model.ctpce[i].MaKeo1" />
+                                            </td>
+                                            <td width="15%">
+                                                <select id="dep" asp-for="@Model.ctpce[i].TenHoaChatMK1" class="custom-select"
+                                                        asp-items="@(new SelectList(ViewBag.HoaChat,"TenHoaChat","TenHoaChat"))">
+                                                    <option value="0" selected>Chọn chất</option>
+                                                </select>
+                                            </td>
+                                            <td width="15%">
+                                                <input type="text" class="form-control" asp-for="@Model.ctpce[i].KhoiLuongMK1" />
+                                            </td>
+                                            <td width="15%">
+                                                <input type="text" class="form-control" asp-for="@Model.ctpce[i].MaKeo2" />
+                                            </td>
+                                            <td width="15%">
+                                                <select id="dep" asp-for="@Model.ctpce[i].TenHoaChatMK2" class="custom-select"
+                                                        asp-items="@(new SelectList(ViewBag.HoaChat,"TenHoaChat","TenHoaChat"))">
+                                                    <option value="0" selected>Chọn chất</option>
+                                                </select>
+                                            </td>
+                                            <td width="15%">
+                                                <input type="text" class="form-control" asp-for="@Model.ctpce[i].KhoiLuongMK2" />
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div class="card-footer">
+                                <a href="/CTPC/Index" class="btn btn-secondary">Quay Lại</a>
+                                <button id="btSend" class="btn btn-primary float-right">
+                                    Xác nhận
+                                </button>
+                            </div>
+                        </form>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btSend").click(function (e) {
+                debugger
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: '@Url.Action("Create", "CTPC")',
+                    data: $("#formData").serialize(),
+                    success: function (result) {
+                        debugger
+                        
+                            let dia = bs4pop.dialog({
+
+                                title: 'Thông báo',
+                                content: result,
+
+                                closeBtn: true,
+                                backdrop: 'static',
+                                btns: [
+                                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                                ],
+                                onDragStart: function () {
+                                    console.log('onDragStart');
+                                },
+                                onDrag: function () {
+                                    console.log('onDrag');
+                                }
+                            });
+                    }
+                })
+                e.preventDefault();
+            });
+
+            $("#chatkeo").on("input", function () {
+                var chatkeo = $("#chatkeo");
+                var sothe = $("#sothe");
+                var viettat = "";
+                debugger
+                if (chatkeo.val().length > 1) {
+                    if (chatkeo.val().substr(0, 1) == 'S')
+                        $("#slMau").prop("disabled", false);
+                    else
+                        $("#slMau").prop("disabled", true);
+                    if (chatkeo.val().substr(0, 1) == 'N') {
+                        if (chatkeo.val().substr(0, 2) == 'NP')
+                            viettat = 'NP';
+                        else
+                            if (chatkeo.val().substr(0, 2) == 'NR')
+                                viettat = 'NR';
+                            else
+                                viettat = 'NB';
+                    }
+                    else
+                        viettat = chatkeo.val().substr(0, 2);
+                    sothe.val(sothe.val().substr(0, 3) + '_' + viettat);
+                }
+                else {
+                    $("slMau").prop("disabled", true);
+                }
+            });
+
+
+            $("#slMau").change(function (e) {
+                debugger
+                var sothe = $("#sothe");
+                var value = $("#slMau").val();
+                var chatkeo = $("#chatkeo");
+                if (chatkeo.val().length > 1 && chatkeo.val().substr(0,1) == 'S') {
+                    if (value == 'B')
+                        sothe.val(sothe.val().substr(0, 3) + '_' + chatkeo.val().substr(0, 2) + '_' + 'B')
+                    if (value == 'W')
+                        sothe.val(sothe.val().substr(0, 3) + '_' + chatkeo.val().substr(0, 2) + '_' + 'W')
+                    if (value == 'Y')
+                        sothe.val(sothe.val().substr(0, 3) + '_' + chatkeo.val().substr(0, 2) + '_' + 'Y')
+                    if (value == 'R')
+                        sothe.val(sothe.val().substr(0, 3) + '_' + chatkeo.val().substr(0, 2) + '_' + 'R')
+                    if (value == 'U')
+                        sothe.val(sothe.val().substr(0, 3) + '_' + chatkeo.val().substr(0, 2) + '_' + 'U')
+                    if (value == 'G')
+                        sothe.val(sothe.val().substr(0, 3) + '_' + chatkeo.val().substr(0, 2) + '_' + 'G')
+                    if (value == 'E')
+                        sothe.val(sothe.val().substr(0, 3) + '_' + chatkeo.val().substr(0, 2) + '_' + 'E')
+                    if (value == 'V')
+                        sothe.val(sothe.val().substr(0, 3) + '_' + chatkeo.val().substr(0, 2) + '_' + 'V')
+                    if (value == 'P')
+                        sothe.val(sothe.val().substr(0, 3) + '_' + chatkeo.val().substr(0, 2) + '_' + 'P')
+                    if (value == 'O')
+                        sothe.val(sothe.val().substr(0, 3) + '_' + chatkeo.val().substr(0, 2) + '_' + 'Q')
+                    if (value == 'T')
+                        sothe.val(sothe.val().substr(0, 3) + '_' + chatkeo.val().substr(0, 2) + '_' + 'T')
+                }
+            });
+        });
+
+        $(function () {
+            $("#tbk").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                "searching": false,
+                "ordering": false,
+                "info": false,
+                "lengthChange": false,
+                "paging": false,
+            });
+            $("#tbe").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                "searching": false,
+                "ordering": false,
+                "info": false,
+                "lengthChange": false,
+                "paging": false,
+            });
+        });
+    </script>
+}
+
+
+

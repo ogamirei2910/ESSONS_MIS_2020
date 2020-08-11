@@ -104,18 +104,6 @@ namespace ESSONS_MIS_2020_App.Controllers
 
             return PartialView("DisplayError");
         }
-        public async Task<IActionResult> Update_Kho(QuyTrinhModel um)
-        {
-            HttpClient hc = _api.Initial();
-            HttpResponseMessage res = await hc.PostAsJsonAsync($"api/QuyTrinhSP/QuyTrinh_Update_Kho", um);
-
-            if (res.IsSuccessStatusCode)
-                ViewBag.Error = "Cập nhật thành công";
-            else
-                ViewBag.Error = "Lỗi kết nối server.";
-
-            return PartialView("DisplayError");
-        }
         public async Task<IActionResult> Update_ThuMua(QuyTrinhModel um)
         {
             HttpClient hc = _api.Initial();
@@ -372,26 +360,26 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return RedirectToAction("Login", "User");
             }
             getRole();
-            List<ChildQuyTrinh> um = new List<ChildQuyTrinh>();
+            List<CongThucPhaChe> um = new List<CongThucPhaChe>();
             HttpClient hc = _api.Initial();
-            HttpResponseMessage res = await hc.GetAsync($"api/QuyTrinhSP/QuyTrinh_GetCodeSPList");
+            HttpResponseMessage res = await hc.GetAsync($"api/CTPC/GetSoTheHC");
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
-                um = JsonConvert.DeserializeObject<List<ChildQuyTrinh>>(results);
+                ViewBag.sothe = JsonConvert.DeserializeObject<List<CongThucPhaChe>>(results);
             }
-            ViewBag.codeSP = um;
+
             return View();
         }
-        public async Task<IActionResult> GetMaKeo(string codeSP)
+        public async Task<IActionResult> GetMaKeo(string sothe)
         {
-            QuyTrinhModel em = new QuyTrinhModel();
+            CongThucPhaChe em = new CongThucPhaChe();
             HttpClient hc = _api.Initial();
-            HttpResponseMessage res = await hc.GetAsync($"api/QuyTrinhSP/QuyTrinh_GetMaKeo?codeSP={codeSP}");
+            HttpResponseMessage res = await hc.GetAsync($"api/CTPC/CTPC_GetMaKeo?sothe={sothe}");
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
-                em = JsonConvert.DeserializeObject<QuyTrinhModel>(results);
+                em = JsonConvert.DeserializeObject<CongThucPhaChe>(results);
             }
             ViewBag.makeoList = em;
             return PartialView("DisplayMaKeo");
@@ -431,9 +419,9 @@ namespace ESSONS_MIS_2020_App.Controllers
             getRole();
             HttpClient hc = _api.Initial();
 
-            if (um.CodeSP == null)
+            if (um.sothe == null)
             {
-                ViewBag.Error = "Chưa chọn code SP";
+                ViewBag.Error = "Chưa chọn số thẻ";
                 return PartialView("DisplayError");
             }
 
@@ -748,387 +736,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             //return File(stream, "application/octet-stream", excelName);  
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
         }
-        public async Task<IActionResult> ExportKho(CancellationToken cancellationToken)
-        {
-            getRole();
-            // query data from database  
-            List<QuyTrinhModel> um = new List<QuyTrinhModel>();
-            HttpClient hc = _api.Initial();
-            HttpResponseMessage res = await hc.GetAsync($"api/QuyTrinhSP/QuyTrinh_GetALLQuyTrinh");
-            if (res.IsSuccessStatusCode)
-            {
-                var results = res.Content.ReadAsStringAsync().Result;
-                um = JsonConvert.DeserializeObject<List<QuyTrinhModel>>(results);
-            }
 
-            var stream = new MemoryStream();
-
-            using (var package = new ExcelPackage(stream))
-            {
-                var worksheet = package.Workbook.Worksheets.Add("Sheet1");
-                worksheet.Cells["A1"].Value = "BẢNG TỔNG HỢP QUI TRÌNH SẢN XUẤT PHÁT TRIỂN SẢN PHẨM MỚI";
-
-                worksheet.Cells["A3"].Value = "KẾ HOẠCH SẢN XUẤT";
-                worksheet.Cells["A4"].Value = "Code SP";
-                worksheet.Cells["B4"].Value = "Quy cách Khách hàng";
-                worksheet.Cells["C4"].Value = "Quy cách Essons";
-                worksheet.Cells["D4"].Value = "Chất keo";
-                worksheet.Cells["E4"].Value = "Màu";
-                worksheet.Cells["F4"].Value = "Mã keo 1";
-                worksheet.Cells["G4"].Value = "Mã keo 2";
-                worksheet.Cells["H3"].Value = "KHO NL";
-                worksheet.Cells["H4"].Value = "Mã Keo 1";
-                worksheet.Cells["I4"].Value = "CT HÓA CHẤT CTY";
-                worksheet.Cells["AG4"].Value = "CT HÓA CHẤT KHÁCH HÀNG";
-                worksheet.Cells["BF4"].Value = "Mã keo 2";
-                worksheet.Cells["BG4"].Value = "CT HÓA CHẤT CTY";
-                worksheet.Cells["CE4"].Value = "CT HÓA CHẤT KHÁCH HÀNG";
-                worksheet.Cells["I5"].Value = "Hóa chất 1";
-                worksheet.Cells["J5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["K5"].Value = "Hóa chất 2";
-                worksheet.Cells["L5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["M5"].Value = "Hóa chất 3";
-                worksheet.Cells["N5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["O5"].Value = "Hóa chất 4";
-                worksheet.Cells["P5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["Q5"].Value = "Hóa chất 5";
-                worksheet.Cells["R5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["S5"].Value = "Hóa chất 6";
-                worksheet.Cells["T5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["U5"].Value = "Hóa chất 7";
-                worksheet.Cells["V5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["W5"].Value = "Hóa chất 8";
-                worksheet.Cells["X5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["Y5"].Value = "Hóa chất 9";
-                worksheet.Cells["Z5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["AA5"].Value = "Hóa chất 10";
-                worksheet.Cells["AB5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["AC5"].Value = "Hóa chất 11";
-                worksheet.Cells["AD5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["AE5"].Value = "Hóa chất 12";
-                worksheet.Cells["AF5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["AG5"].Value = "Hóa chất 1";
-                worksheet.Cells["AH5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["AI5"].Value = "Hóa chất 2";
-                worksheet.Cells["AJ5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["AK5"].Value = "Hóa chất 3";
-                worksheet.Cells["AL5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["AM5"].Value = "Hóa chất 4";
-                worksheet.Cells["AN5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["AO5"].Value = "Hóa chất 5";
-                worksheet.Cells["AP5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["AQ5"].Value = "Hóa chất 6";
-                worksheet.Cells["AR5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["AS5"].Value = "Hóa chất 7";
-                worksheet.Cells["AT5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["AU5"].Value = "Hóa chất 8";
-                worksheet.Cells["AV5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["AW5"].Value = "Hóa chất 9";
-                worksheet.Cells["AY5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["AZ5"].Value = "Hóa chất 10";
-                worksheet.Cells["BA5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["BB5"].Value = "Hóa chất 11";
-                worksheet.Cells["BC5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["BD5"].Value = "Hóa chất 12";
-                worksheet.Cells["BE5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["BG5"].Value = "Hóa chất 1";
-                worksheet.Cells["BH5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["BI5"].Value = "Hóa chất 2";
-                worksheet.Cells["BJ5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["BK5"].Value = "Hóa chất 3";
-                worksheet.Cells["BL5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["BM5"].Value = "Hóa chất 4";
-                worksheet.Cells["BN5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["BO5"].Value = "Hóa chất 5";
-                worksheet.Cells["BP5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["BQ5"].Value = "Hóa chất 6";
-                worksheet.Cells["BR5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["BS5"].Value = "Hóa chất 7";
-                worksheet.Cells["BT5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["BU5"].Value = "Hóa chất 8";
-                worksheet.Cells["BV5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["BW5"].Value = "Hóa chất 9";
-                worksheet.Cells["BX5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["BY5"].Value = "Hóa chất 10";
-                worksheet.Cells["BZ5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["CA5"].Value = "Hóa chất 11";
-                worksheet.Cells["CB5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["CC5"].Value = "Hóa chất 12";
-                worksheet.Cells["CD5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["CE5"].Value = "Hóa chất 1";
-                worksheet.Cells["CF5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["CG5"].Value = "Hóa chất 2";
-                worksheet.Cells["CH5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["CI5"].Value = "Hóa chất 3";
-                worksheet.Cells["CJ5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["CK5"].Value = "Hóa chất 4";
-                worksheet.Cells["CL5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["CM5"].Value = "Hóa chất 5";
-                worksheet.Cells["CN5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["CO5"].Value = "Hóa chất 6";
-                worksheet.Cells["CP5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["CQ5"].Value = "Hóa chất 7";
-                worksheet.Cells["CR5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["CS5"].Value = "Hóa chất 8";
-                worksheet.Cells["CT5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["CU5"].Value = "Hóa chất 9";
-                worksheet.Cells["CV5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["CW5"].Value = "Hóa chất 10";
-                worksheet.Cells["CX5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["CY5"].Value = "Hóa chất 11";
-                worksheet.Cells["CZ5"].Value = "Khối lượng HC(g)";
-                worksheet.Cells["DA5"].Value = "Hóa chất 12";
-                worksheet.Cells["DB5"].Value = "Khối lượng HC(g)";
-
-                worksheet.Cells["A1"].Style.Font.Size = 22;
-                worksheet.Cells["A1"].Style.Font.Bold = true;
-                worksheet.Cells["A1"].Style.Font.Name = "Times New Roman";
-                worksheet.Cells["A4:A5"].Merge = true;
-                worksheet.Cells["A4:A5"].Style.WrapText = true;
-                worksheet.Cells["B4:B5"].Merge = true;
-                worksheet.Cells["B4:B5"].Style.WrapText = true;
-                worksheet.Cells["C4:C5"].Merge = true;
-                worksheet.Cells["C4:C5"].Style.WrapText = true;
-                worksheet.Cells["D4:D5"].Merge = true;
-                worksheet.Cells["D4:D5"].Style.WrapText = true;
-                worksheet.Cells["E4:E5"].Merge = true;
-                worksheet.Cells["E4:E5"].Style.WrapText = true;
-                worksheet.Cells["F4:F5"].Merge = true;
-                worksheet.Cells["F4:F5"].Style.WrapText = true;
-                worksheet.Cells["G4:G5"].Merge = true;
-                worksheet.Cells["G4:G5"].Style.WrapText = true;
-                worksheet.Cells["H4:H5"].Merge = true;
-                worksheet.Cells["H4:H5"].Style.WrapText = true;
-
-                worksheet.Cells["BF4:BF5"].Merge = true;
-                worksheet.Cells["BF4:BF5"].Style.WrapText = true;
-                worksheet.Cells["A3:G3"].Merge = true;
-                worksheet.Cells["H3:DB3"].Merge = true;
-                worksheet.Cells["I4:AF4"].Merge = true;
-                worksheet.Cells["AG4:BE4"].Merge = true;
-                worksheet.Cells["BG4:CD4"].Merge = true;
-                worksheet.Cells["CE4:DB4"].Merge = true;
-
-                using (var range = worksheet.Cells["A3:G3"])
-                {
-                    range.Style.WrapText = true;
-                    range.Style.Font.Size = 18;
-                    range.Style.Font.Bold = true;
-                    range.Style.Font.Name = "Times New Roman";
-                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    range.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(55, 86, 35));
-                    range.Style.Font.Color.SetColor(Color.White);
-                    var borderHeader = range.Style.Border;
-                    borderHeader.Top.Style = borderHeader.Left.Style = borderHeader.Right.Style = borderHeader.Bottom.Style =
-                        OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                }
-
-                using (var range = worksheet.Cells["H3:DB3"])
-                {
-                    range.Style.WrapText = true;
-                    range.Style.Font.Size = 18;
-                    range.Style.Font.Bold = true;
-                    range.Style.Font.Name = "Times New Roman";
-                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    range.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(131, 60, 12));
-                    range.Style.Font.Color.SetColor(Color.White);
-                    var borderHeader = range.Style.Border;
-                    borderHeader.Top.Style = borderHeader.Left.Style = borderHeader.Right.Style = borderHeader.Bottom.Style =
-                        OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                }
-
-                using (var range = worksheet.Cells["A4:DB5"])
-                {
-                    range.Style.WrapText = true;
-                    range.Style.Font.Size = 14;
-                    range.Style.Font.Name = "Times New Roman";
-                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    range.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(155, 194, 230));
-                    range.Style.Font.Color.SetColor(Color.Black);
-                    var borderHeader = range.Style.Border;
-                    borderHeader.Top.Style = borderHeader.Left.Style = borderHeader.Right.Style = borderHeader.Bottom.Style =
-                        OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                }
-
-                using (var range = worksheet.Cells["I4:AF4"])
-                {
-                    range.Style.Font.Bold = true;
-                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    range.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 255, 0));
-                    range.Style.Font.Color.SetColor(Color.Black);
-                }
-
-                using (var range = worksheet.Cells["AG4:BE4"])
-                {
-                    range.Style.Font.Bold = true;
-                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    range.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(84, 130, 53));
-                    range.Style.Font.Color.SetColor(Color.FromArgb(219,219,219));
-                }
-
-                using (var range = worksheet.Cells["BG4:CD4"])
-                {
-                    range.Style.Font.Bold = true;
-                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    range.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(255, 255, 0));
-                    range.Style.Font.Color.SetColor(Color.Black);
-                }
-
-                using (var range = worksheet.Cells["CE4:DB4"])
-                {
-                    range.Style.Font.Bold = true;
-                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    range.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(84, 130, 53));
-                    range.Style.Font.Color.SetColor(Color.FromArgb(219, 219, 219));
-                }
-
-                worksheet.Cells["H4"].Style.Font.Bold = true;
-                worksheet.Cells["BF4"].Style.Font.Bold = true;
-                worksheet.Cells["A3:DB5"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                worksheet.Cells["A3:DB5"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-
-                worksheet.Row(3).Height = 20.00;
-                worksheet.Row(4).Height = 20.00;
-                worksheet.Row(5).Height = 63.00;
-                for (int j = 1; j <= 85;j++)
-                {
-                    worksheet.Column(j).Width = 11;
-                }
-
-
-                worksheet.View.FreezePanes(1, 8);
-                worksheet.Cells["A4:G4"].AutoFilter = true;
-
-                int i = 0;
-                foreach (var item in um)
-                {
-                    i++;
-                    worksheet.Cells["A" + (5 + i).ToString()].Value = item.CodeSP;
-                    worksheet.Cells["B" + (5 + i).ToString()].Value = item.QuyCachKH;
-                    worksheet.Cells["C" + (5 + i).ToString()].Value = item.QuyCachEssons;
-                    worksheet.Cells["D" + (5 + i).ToString()].Value = item.ChatKeo;
-                    worksheet.Cells["E" + (5 + i).ToString()].Value = item.Mau;
-                    worksheet.Cells["F" + (5 + i).ToString()].Value = item.MaKeo1;
-                    worksheet.Cells["G" + (5 + i).ToString()].Value = item.MaKeo2;
-                    worksheet.Cells["H" + (5 + i).ToString()].Value = item.MaKeo1;
-                    worksheet.Cells["BF4" + (5 + i).ToString()].Value = item.MaKeo2;
-                    worksheet.Cells["I" + (5 + i).ToString()].Value = item.HoaChat1MK1;
-                    worksheet.Cells["J" + (5 + i).ToString()].Value = item.KhoiLuongHC1MK1;
-                    worksheet.Cells["K" + (5 + i).ToString()].Value = item.HoaChat2MK1;
-                    worksheet.Cells["L" + (5 + i).ToString()].Value = item.KhoiLuongHC2MK1;
-                    worksheet.Cells["M" + (5 + i).ToString()].Value = item.HoaChat3MK1;
-                    worksheet.Cells["N" + (5 + i).ToString()].Value = item.KhoiLuongHC3MK1;
-                    worksheet.Cells["O" + (5 + i).ToString()].Value = item.HoaChat4MK1;
-                    worksheet.Cells["P" + (5 + i).ToString()].Value = item.KhoiLuongHC4MK1;
-                    worksheet.Cells["Q" + (5 + i).ToString()].Value = item.HoaChat5MK1;
-                    worksheet.Cells["R" + (5 + i).ToString()].Value = item.KhoiLuongHC5MK1;
-                    worksheet.Cells["S" + (5 + i).ToString()].Value = item.HoaChat6MK1;
-                    worksheet.Cells["T" + (5 + i).ToString()].Value = item.KhoiLuongHC6MK1;
-                    worksheet.Cells["U" + (5 + i).ToString()].Value = item.HoaChat7MK1;
-                    worksheet.Cells["V" + (5 + i).ToString()].Value = item.KhoiLuongHC7MK1;
-                    worksheet.Cells["W" + (5 + i).ToString()].Value = item.HoaChat8MK1;
-                    worksheet.Cells["X" + (5 + i).ToString()].Value = item.KhoiLuongHC8MK1;
-                    worksheet.Cells["Y" + (5 + i).ToString()].Value = item.HoaChat9MK1;
-                    worksheet.Cells["Z" + (5 + i).ToString()].Value = item.KhoiLuongHC9MK1;
-                    worksheet.Cells["AA" + (5 + i).ToString()].Value = item.HoaChat10MK1;
-                    worksheet.Cells["AB" + (5 + i).ToString()].Value = item.KhoiLuongHC10MK1;
-                    worksheet.Cells["AC" + (5 + i).ToString()].Value = item.HoaChat11MK1;
-                    worksheet.Cells["AD" + (5 + i).ToString()].Value = item.KhoiLuongHC11MK1;
-                    worksheet.Cells["AE" + (5 + i).ToString()].Value = item.HoaChat12MK1;
-                    worksheet.Cells["AF" + (5 + i).ToString()].Value = item.KhoiLuongHC12MK1;
-                    worksheet.Cells["AG" + (5 + i).ToString()].Value = item.HoaChat1MK1KH;
-                    worksheet.Cells["AH" + (5 + i).ToString()].Value = item.KhoiLuongHC1MK1KH;
-                    worksheet.Cells["AI" + (5 + i).ToString()].Value = item.HoaChat2MK1KH;
-                    worksheet.Cells["AJ" + (5 + i).ToString()].Value = item.KhoiLuongHC2MK1KH;
-                    worksheet.Cells["AK" + (5 + i).ToString()].Value = item.HoaChat3MK1KH;
-                    worksheet.Cells["AL" + (5 + i).ToString()].Value = item.KhoiLuongHC3MK1KH;
-                    worksheet.Cells["AM" + (5 + i).ToString()].Value = item.HoaChat4MK1KH;
-                    worksheet.Cells["AN" + (5 + i).ToString()].Value = item.KhoiLuongHC4MK1KH;
-                    worksheet.Cells["AO" + (5 + i).ToString()].Value = item.HoaChat5MK1KH;
-                    worksheet.Cells["AP" + (5 + i).ToString()].Value = item.KhoiLuongHC5MK1KH;
-                    worksheet.Cells["AQ" + (5 + i).ToString()].Value = item.HoaChat6MK1KH;
-                    worksheet.Cells["AR" + (5 + i).ToString()].Value = item.KhoiLuongHC6MK1KH;
-                    worksheet.Cells["AS" + (5 + i).ToString()].Value = item.HoaChat7MK1KH;
-                    worksheet.Cells["AT" + (5 + i).ToString()].Value = item.KhoiLuongHC7MK1KH;
-                    worksheet.Cells["AU" + (5 + i).ToString()].Value = item.HoaChat8MK1KH;
-                    worksheet.Cells["AV" + (5 + i).ToString()].Value = item.KhoiLuongHC3MK1KH;
-                    worksheet.Cells["AW" + (5 + i).ToString()].Value = item.HoaChat9MK1KH;
-                    worksheet.Cells["AX" + (5 + i).ToString()].Value = item.KhoiLuongHC4MK1KH;
-                    worksheet.Cells["AY" + (5 + i).ToString()].Value = item.HoaChat10MK1KH;
-                    worksheet.Cells["AZ" + (5 + i).ToString()].Value = item.KhoiLuongHC5MK1KH;
-                    worksheet.Cells["BA" + (5 + i).ToString()].Value = item.HoaChat11MK1KH;
-                    worksheet.Cells["BB" + (5 + i).ToString()].Value = item.KhoiLuongHC6MK1KH;
-                    worksheet.Cells["BC" + (5 + i).ToString()].Value = item.HoaChat12MK1KH;
-                    worksheet.Cells["BD" + (5 + i).ToString()].Value = item.KhoiLuongHC7MK1KH;
-                    worksheet.Cells["BE" + (5 + i).ToString()].Value = item.HoaChat1MK2;
-                    worksheet.Cells["BF" + (5 + i).ToString()].Value = item.KhoiLuongHC1MK2;
-                    worksheet.Cells["BG" + (5 + i).ToString()].Value = item.HoaChat2MK2;
-                    worksheet.Cells["BH" + (5 + i).ToString()].Value = item.KhoiLuongHC2MK2;
-                    worksheet.Cells["BI" + (5 + i).ToString()].Value = item.HoaChat3MK2;
-                    worksheet.Cells["BJ" + (5 + i).ToString()].Value = item.KhoiLuongHC3MK2;
-                    worksheet.Cells["AR" + (5 + i).ToString()].Value = item.HoaChat4MK2;
-                    worksheet.Cells["AS" + (5 + i).ToString()].Value = item.KhoiLuongHC4MK2;
-                    worksheet.Cells["AT" + (5 + i).ToString()].Value = item.HoaChat5MK2;
-                    worksheet.Cells["AU" + (5 + i).ToString()].Value = item.KhoiLuongHC5MK2;
-                    worksheet.Cells["AV" + (5 + i).ToString()].Value = item.HoaChat6MK2;
-                    worksheet.Cells["AW" + (5 + i).ToString()].Value = item.KhoiLuongHC6MK2;
-                    worksheet.Cells["AX" + (5 + i).ToString()].Value = item.HoaChat7MK2;
-                    worksheet.Cells["AY" + (5 + i).ToString()].Value = item.KhoiLuongHC7MK2;
-                    worksheet.Cells["AP" + (5 + i).ToString()].Value = item.HoaChat8MK2;
-                    worksheet.Cells["AQ" + (5 + i).ToString()].Value = item.KhoiLuongHC8MK2;
-                    worksheet.Cells["AR" + (5 + i).ToString()].Value = item.HoaChat9MK2;
-                    worksheet.Cells["AS" + (5 + i).ToString()].Value = item.KhoiLuongHC9MK2;
-                    worksheet.Cells["AT" + (5 + i).ToString()].Value = item.HoaChat10MK2;
-                    worksheet.Cells["AU" + (5 + i).ToString()].Value = item.KhoiLuongHC10MK2;
-                    worksheet.Cells["AV" + (5 + i).ToString()].Value = item.HoaChat11MK2;
-                    worksheet.Cells["AW" + (5 + i).ToString()].Value = item.KhoiLuongHC11MK2;
-                    worksheet.Cells["AX" + (5 + i).ToString()].Value = item.HoaChat12MK2;
-                    worksheet.Cells["AY" + (5 + i).ToString()].Value = item.KhoiLuongHC12MK2;
-                    worksheet.Cells["AZ" + (5 + i).ToString()].Value = item.HoaChat1MK2KH;
-                    worksheet.Cells["BA" + (5 + i).ToString()].Value = item.KhoiLuongHC1MK2KH;
-                    worksheet.Cells["BB" + (5 + i).ToString()].Value = item.HoaChat2MK2KH;
-                    worksheet.Cells["BC" + (5 + i).ToString()].Value = item.KhoiLuongHC2MK2KH;
-                    worksheet.Cells["BD" + (5 + i).ToString()].Value = item.HoaChat3MK2KH;
-                    worksheet.Cells["BE" + (5 + i).ToString()].Value = item.KhoiLuongHC3MK2KH;
-                    worksheet.Cells["BF" + (5 + i).ToString()].Value = item.HoaChat4MK2KH;
-                    worksheet.Cells["BG" + (5 + i).ToString()].Value = item.KhoiLuongHC4MK2KH;
-                    worksheet.Cells["BH" + (5 + i).ToString()].Value = item.HoaChat5MK2KH;
-                    worksheet.Cells["BI" + (5 + i).ToString()].Value = item.KhoiLuongHC5MK2KH;
-                    worksheet.Cells["BJ" + (5 + i).ToString()].Value = item.HoaChat6MK2KH;
-                    worksheet.Cells["BK" + (5 + i).ToString()].Value = item.KhoiLuongHC6MK2KH;
-                    worksheet.Cells["BL" + (5 + i).ToString()].Value = item.HoaChat7MK2KH;
-                    worksheet.Cells["BM" + (5 + i).ToString()].Value = item.KhoiLuongHC7MK2KH;
-                }
-
-                // Formatting style all
-                using (var range = worksheet.Cells["A6:DB" + (i + 5).ToString()])
-                {
-                    range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    range.Style.Font.Name = "Times New Roman";
-                    range.Style.Fill.BackgroundColor.SetColor(Color.White);
-                    range.Style.Font.Color.SetColor(Color.Black);
-                }
-
-                //Border
-                worksheet.Cells["A6:DB" + (i + 5).ToString()].Style.Font.Size = 10;
-                worksheet.Cells["A6:DB" + (i + 5).ToString()].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                var cellData = worksheet.Cells["A6:DB" + (i + 5).ToString()];
-                var border = cellData.Style.Border;
-                border.Top.Style = border.Left.Style = border.Right.Style = border.Bottom.Style =
-                    OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-                //Align
-                worksheet.Cells["A6:DB" + (i + 5).ToString()].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                worksheet.Cells["A6:DB" + (i + 5).ToString()].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-
-                package.Save();
-            }
-            stream.Position = 0;
-            string excelName = $"QUYTRINHSP-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
-
-            //return File(stream, "application/octet-stream", excelName);  
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
-        }
         public async Task<IActionResult> ExportThuMua(CancellationToken cancellationToken)
         {
             getRole();

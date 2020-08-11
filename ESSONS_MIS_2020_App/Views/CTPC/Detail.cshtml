@@ -1,0 +1,261 @@
+﻿@model ESSONS_MIS_2020_App.Models.CongThucPhaChe
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Thêm mới thẻ hóa chất</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form id="formData" method="post">
+                            <table class="table">
+                                <tr>
+                                    <td>
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label">Số thẻ</label>
+                                            <input type="text" class="form-control" readonly asp-for="sothe" value="@Model.sothe" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label">Chất keo</label>
+                                            <input asp-for="chatkeo" id="chatkeo" type="text" readonly class="form-control" value="@Model.chatkeo" />
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">Công thức pha chế theo yêu cầu khách hàng/ nhà cung cấp (Standard)</h3>
+                                </div>
+                            </div>
+                            <table id="tbk" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Mã keo 1 KH</th>
+                                        <th>Tên Hóa Chất</th>
+                                        <th>Khối lượng</th>
+                                        <th>Mã keo 2 KH</th>
+                                        <th>Tên Hóa Chất</th>
+                                        <th>Khối lượng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < 12; i++)
+                                    {
+                                        <tr>
+                                            <td width="7%">
+                                                <input type="text" class="form-control" readonly asp-for="@Model.ctpck[i].STT" value="@Model.ctpck[i].STT" />
+                                            </td>
+                                            <td width="15%">
+                                                <input type="text" class="form-control" asp-for="@Model.ctpck[i].MaKeo1" value="@Model.ctpck[i].MaKeo1" />
+                                            </td>
+                                            <td width="15%">
+                                                <select asp-for="@Model.ctpck[i].TenHoaChatMK1" class="custom-select" asp-items="@(new SelectList(""))">
+                                                    <option value="0">Chọn chất </option>
+                                                    @foreach (var hc in ViewBag.HoaChat)
+                                                    {
+                                                        if (hc.TenHoaChat == Model.ctpck[i].TenHoaChatMK1)
+                                                        {
+                                                            <option value="@hc.TenHoaChat" selected>@hc.TenHoaChat</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@hc.TenHoaChat">@hc.TenHoaChat</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td width="15%">
+                                                <input type="text" class="form-control" asp-for="@Model.ctpck[i].KhoiLuongMK1" value="@Model.ctpck[i].KhoiLuongMK1" />
+                                            </td>
+                                            <td width="15%">
+                                                <input type="text" class="form-control" asp-for="@Model.ctpck[i].MaKeo2" value="@Model.ctpck[i].MaKeo2"/>
+                                            </td>
+                                            <td width="15%">
+                                                <select asp-for="@Model.ctpck[i].TenHoaChatMK2" class="custom-select"
+                                                        asp-items="@(new SelectList(""))">
+                                                    <option value="0">Chọn chất</option>
+                                                    @foreach (var hc in ViewBag.HoaChat)
+                                                    {
+                                                        if (hc.TenHoaChat == Model.ctpck[i].TenHoaChatMK2)
+                                                        {
+                                                            <option value="@hc.TenHoaChat" selected>@hc.TenHoaChat</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@hc.TenHoaChat">@hc.TenHoaChat</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td width="15%">
+                                                <input type="text" class="form-control" asp-for="@Model.ctpck[i].KhoiLuongMK2" value="@Model.ctpck[i].KhoiLuongMK2" />
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <br />
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">Công thức pha chế Essons Global</h3>
+                                </div>
+                            </div>
+                            <table id="tbe" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Mã keo 1</th>
+                                        <th>Tên Hóa Chất</th>
+                                        <th>Khối lượng</th>
+                                        <th>Mã keo 2</th>
+                                        <th>Tên Hóa Chất</th>
+                                        <th>Khối lượng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < 14; i++)
+                                    {
+                                        <tr>
+                                            <td width="7%">
+                                                <input type="text" class="form-control" readonly asp-for="@Model.ctpce[i].STT" value="@Model.ctpce[i].STT" />
+                                            </td>
+                                            <td width="15%">
+                                                <input type="text" class="form-control" asp-for="@Model.ctpce[i].MaKeo1" value="@Model.ctpce[i].MaKeo1" />
+                                            </td>
+                                            <td width="15%">
+                                                <select id="dep" asp-for="@Model.ctpce[i].TenHoaChatMK1" class="custom-select"
+                                                        asp-items="@(new SelectList(""))">
+                                                    <option value="0">Chọn chất</option>
+                                                    @foreach (var hc in ViewBag.HoaChat)
+                                                    {
+                                                        if (hc.TenHoaChat == Model.ctpce[i].TenHoaChatMK1)
+                                                        {
+                                                            <option value="@hc.TenHoaChat" selected>@hc.TenHoaChat</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@hc.TenHoaChat">@hc.TenHoaChat</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td width="15%">
+                                                <input type="text" class="form-control" asp-for="@Model.ctpce[i].KhoiLuongMK1" value="@Model.ctpce[i].KhoiLuongMK1"/>
+                                            </td>
+                                            <td width="15%">
+                                                <input type="text" class="form-control" asp-for="@Model.ctpce[i].MaKeo2" value="@Model.ctpce[i].MaKeo2"/>
+                                            </td>
+                                            <td width="15%">
+                                                <select id="dep" asp-for="@Model.ctpce[i].TenHoaChatMK2" class="custom-select"
+                                                        asp-items="@(new SelectList(""))">
+                                                    <option value="0">Chọn chất</option>
+                                                    @foreach (var hc in ViewBag.HoaChat)
+                                                    {
+                                                        if (hc.TenHoaChat == Model.ctpce[i].TenHoaChatMK2)
+                                                        {
+                                                            <option value="@hc.TenHoaChat" selected>@hc.TenHoaChat</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@hc.TenHoaChat">@hc.TenHoaChat</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td width="15%">
+                                                <input type="text" class="form-control" asp-for="@Model.ctpce[i].KhoiLuongMK2" value="@Model.ctpce[i].KhoiLuongMK2"/>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div class="card-footer">
+                                <a href="/CTPC/Index" class="btn btn-secondary">Quay Lại</a>
+                                <button id="btSend" class="btn btn-primary float-right">
+                                    Cập nhật
+                                </button>
+                            </div>
+                        </form>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btSend").click(function (e) {
+                debugger
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: '@Url.Action("Update", "CTPC")',
+                    data: $("#formData").serialize(),
+                    success: function (result) {
+                        debugger
+                            let dia = bs4pop.dialog({
+
+                                title: 'Thông báo',
+                                content: result,
+
+                                closeBtn: true,
+                                backdrop: 'static',
+                                btns: [
+                                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                                ],
+                                onDragStart: function () {
+                                    console.log('onDragStart');
+                                },
+                                onDrag: function () {
+                                    console.log('onDrag');
+                                }
+                            });
+                    }
+                })
+                e.preventDefault();
+            });
+        });
+
+        $(function () {
+            $("#tbk").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                "searching": false,
+                "ordering": false,
+                "info": false,
+                "lengthChange": false,
+                "paging": false,
+            });
+            $("#tbe").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                "searching": false,
+                "ordering": false,
+                "info": false,
+                "lengthChange": false,
+                "paging": false,
+            });
+        });
+    </script>
+}
+
+

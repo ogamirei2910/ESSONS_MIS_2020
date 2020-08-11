@@ -117,7 +117,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             number = (Total.TotalDays + 1) * 8;
             if (um.dateoffType == "4" || um.dateoffType == "1")
             {
-                if (um.dateoffEndTime != null && um.dateoffStartTime != null && um.dateoffStart == um.dateoffEnd)
+                if (um.dateoffEndTime != null && um.dateoffStartTime != null && um.dateoffStart == um.dateoffEnd && number == 1 )
                 {
                     int yearS = int.Parse(um.dateoffStart.Substring(6, 4));
                     int monthS = int.Parse(um.dateoffStart.Substring(3, 2));

@@ -8,7 +8,7 @@ namespace ESSONS_MIS_2020.Models
     public class MaKeoQuyTrinh
     {
         public string MaKeo1 { get; set; }
-        public string CodeSP { get; set; }
+        public string sothe { get; set; }
         public int BatchNo { get; set; }
         public decimal Weight { get; set; }
         public string indat { get; set; }

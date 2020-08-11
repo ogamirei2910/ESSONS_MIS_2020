@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewData["Title"] = "CongTac_All";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Danh sách yêu cầu công tác</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Mã công tác</th>
+                                        <th>Bộ phận</th>
+                                        <th>Số thẻ</th>
+                                        <th>Tên kế hoạch</th>
+                                        <th>Ngày bắt đầu</th>
+                                        <th>Ngày kết thúc</th>
+                                        <th>Giờ bắt đầu</th>
+                                        <th>Giờ kết thúc</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in ViewBag.requestList)
+                                    {
+                                    <tr>
+                                        <td>@item.congtacID</td>
+                                        <td>@item.depName</td>
+                                        <td>@item.empid</td>
+                                        <td>@item.planName</td>
+                                        <td>@item.planStart</td>
+                                        <td>@item.planEnd</td>
+                                        <td>@item.timeStart</td>
+                                        <td>@item.timeEnd</td>
+                                    </tr>
+                                    }
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+

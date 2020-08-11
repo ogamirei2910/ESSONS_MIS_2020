@@ -110,7 +110,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             em.empEmail = mail;
             var res = hc.PostAsJsonAsync<EmpModel>($"api/emp/UpdateMail/", em);
             res.Wait();
-            //empid = "03903";
+            //empid = "03905";
 
             List<UserRoleModel> urm = new List<UserRoleModel>();
             hc = _api.Initial();
