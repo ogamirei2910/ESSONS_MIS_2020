@@ -77,7 +77,7 @@
                 <div class="col-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Export Excel File</h3>
+                            <h3 class="card-title">Xuất Excel File</h3>
                             <div class="card-tools">
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
                                     <i class="fas fa-minus"></i>
@@ -90,7 +90,6 @@
                                     <tr>
                                         <th>Kinh Doanh</th>
                                         <th>KHSX</th>
-                                        <th>Kho</th>
                                         <th>Thu Mua</th>
                                         <th>Chê tạo khuôn</th>
                                         <th>Bảo trì khuôn</th>
@@ -107,11 +106,6 @@
                                         </td>
                                         <td width="13%">
                                             <a href="@Url.Action("ExportKHSX", "QuyTrinhSP")" class="links">
-                                                <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
-                                            </a>
-                                        </td>
-                                        <td width="13%">
-                                            <a href="@Url.Action("ExportKho", "QuyTrinhSP")" class="links">
                                                 <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
                                             </a>
                                         </td>
@@ -153,7 +147,6 @@
                                         <th>Lưu hóa 2</th>
                                         <th>Mài hàng</th>
                                         <th>Quy trình khác</th>
-                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -193,9 +186,6 @@
                                                 <img width="30" height="30" src="@Url.Content("~/images/Excel-icon.png")">
                                             </a>
                                         </td>
-                                        <td width="13%">
-                                            
-                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -233,13 +223,6 @@
                     e.preventDefault();
                 }
             });
-        });
-
-        $.fn.dataTable.ext.errMode = 'throw';
-
-        $('#example1').dataTable({
-            "aaSorting": [],
-            // Your other options here...
         });
 
         $(function () {

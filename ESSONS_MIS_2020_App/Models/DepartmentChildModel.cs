@@ -12,5 +12,7 @@ namespace ESSONS_MIS_2020_App.Models
         public string DepChildName { get; set; }
 
         public string DepID { get; set; }
+
+        public DepartmentModel dep { get; set; }
     }
 }

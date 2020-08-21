@@ -31,13 +31,18 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.folder = DistinctItems;
             ViewBag.folderList = role;
         }
+
+        //Giao diện đăng nhập
         public IActionResult Login()
         {
+            //Kiểm tra nếu đã đăng nhập thì không cần đăng nhập lại
             if (HttpContext.Session.GetString("isLogin") == "true")
                 return RedirectToAction("Index", "Home");
 
             return View();
         }
+
+        //Đăng nhập vào hệ thống
         [HttpPost]
         public IActionResult Login(UserModel um)
         {
@@ -47,11 +52,11 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return View();
             }
 
-
+            //Đăng nhập vào hệ thống sử dụng LDAP liên kết 
             string username = um.username + "@essons.vn";
             var mail = "";
             var empid = "";
-            //using (var DE = new DirectoryEntry("LDAP://OU=Essons Amata,DC=essons,DC=vn", "Administrator", "Csi@dvtk2020")) P@ssw0rd123
+   
             try
             {
                 using (var connection = new LdapConnection { SecureSocketLayer = false })
@@ -61,8 +66,8 @@ namespace ESSONS_MIS_2020_App.Controllers
                     if (connection.Bound)
                     {
                         String[] attrs = new String[2];
-                        attrs[0] = "postOfficeBox";
-                        attrs[1] = "mail";
+                        attrs[0] = "postOfficeBox"; //Số thẻ
+                        attrs[1] = "mail"; //Email
 
                         LdapSearchResults lsc = connection.Search("OU=Essons Amata,DC=essons,DC=vn",
                            LdapConnection.SCOPE_SUB,
@@ -106,6 +111,8 @@ namespace ESSONS_MIS_2020_App.Controllers
             HttpClient hc = _api.Initial();
             EmpModel em = new EmpModel();
             hc = _api.Initial();
+
+            //Cập nhật lại Email khi login vào hệ thống
             em.empID = empid;
             em.empEmail = mail;
             var res = hc.PostAsJsonAsync<EmpModel>($"api/emp/UpdateMail/", em);
@@ -114,16 +121,19 @@ namespace ESSONS_MIS_2020_App.Controllers
 
             List<UserRoleModel> urm = new List<UserRoleModel>();
             hc = _api.Initial();
+            //Lấy danh sách mục được phép truy cập
             res = hc.GetAsync($"api/user/GetRole/{empid}");
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
                 var results2 = results.Content.ReadAsStringAsync().Result;
                 urm = JsonConvert.DeserializeObject<List<UserRoleModel>>(results2);
-
+                //Gán danh sách mục truy cập vào Sessions
                 HttpContext.Session.SetObjectAsJson("folderList", urm);
 
                 HttpContext.Session.SetString("notice", "Người dùng " + urm.First().empName + " đã đăng nhập thành công");
+
+                //Kiểm tra có phải đăng nhập tại trang đăng nhập hoặc tại trang khác để trả về đúng vị trí trang truy cập
                 if (HttpContext.Session.GetString("resultPage") is null || HttpContext.Session.GetString("resultPage") == "")
                 {
                     HttpContext.Session.SetString("isLogin", "true");
@@ -131,6 +141,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 }
                 else
                 {
+                    HttpContext.Session.SetString("isLogin", "true");
                     string url = HttpContext.Session.GetString("resultPage");
                     HttpContext.Session.SetString("resultPage", "");
                     return Redirect(url);
@@ -141,13 +152,24 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View();
         }
 
+        //Giao diện phân quyền duyệt phép, công tác, tăng ca
         public async Task<IActionResult> SetFolder()
         {
+            //Kiểm tra quyền truy cập nếu chưa lấy danh sách mục quản lý thì trở về trang đăng nhập
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
+
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");
 
             List<UserFolderModel> um = new List<UserFolderModel>();
             HttpClient hc = _api.Initial();
+
+            //Lấy tất cả danh sách nhân viên đang có quyền thực thi 
             HttpResponseMessage res = await hc.GetAsync($"api/user/GetAllPer");
             if (res.IsSuccessStatusCode)
             {
@@ -156,6 +178,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 ViewBag.perList = um;
             }
 
+            //Lấy danh sách toàn bộ nhân viên
             res = await hc.GetAsync("api/emp/Get");
             if (res.IsSuccessStatusCode)
             {
@@ -163,6 +186,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 ViewBag.emp = JsonConvert.DeserializeObject<List<EmpModel>>(results);
             }
 
+            //Lấy danh sách phòng ban 
             res = await hc.GetAsync("api/emp/GetDepartment");
             if (res.IsSuccessStatusCode)
             {
@@ -174,6 +198,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View();
         }
 
+        //Phân quyền cho nhân viên
         [HttpPost]
         public async Task<IActionResult> SetFolder(UserFolderModel urm)
         {
@@ -189,6 +214,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return PartialView("DisplayError");
             }
 
+            //Gửi thông tin đến web api
             HttpClient hc = _api.Initial();
             var res = await hc.PostAsJsonAsync<UserFolderModel>("api/user/setper", urm);
 
@@ -209,6 +235,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             }
         }
 
+        //Xóa quyền nhân viên
         public IActionResult user_Block(string empid)
         {
             ViewBag.Error = "";
@@ -227,8 +254,10 @@ namespace ESSONS_MIS_2020_App.Controllers
             return RedirectToAction("SetFolder", "User");
         }
 
+        //Đăng xuất hệ thống
         public IActionResult Logout()
         {
+            //Xóa tự động login, Xóa quyền try cập
             HttpContext.Session.SetString("isLogin", "");
             HttpContext.Session.SetObjectAsJson("folderList", null);
             return RedirectToAction("Index", "MainPage");

@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewData["Title"] = "LichSuDieuDong";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="se-pre-con"></div>
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fa fa-info"></i>
+                        Lịch sử điều động pha chế hóa chất
+                    </h3>
+                </div>
+
+                <div class="card-body">
+                    <table id="example1" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Mã điều động</th>
+                                <th>Mã keo</th>
+                                <th>Số thẻ</th>
+                                <th>Số hộp</th>
+                                <th>Số KG</th>
+                                <th>Giờ ĐĐ</th>
+                                <th>Ngày ĐĐ</th>
+                                <th>Người ĐĐ</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.dieudongList)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.MO
+                                    </td>
+                                    <td>
+                                        @item.MaKeo
+                                    </td>
+                                    <td>@item.SoThe</td>
+                                    <td>@item.BatchNo</td>
+                                    <td>@item.weight</td>
+                                    <td>@item.intime</td>
+                                    <td>@item.indat</td>
+                                    <td>@item.username</td>
+                                    @if (item.status != 2)
+                                    {
+                                        if (item.status == 1)
+                                        {
+                                            <td>Hoàn thành</td>
+                                        }
+                                        else
+                                        {
+                                            <td>Đã hủy</td>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            Đang chờ
+                                        </td>
+
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+</div>
+@section scripts{
+    <script type="text/javascript">
+
+        $.fn.dataTable.ext.errMode = 'throw';
+
+        $('#example1').dataTable({
+            "aaSorting": [],
+            // Your other options here...
+        });
+
+    </script>
+}
+

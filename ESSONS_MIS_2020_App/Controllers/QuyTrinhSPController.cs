@@ -360,6 +360,9 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return RedirectToAction("Login", "User");
             }
             getRole();
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
+
             List<CongThucPhaChe> um = new List<CongThucPhaChe>();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.GetAsync($"api/CTPC/GetSoTheHC");
@@ -367,6 +370,37 @@ namespace ESSONS_MIS_2020_App.Controllers
             {
                 var results = res.Content.ReadAsStringAsync().Result;
                 ViewBag.sothe = JsonConvert.DeserializeObject<List<CongThucPhaChe>>(results);
+            }
+
+            List<DieuDongModel> dd = new List<DieuDongModel>();
+            res = await hc.GetAsync($"api/CTPC/CTPC_GetAll");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                ViewBag.DieuDong = JsonConvert.DeserializeObject<List<DieuDongModel>>(results);
+            }
+
+            return View();
+        }
+        public async Task<IActionResult> LichSuDieuDong()
+        {
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
+            getRole();
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
+
+            List<DieuDongModel> um = new List<DieuDongModel>();
+            HttpClient hc = _api.Initial();
+            HttpResponseMessage res = await hc.GetAsync($"api/QuyTrinhSP/DieuDong_GetAll");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                ViewBag.dieudongList = JsonConvert.DeserializeObject<List<DieuDongModel>>(results);
             }
 
             return View();
@@ -437,18 +471,13 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return PartialView("DisplayError");
             }
 
-            if (um.BatchNo == 0)
-            {
-                ViewBag.Error = "Kiểm tra lại số mẻ cài đặt";
-                return PartialView("DisplayError");
-            }
-
             um.username = ViewBag.empid;
             var res = await hc.PostAsJsonAsync<MaKeoQuyTrinh>("api/QuyTrinhSP/QuyTrinh_DieuDong", um);
 
             if (res.IsSuccessStatusCode)
             {
-                ViewBag.Error = "Điều động thành công";
+                HttpContext.Session.SetString("notice", "Điều động thành công");
+                ViewBag.Error = "OK";
                 return PartialView("DisplayError");
             }
 
@@ -456,6 +485,23 @@ namespace ESSONS_MIS_2020_App.Controllers
             return PartialView("DisplayError");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DieuDong_Huy(string MO)
+        {
+            getRole();
+            HttpClient hc = _api.Initial();
+            DieuDongModel dd = new DieuDongModel();
+            dd.MO = MO;
+            var res = await hc.PostAsJsonAsync<DieuDongModel>("api/QuyTrinhSP/DieuDong_Huy", dd);
+
+            if (res.IsSuccessStatusCode)
+            {
+                HttpContext.Session.SetString("notice", "Hủy điều động thành công");
+                return RedirectToAction("DieuDong");
+            }
+            HttpContext.Session.SetString("notice", "Lỗi không hủy được");
+            return RedirectToAction("DieuDong");
+        }
         public async Task<IActionResult> ExportKinhDoanh(CancellationToken cancellationToken)
         {
             getRole();
@@ -2276,14 +2322,16 @@ namespace ESSONS_MIS_2020_App.Controllers
                 worksheet.Cells["H3"].Value = "QUI TRÌNH KHÁC";
                 worksheet.Cells["H4"].Value = "Trộn bột";
                 worksheet.Cells["I4"].Value = "Chấm sơn";
-                worksheet.Cells["J4"].Value = "Gắn linh kiện";
-                worksheet.Cells["K4"].Value = "Phủ Teflon";
+                worksheet.Cells["J4"].Value = "Đóng thêm mộc, chữ";
+                worksheet.Cells["K4"].Value = "Cắt theo bảng vẽ";
+                worksheet.Cells["L4"].Value = "Gắn linh kiện";
+                worksheet.Cells["M4"].Value = "Phủ Teflon";
 
                 worksheet.Cells["A1"].Style.Font.Size = 22;
                 worksheet.Cells["A1"].Style.Font.Bold = true;
                 worksheet.Cells["A1"].Style.Font.Name = "Times New Roman";
                 worksheet.Cells["A3:G3"].Merge = true;
-                worksheet.Cells["H3:K3"].Merge = true;
+                worksheet.Cells["H3:M3"].Merge = true;
 
                 using (var range = worksheet.Cells["A3:G3"])
                 {
@@ -2312,7 +2360,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                         OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 }
 
-                using (var range = worksheet.Cells["H3:K3"])
+                using (var range = worksheet.Cells["H3:M3"])
                 {
                     range.Style.WrapText = true;
                     range.Style.Font.Size = 18;
@@ -2326,7 +2374,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                         OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 }
 
-                using (var range = worksheet.Cells["H4:K4"])
+                using (var range = worksheet.Cells["H4:M4"])
                 {
                     range.Style.WrapText = true;
                     range.Style.Font.Size = 14;
@@ -2339,11 +2387,11 @@ namespace ESSONS_MIS_2020_App.Controllers
                         OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 }
 
-                worksheet.Cells["A3:K4"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                worksheet.Cells["A3:K4"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                worksheet.Cells["A3:M4"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                worksheet.Cells["A3:M4"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
 
                 worksheet.Row(4).Height = 90.00;
-                for (int j = 1; j <= 12; j++)
+                for (int j = 1; j <= 14; j++)
                 {
                     worksheet.Column(j).Width = 12;
                 }
@@ -2365,12 +2413,14 @@ namespace ESSONS_MIS_2020_App.Controllers
                     worksheet.Cells["G" + (4 + i).ToString()].Value = item.MaKeo2;
                     worksheet.Cells["H" + (4 + i).ToString()].Value = item.TronBot;
                     worksheet.Cells["I" + (4 + i).ToString()].Value = item.ChamSon;
-                    worksheet.Cells["J" + (4 + i).ToString()].Value = item.GanLinhKien;
-                    worksheet.Cells["K" + (4 + i).ToString()].Value = item.PhuTeflon;
+                    worksheet.Cells["J" + (4 + i).ToString()].Value = item.DongThemMocChu;
+                    worksheet.Cells["K" + (4 + i).ToString()].Value = item.CatTheoBangVe;
+                    worksheet.Cells["L" + (4 + i).ToString()].Value = item.GanLinhKien;
+                    worksheet.Cells["M" + (4 + i).ToString()].Value = item.PhuTeflon;
                 }
 
                 // Formatting style all
-                using (var range = worksheet.Cells["A5:K" + (i + 4).ToString()])
+                using (var range = worksheet.Cells["A5:M" + (i + 4).ToString()])
                 {
                     range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
                     range.Style.Font.Name = "Times New Roman";
@@ -2379,16 +2429,16 @@ namespace ESSONS_MIS_2020_App.Controllers
                 }
 
                 //Border
-                worksheet.Cells["A5:K" + (i + 4).ToString()].Style.Font.Size = 10;
-                worksheet.Cells["A5:K" + (i + 4).ToString()].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                var cellData = worksheet.Cells["A5:K" + (i + 4).ToString()];
+                worksheet.Cells["A5:M" + (i + 4).ToString()].Style.Font.Size = 10;
+                worksheet.Cells["A5:M" + (i + 4).ToString()].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                var cellData = worksheet.Cells["A5:M" + (i + 4).ToString()];
                 var border = cellData.Style.Border;
                 border.Top.Style = border.Left.Style = border.Right.Style = border.Bottom.Style =
                     OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
                 //Align
-                worksheet.Cells["A5:K" + (i + 4).ToString()].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                worksheet.Cells["A5:K" + (i + 4).ToString()].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                worksheet.Cells["A5:M" + (i + 4).ToString()].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                worksheet.Cells["A5:M" + (i + 4).ToString()].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
 
                 package.Save();
             }

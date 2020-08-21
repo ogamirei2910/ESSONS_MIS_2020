@@ -32,6 +32,8 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.folder = DistinctItems;
             ViewBag.folderList = role;
         }
+
+        //Thông tin công tác
         public async Task<IActionResult> Index()
         {
             if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
@@ -54,6 +56,8 @@ namespace ESSONS_MIS_2020_App.Controllers
             }
             return View();
         }
+
+        //Kiểm tra lịch công tác
         public async Task<IActionResult> CongTac_All()
         {
             if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
@@ -77,10 +81,12 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View();
         }
 
+        //Giao diện công tác
         public async Task<IActionResult> YeuCauCongTac()
         {
             getRole();
             HttpClient hc = _api.Initial();
+            //Lấy danh sách nhân viên để đăng kí công tác
             HttpResponseMessage res = await hc.GetAsync("api/emp/Get");
             if (res.IsSuccessStatusCode)
             {
@@ -90,6 +96,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View();
         }
 
+        //Yêu cầu công tác
         [HttpPost]
         public IActionResult YeuCauCongTac(CongTacModel um)
         {
@@ -101,9 +108,12 @@ namespace ESSONS_MIS_2020_App.Controllers
             }
             getRole();
             HttpClient hc = _api.Initial();
+
+            //Lấy dư liệu từ combobox để kiểm tra có bao nhiêu người đăng kí công tác
             var test = um.empid.Split(',');
             um.planNumber = test.Length;
 
+            //Thêm mã nhân viên vào list công tác
             List<ChildCongTac> lem = new List<ChildCongTac>();            
             for (int i = 0; i < test.Length; i++)
             {
@@ -112,12 +122,15 @@ namespace ESSONS_MIS_2020_App.Controllers
                 lem.Add(em);
             }
             um.empmodel = lem;
+
+            //Gửi thông tin đến web api
             var res = hc.PostAsJsonAsync<CongTacModel>("api/CongTac/CongTac_Request", um);
             res.Wait();
 
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
+                //Lấy danh sách email người quản lý trực tiếp
                 List<EmpModel> am = new List<EmpModel>();
                 res = hc.GetAsync($"api/emp/GetEmailEmpManager?empid={ViewBag.empid}");
                 res.Wait();
@@ -128,6 +141,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                     am = JsonConvert.DeserializeObject<List<EmpModel>>(results2);
                     if (am.Count > 0)
                     {
+                        //Gửi mail
                         SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
                         client.UseDefaultCredentials = false;
                         client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");
@@ -150,6 +164,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View(um);
         }
 
+        //Giao diện xác nhận công tác
         public async Task<IActionResult> XacNhanCongTac()
         {
             if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
@@ -173,6 +188,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View();
         }
 
+        //Xác nhận công tác
         public IActionResult Update(string congtacID, int page, int status)
         {
             getRole();
@@ -212,6 +228,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             else
                 return RedirectToAction("XacNhanCongTac");
         }
+        //Hủy công tác
         public IActionResult Delete(string congtacID, int page, int status)
         {
             getRole();
@@ -219,8 +236,12 @@ namespace ESSONS_MIS_2020_App.Controllers
             em.status = status;
             em.congtacID = congtacID;
             HttpClient hc = _api.Initial();
+
+            //Gửi thông tin đến web api
             var res = hc.PostAsJsonAsync<CongTacModel>($"api/congtac/Delete", em);
             res.Wait();
+
+            //Lấy mail người đăng kí công tác
             EmpModel am = new EmpModel();
             res = hc.GetAsync($"api/emp/GetEmailEmpInManager?congtacID={congtacID}");
             res.Wait();
@@ -231,6 +252,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 am = JsonConvert.DeserializeObject<EmpModel>(results2);
                 if (am.empEmail != "" && am.empEmail != null)
                 {
+                    //Gửi mail
                     SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
                     client.UseDefaultCredentials = false;
                     client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");
@@ -250,7 +272,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             else
                 return RedirectToAction("XacNhanCongTac");
         }
-
+        //Chi tiết công tác
         public async Task<IActionResult> Detail(string congtacID, int page)
         {
             if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
@@ -282,7 +304,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.page = page;
             return View(um);
         }
-
+        //Sửa công tác
         public IActionResult Edit(CongTacModel model)
         {
             if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
@@ -293,8 +315,11 @@ namespace ESSONS_MIS_2020_App.Controllers
             }
             getRole();
             HttpClient hc = _api.Initial();
+            //Lấy danh sách nhân viên công tác mới
             var test = model.empid.Split(',');
             model.planNumber = test.Length;
+
+            //Thêm vào list công tác
             List<ChildCongTac> lem = new List<ChildCongTac>();
             for (int i = 0; i < test.Length; i++)
             {
@@ -302,7 +327,10 @@ namespace ESSONS_MIS_2020_App.Controllers
                 em.empid = test[i];
                 lem.Add(em);
             }
+
             model.empmodel = lem;
+
+            //Gửi thông tin đến web api
             var res = hc.PostAsJsonAsync<CongTacModel>($"api/congtac/Edit", model);
             res.Wait();
             return RedirectToAction("Index");

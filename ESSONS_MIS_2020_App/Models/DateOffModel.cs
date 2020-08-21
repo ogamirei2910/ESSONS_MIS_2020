@@ -20,6 +20,8 @@ namespace ESSONS_MIS_2020_App.Models
         public string username { get; set; }
 
 
+        public string shiftName { get; set; }
+        public int isOT { get; set; }
         public string empName { get; set; }
         public string depName { get; set; }
         public string positionID { get; set; }

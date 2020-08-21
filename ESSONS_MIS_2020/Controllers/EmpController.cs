@@ -505,6 +505,90 @@ namespace ESSONS_MIS_2020.Controllers
             }
             return ldm;
         }
+        [HttpGet]
+        public List<DepartmentModel> GetAllDepartment()
+        {
+            List<DepartmentModel> ldm = new List<DepartmentModel>();
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_department", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Select"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        DepartmentModel dm = new DepartmentModel();
+                        dm.depID = sdr["depID"].ToString();
+                        dm.depName = sdr["depName"].ToString();
+                        ldm.Add(dm);
+                    }
+                }
+            }
+            return ldm;
+        }
+        [HttpGet]
+        public List<DepartmentChildModel> GetAllDepartmentChild()
+        {
+            List<DepartmentChildModel> ldm = new List<DepartmentChildModel>();
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_department", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Select"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        DepartmentChildModel dm = new DepartmentChildModel();
+                        dm.DepChildID = sdr["DepChildID"].ToString();
+                        dm.DepChildName = sdr["DepChildName"].ToString();
+                        dm.dep.depID = sdr["DepID"].ToString();
+                        dm.dep.depName = sdr["DepName"].ToString();
+                        ldm.Add(dm);
+                    }
+                }
+            }
+            return ldm;
+        }
+        [HttpGet]
+        public List<PositionModel> GetAllPosition()
+        {
+            List<PositionModel> ldm = new List<PositionModel>();
+            string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_department", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "Select"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        PositionModel dm = new PositionModel();
+                        dm.positionID = sdr["positionID"].ToString();
+                        dm.positionName = sdr["positionName"].ToString();
+                        dm.dep.depID = sdr["DepID"].ToString();
+                        dm.dep.depName = sdr["DepName"].ToString();
+                        dm.depchild.DepChildID = sdr["DepChildID"].ToString();
+                        dm.depchild.DepChildName = sdr["DepChildName"].ToString();
+                        ldm.Add(dm);
+                    }
+                }
+            }
+            return ldm;
+        }
 
         [HttpGet]
         public IEnumerable<DepartmentChildModel> GetDepartmentChild(string depID)

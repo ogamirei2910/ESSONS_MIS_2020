@@ -270,5 +270,38 @@ namespace ESSONS_MIS_2020.Controllers
                 }
             }
         }
+        public List<DieuDongModel> CTPC_GetAll()
+        {
+            List<DieuDongModel> ldd = new List<DieuDongModel>();
+            string connection = _configuration.GetConnectionString("DefaultConnection3");
+
+            using (SqlConnection sql = new SqlConnection(connection))
+            {
+                using (SqlCommand sc = new SqlCommand("sp_CTPC", sql))
+                {
+                    sql.Open();
+                    sc.CommandType = System.Data.CommandType.StoredProcedure;
+                    sc.Parameters.Add(
+                        new SqlParameter("@type", "GetAll"));
+                    SqlDataReader sdr = sc.ExecuteReader();
+                    while (sdr.Read())
+                    {
+                        DieuDongModel dd = new DieuDongModel();
+                        dd.MO = sdr["ManufactureOrderNo"].ToString();
+                        dd.MaKeo = sdr["ChemicalOrderCode"].ToString();
+                        dd.SoThe = sdr["SoThe"].ToString();
+                        dd.BatchNo = int.Parse(sdr["BatchNo"].ToString());
+                        dd.weight = int.Parse(sdr["weight"].ToString());
+                        dd.intime = sdr["intime"].ToString();
+                        dd.indat = sdr["indat"].ToString();
+                        dd.username = sdr["username"].ToString();
+                        dd.status = int.Parse(sdr["status"].ToString());
+                        ldd.Add(dd);
+                    }
+                }
+                return ldd;
+            }
+        }
+
     }
 }

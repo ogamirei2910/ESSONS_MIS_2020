@@ -157,6 +157,46 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View();
         }
 
+        //Giao diện quản lý bộ phận chức vụ
+        public async Task<IActionResult> emp_SetPhongBan()
+        {
+            //Kiểm tra quyền truy cập nếu chưa lấy danh sách mục quản lý thì trở về trang đăng nhập
+            if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
+            {
+                string path = Request.Scheme.ToString() + @"://" + Request.Host.Value + Request.Path.ToString() + Request.QueryString.ToString();
+                HttpContext.Session.SetString("resultPage", path);
+                return RedirectToAction("Login", "User");
+            }
+
+            ViewBag.notice = HttpContext.Session.GetString("notice");
+            HttpContext.Session.SetString("notice", "");
+
+            HttpClient hc = _api.Initial();
+
+            //Lấy danh sách phòng ban 
+            var res = await hc.GetAsync("api/emp/GetAllDepartment");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                ViewBag.departmentList = JsonConvert.DeserializeObject<List<DepartmentModel>>(results);
+            }
+
+            res = await hc.GetAsync("api/emp/GetAllDepartmentChild");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                ViewBag.departmentchildList = JsonConvert.DeserializeObject<List<DepartmentChildModel>>(results);
+            }
+
+            res = await hc.GetAsync("api/emp/GetAllPosition");
+            if (res.IsSuccessStatusCode)
+            {
+                var results = res.Content.ReadAsStringAsync().Result;
+                ViewBag.positionList = JsonConvert.DeserializeObject<List<PositionModel>>(results);
+            }
+            getRole();
+            return View();
+        }
         //Chỉnh kích thước ảnh phù hợp với khung hình thẻ nhân viên
         public static Image ResizeImage(Image imgToResize, Size size)
         {

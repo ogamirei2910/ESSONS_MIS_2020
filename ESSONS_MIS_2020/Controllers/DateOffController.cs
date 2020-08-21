@@ -403,6 +403,10 @@ namespace ESSONS_MIS_2020.Controllers
                     sc.Parameters.Add(
                         new SqlParameter("@dateoffType", model.dateoffType));
                     sc.Parameters.Add(
+                        new SqlParameter("@isOT", model.isOT));
+                    sc.Parameters.Add(
+                        new SqlParameter("@shiftName", model.shiftName));
+                    sc.Parameters.Add(
                         new SqlParameter("@username", model.username));
                     SqlParameter result = new SqlParameter("@result", SqlDbType.NVarChar,50);
                     result.Direction = ParameterDirection.Output;

@@ -1,0 +1,172 @@
+﻿
+@{
+    ViewData["Title"] = "emp_SetPhongBan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Quản lý bộ phận, chức vụ</h3>
+                        <br />
+                        <a class="btn btn-primary" id="btNhomBoPhan" >
+                            Nhóm bộ phận
+                        </a>
+                        <a class="btn btn-primary" id="btBoPhan" >
+                            Bộ phận
+                        </a>
+                        <a class="btn btn-primary" id="btChucVu">
+                            Chức vụ
+                        </a>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div id="NhomBoPhan">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Tên nhóm bộ phận</th>
+                                        <th>Mã nhóm bộ phận</th>
+                                        <th>Chức năng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in ViewBag.departmentList)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.depName
+                                            </td>
+                                            <td>
+                                                @item.depID
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Xóa", "emp_Block", "Emp", new { empID = item.empID },
+                                                                                             new
+                                                                                                  {
+                                                                                                      @class = "btn btn-danger btn-sm",
+                                                                                                      id = "blockBT"
+                                                                                                  })
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="BoPhan">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Tên nhóm bộ phận</th>
+                                        <th>Tên bộ phận</th>
+                                        <th>Mã bộ phận</th>
+                                        <th>Chức năng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in ViewBag.departmentchildList)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.dep.depName
+                                            </td>
+                                            <td>
+                                                @item.DepChildName
+                                            </td>
+                                            <td>
+                                                @item.DepChildID
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Xóa", "emp_Block", "Emp", new { empID = item.empID },
+                                                                                             new
+                                                                                                  {
+                                                                                                      @class = "btn btn-danger btn-sm",
+                                                                                                      id = "blockBT"
+                                                                                                  })
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="ChucVu">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Tên nhóm bộ phận</th>
+                                        <th>Tên bộ phận</th>
+                                        <th>Tên chức vụ</th>
+                                        <th>Mã chức vụ</th>
+                                        <th>Chức năng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in ViewBag.positionList)
+                                    {
+                                    <tr>
+                                        <td>
+                                            @item.dep.depName
+                                        </td>
+                                        <td>
+                                            @item.DepChildName
+                                        </td>
+                                        <td>
+                                            @item.PositionName
+                                        </td>
+                                        <td>
+                                            @item.PositionID
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Xóa", "emp_Block", "Emp", new { empID = item.empID },
+                                                                                         new
+                                                                                              {
+                                                                                                  @class = "btn btn-danger btn-sm",
+                                                                                                  id = "blockBT"
+                                                                                              })
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+       var a = '@ViewBag.notice';
+        if (a != '') {
+            let dia = bs4pop.dialog({
+
+                title: 'Thông báo',
+                content: '@ViewBag.notice',
+
+                closeBtn: true,
+                backdrop: 'static',
+                btns: [
+                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                ],
+                onDragStart: function () {
+                    console.log('onDragStart');
+                },
+                onDrag: function () {
+                    console.log('onDrag');
+                }
+
+            });
+        }
+    </script>
+}

@@ -9,5 +9,7 @@ namespace ESSONS_MIS_2020.Models
     {
         public string positionID { get; set; }
         public string positionName { get; set; }
+        public DepartmentModel dep { get; set; }
+        public DepartmentChildModel depchild { get; set; }
     }
 }

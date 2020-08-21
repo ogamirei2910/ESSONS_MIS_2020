@@ -40,6 +40,8 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.folder = DistinctItems;
             ViewBag.folderList = role;
         }
+
+        //Trang chính yêu cầu tăng ca
         public async Task<IActionResult> Index()
         {
             if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
@@ -50,10 +52,14 @@ namespace ESSONS_MIS_2020_App.Controllers
             }
 
             getRole();
+            //Nhận thông báo từ trang khác 
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");
+
             List<EmpDateWorkModel> um = new List<EmpDateWorkModel>();
             HttpClient hc = _api.Initial();
+
+            //Lấy danh sách đã đăng kí
             HttpResponseMessage res = await hc.GetAsync($"api/datework/GetDateWork?empid={ViewBag.empid}");
             if (res.IsSuccessStatusCode)
             {
@@ -65,6 +71,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View();
         }
 
+        //Chi tiết đơn tăng ca
         public async Task<IActionResult> Detail(string requestID, int isOT, string shiftName, int page)
         {
             if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
@@ -74,9 +81,11 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return RedirectToAction("Login", "User");
             }
             getRole();
-            HttpContext.Session.SetString("requestID", "");
+
             List<EmpDateWorkModel> um = new List<EmpDateWorkModel>();
             HttpClient hc = _api.Initial();
+
+            //Lấy dữ liệu tăng ca từ web api
             HttpResponseMessage res = await hc.GetAsync($"api/datework/GetDateWorkDetail?requestID={requestID}&&isOT={isOT}&&shiftName={shiftName}");
             if (res.IsSuccessStatusCode)
             {
@@ -98,11 +107,15 @@ namespace ESSONS_MIS_2020_App.Controllers
             }
 
             getRole();
-            HttpContext.Session.SetString("requestID", "");
+            //Nhận thông báo
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");
+
+
             List<EmpDateWorkModel> um = new List<EmpDateWorkModel>();
             HttpClient hc = _api.Initial();
+
+            //Lấy tất cả đơn công tác thuộc quản lý
             HttpResponseMessage res = await hc.GetAsync($"api/datework/GetAllDateWork?empid={ViewBag.empid}");
             if (res.IsSuccessStatusCode)
             {
@@ -114,6 +127,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View();
         }
 
+        //Xuất file excel
         public async Task<IActionResult> ExportV2(CancellationToken cancellationToken, string requestID, string shiftName)
         {
             getRole();
@@ -280,6 +294,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
         }
 
+        //Giao diện yêu cầu tăng ca
         [HttpGet]
         public async Task<IActionResult> RequestOT()
         {
@@ -294,6 +309,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             EmpDateWorkModel um = new EmpDateWorkModel();
             HttpClient hc = _api.Initial();
 
+            //Lấy danh sách người đăng kí tăng ca
             HttpResponseMessage res = await hc.GetAsync($"api/emp/GetEmpInManager_DateWork?empid={ViewBag.empid}");
             if (res.IsSuccessStatusCode)
             {
@@ -301,6 +317,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 um = JsonConvert.DeserializeObject<EmpDateWorkModel>(results);
             }
 
+            //Lấy ca làm việc
             List<TimeWorkModel> em = new List<TimeWorkModel>();
             HttpResponseMessage res2 = await hc.GetAsync($"api/dateoff/GetTimeWorkRequest?empid={ViewBag.empid}&&workdate=0");
             if (res2.IsSuccessStatusCode)
@@ -313,6 +330,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View(um);
         }
 
+        //Gửi yêu cầu tăng ca đến web api
         [HttpPost]
         public async Task<IActionResult> RequestOT(EmpDateWorkModel um)
         {
@@ -333,12 +351,16 @@ namespace ESSONS_MIS_2020_App.Controllers
             HttpClient hc = _api.Initial();
             um.indat = DateTime.Now.ToString("dd-MM-yyyy");
             um.username = ViewBag.empid;
+
+            //Gửi yêu cầu
             var res = await hc.PostAsJsonAsync<EmpDateWorkModel>("api/DateWork/RequestOT", um);
 
             if (res.IsSuccessStatusCode)
             {
                 var results = res.Content.ReadAsStringAsync().Result;
                 ViewBag.Error = results;
+
+                //Lấy danh sách email
                 List<EmpModel> am = new List<EmpModel>();
                 res = await hc.GetAsync($"api/emp/GetEmailEmpManager?empid={ViewBag.empid}");
                 if (res.IsSuccessStatusCode)
@@ -347,6 +369,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                     am = JsonConvert.DeserializeObject<List<EmpModel>>(results2);
                     if (am.Count > 0)
                     {
+                        //Gửi email
                         SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
                         client.UseDefaultCredentials = false;
                         client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");
@@ -380,6 +403,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return PartialView("DisplayError");
         }
 
+        //Hủy đơn đăng kí tăng ca
         public async Task<IActionResult> Delete(string requestID, int isOT, string shiftName, int page)
         {
             getRole();
@@ -388,6 +412,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             em.isOT = isOT;
             em.shiftName = shiftName;
             HttpClient hc = _api.Initial();
+            //Gửi thông tin hủy đơn
             var res = await hc.PostAsJsonAsync<EmpDateWorkModel>($"api/DateWork/Delete", em);
 
             if (res.IsSuccessStatusCode)
@@ -399,6 +424,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                     res = await hc.GetAsync($"api/emp/GetEmailEmpInManager?requestID={requestID}");
                     if (res.IsSuccessStatusCode)
                     {
+                        //Gửi email tới người đăng kí đơn
                         var results2 = res.Content.ReadAsStringAsync().Result;
                         am = JsonConvert.DeserializeObject<EmpModel>(results2);
                         if (am.empEmail != "" && am.empEmail != null)
@@ -430,6 +456,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return RedirectToAction("Confirm", "DateWork");
         }
 
+        //Cập nhật đơn đăng kí tăng ca
         public async Task<IActionResult> Update(string requestID, int isOT, string shiftName, int page)
         {
             HttpClient hc = _api.Initial();
@@ -437,6 +464,8 @@ namespace ESSONS_MIS_2020_App.Controllers
             em.requestID = requestID;
             em.isOT = isOT;
             em.shiftName = shiftName;
+
+            //Cập nhật đơn đăng kí
             var res = await hc.PostAsJsonAsync<EmpDateWorkModel>($"api/DateWork/Update", em);
 
             if (res.IsSuccessStatusCode)
@@ -448,6 +477,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                     res = await hc.GetAsync($"api/emp/GetEmailEmpInManager?requestID={requestID}");
                     if (res.IsSuccessStatusCode)
                     {
+                        //Gửi email đến người đăng kí đơn
                         var results2 = res.Content.ReadAsStringAsync().Result;
                         am = JsonConvert.DeserializeObject<EmpModel>(results2);
                         if (am.empEmail != "" && am.empEmail != null)

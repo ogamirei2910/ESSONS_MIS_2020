@@ -34,10 +34,12 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.folderList = role;
         }
 
+        //Login User
         [HttpPost]
         public IActionResult Login(EmpModel em)
         {
             HttpClient hc = _api.Initial();
+            //Gửi thông tin thẻ đến web api
             var res = hc.PostAsJsonAsync<EmpModel>("api/emp/LoginCongNhan", em);
             res.Wait();
 
@@ -46,6 +48,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             {
                 List<UserRoleModel> urm = new List<UserRoleModel>();
                 hc = _api.Initial();
+                //Lấy quyền của công nhân viên
                 res = hc.GetAsync($"api/user/GetRoleCN/{em.empID}");
                 var results3 = res.Result;
                 if (results3.IsSuccessStatusCode)
@@ -63,12 +66,14 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View("Index");
         }
 
+        //Giao diện yêu cầu nghỉ phép
         public IActionResult dateoff_Request()
         {
             getRole();
             return View();
         }
 
+        //Giao diện xác nhận nghỉ phép
         public async Task<IActionResult> dateoff_Confirm()
         {
             getRole();
@@ -76,6 +81,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             HttpContext.Session.SetString("notice", "");
             List<DateOffModel> um = new List<DateOffModel>();
             HttpClient hc = _api.Initial();
+            //Lấy danh sách nhân viên thuộc quản lý yêu cầu phép
             HttpResponseMessage res = await hc.GetAsync($"api/dateoff/GetEmpConfirm/{ViewBag.EmpID}");
             if (res.IsSuccessStatusCode)
             {
@@ -85,6 +91,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View(um);
         }
 
+        // 
         [HttpPost]
         public IActionResult dateoff_Request(DateOffModel um)
         {
@@ -115,9 +122,12 @@ namespace ESSONS_MIS_2020_App.Controllers
             string dateend = um.dateoffEnd;
             TimeSpan Total = DateTime.ParseExact(dateend, "dd-MM-yyyy", provider) - DateTime.ParseExact(datestart, "dd-MM-yyyy", provider);
             number = (Total.TotalDays + 1) * 8;
+
+            //Nếu phép năm và phép việc riêng thì kiểm tra giờ xin phép
             if (um.dateoffType == "4" || um.dateoffType == "1")
             {
-                if (um.dateoffEndTime != null && um.dateoffStartTime != null && um.dateoffStart == um.dateoffEnd && number == 1 )
+                //Nếu nghỉ nhỏ hơn 8 tiếng
+                if (um.dateoffEndTime != null && um.dateoffStartTime != null && um.dateoffStart == um.dateoffEnd && number == 8 )
                 {
                     int yearS = int.Parse(um.dateoffStart.Substring(6, 4));
                     int monthS = int.Parse(um.dateoffStart.Substring(3, 2));
@@ -152,49 +162,54 @@ namespace ESSONS_MIS_2020_App.Controllers
                             CultureInfo.InvariantCulture,
                             DateTimeStyles.None, out dt);
 
+            //Kiểm tra điều kiện được xin phép nghỉ
             if (dt.Date < DateTime.Now.Date)
             {
                 ViewBag.Error = "Không thể đăng kí nghỉ phép ngày làm việc đã kết thúc";
                 return PartialView("DisplayError");
             }
 
-            if (number <= 4)
+            if (um.dateoffType == "1" || um.dateoffType == "4")
             {
-                if (dt.Date < DateTime.Now.Date)
+                if (number < 8)
                 {
-                    ViewBag.Error = "Không thể đăng kí nghỉ phép ngày làm việc đã kết thúc";
-                    return PartialView("DisplayError");
+                    if (dt.Date < DateTime.Now.Date)
+                    {
+                        ViewBag.Error = "Không thể đăng kí nghỉ phép ngày làm việc đã kết thúc";
+                        return PartialView("DisplayError");
+                    }
                 }
-            }
 
-            if (number >= 8 && number <= 16)
-            {
-                if (dt.Date <= DateTime.Now.Date)
+                if (number >= 8 && number <= 16)
                 {
-                    ViewBag.Error = "Đăng kí phép trước 1 ngày với trường hợp nghỉ 1-2 ngày";
-                    return PartialView("DisplayError");
+                    if (dt.Date <= DateTime.Now.Date)
+                    {
+                        ViewBag.Error = "Đăng kí phép trước 1 ngày với trường hợp nghỉ 1-2 ngày";
+                        return PartialView("DisplayError");
+                    }
                 }
-            }
 
-            if (number > 16 && number <= 24)
-            {
-                if (dt.Date <= DateTime.Now.AddDays(13).Date && dt.Date.AddDays(1).DayOfWeek != DayOfWeek.Sunday)
+                if (number > 16 && number <= 24)
                 {
-                    ViewBag.Error = "Đăng kí phép trước 2 tuần với trường hợp nghỉ 3 ngày";
-                    return PartialView("DisplayError");
+                    if (dt.Date <= DateTime.Now.AddDays(13).Date && dt.Date.AddDays(1).DayOfWeek != DayOfWeek.Sunday)
+                    {
+                        ViewBag.Error = "Đăng kí phép trước 2 tuần với trường hợp nghỉ 3 ngày";
+                        return PartialView("DisplayError");
+                    }
                 }
-            }
 
-            if (number >= 32)
-            {
-                if (dt.Date <= DateTime.Now.AddDays(29).Date)
+                if (number >= 32)
                 {
-                    ViewBag.Error = "Đăng kí phép trước 1 tháng với trường hợp nghỉ 4 ngày";
-                    return PartialView("DisplayError");
+                    if (dt.Date <= DateTime.Now.AddDays(29).Date)
+                    {
+                        ViewBag.Error = "Đăng kí phép trước 1 tháng với trường hợp nghỉ 4 ngày";
+                        return PartialView("DisplayError");
+                    }
                 }
             }
             um.dateoffNumber = number;
 
+            //Gửi thông tin nghỉ phép đến web api
             um.username = ViewBag.empid;
             var res = hc.PostAsJsonAsync<DateOffModel>("api/dateoff/Create", um);
             res.Wait();
@@ -202,6 +217,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
+                //Lấy thông tin để gửi mail
                 string dateoffName = "";
                 switch (um.dateoffType)
                 {
@@ -216,6 +232,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                     case "16": dateoffName = "Dưỡng sức"; break;
                 }
 
+                //Lấy danh sách người quản lý
                 EmpModel am = new EmpModel();
                 res = hc.GetAsync($"api/emp/GetEmailEmpManager?empid={ViewBag.empid}");
                 res.Wait();
@@ -226,6 +243,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                     am = JsonConvert.DeserializeObject<EmpModel>(results2);
                     if (am.empEmail != "" && am.empEmail != null)
                     {
+                        //Gửi mail
                         SmtpClient client = new SmtpClient("SRV-mgt-01.essons.vn", 587);
                         client.UseDefaultCredentials = false;
                         client.Credentials = new NetworkCredential("noreply@essons.vn", "P@ssw0rd123");

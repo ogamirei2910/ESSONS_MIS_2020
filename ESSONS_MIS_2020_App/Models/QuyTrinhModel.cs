@@ -137,6 +137,8 @@ namespace ESSONS_MIS_2020_App.Models
         public string LoaiDaMai { get; set; }
         public string TronBot { get; set; }
         public string ChamSon { get; set; }
+        public string DongThemMocChu { get; set; }
+        public string CatTheoBangVe { get; set; }
         public string GanLinhKien { get; set; }
         public string PhuTeflon { get; set; }
         public string BaviaKH { get; set; }

@@ -18,6 +18,8 @@ namespace ESSONS_MIS_2020.Models
         public double dateoffNumber { get; set; }
         public string username { get; set; }
 
+        public string shiftName { get; set; }
+        public int isOT { get; set; }
         public string positionID { get; set; }
         public string empName { get; set; }
         public string depName { get; set; }

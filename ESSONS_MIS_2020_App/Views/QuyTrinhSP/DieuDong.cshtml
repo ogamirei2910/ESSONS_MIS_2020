@@ -14,51 +14,100 @@
                     <div class="card-header">
                         <h3 class="card-title">Điều động sản xuất keo</h3>
                     </div>
-                    <!-- /.card-header -->
-                    <form id="dieudongForm" method="post">
-                        <table class="table">
-                            <tr>
-                                <td>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 col-form-label">Chọn Số Thẻ</label>
-                                        <select id="sothe" asp-for="sothe" class="custom-select col-sm-4"
-                                                asp-items="@(new SelectList(ViewBag.sothe,"sothe","sothe"))">
-                                            <option value="0" disabled selected>Chọn số thẻ</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 col-form-label">Mã keo</label>
-                                        <select id="makeo" asp-for="MaKeo1" class="custom-select col-sm-4"
-                                                asp-items="@(new SelectList(""))">
-                                        </select>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Số mẻ</label>
-                                        <div class="col-3">
-                                            <input asp-for="BatchNo" type="number" maxlength="5" class="form-control" placeholder="Số thẻ" value="0">
+                    <div class="card-body">
+                        <form id="dieudongForm" method="post">
+                            <table class="table">
+                                <tr>
+                                    <td>
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label">Chọn Số Thẻ</label>
+                                            <select id="sothe" asp-for="sothe" class="custom-select col-sm-4"
+                                                    asp-items="@(new SelectList(ViewBag.sothe,"sothe","sothe"))">
+                                                <option value="0" disabled selected>Chọn số thẻ</option>
+                                            </select>
                                         </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Số KG</label>
-                                        <div class="col-3">
-                                            <input asp-for="Weight" type="text" maxlength="10" class="form-control" placeholder="Số thời vụ" value="0">
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label">Mã keo</label>
+                                            <select id="makeo" asp-for="MaKeo1" class="custom-select col-sm-4"
+                                                    asp-items="@(new SelectList(""))">
+                                            </select>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">
-                                Tạo điều động
-                            </button>
-                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Số KG</label>
+                                            <div class="col-3">
+                                                <input asp-for="Weight" type="text" maxlength="10" class="form-control" placeholder="Số thời vụ" value="0">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">
+                                    Tạo điều động
+                                </button>
+                            </div>
+                        </form>
                         <div id="table">
+                            <table id="example1" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Mã điều động</th>
+                                        <th>Mã keo</th>
+                                        <th>Số thẻ</th>
+                                        <th>Số hộp</th>
+                                        <th>Số KG</th>
+                                        <th>Giờ ĐĐ</th>
+                                        <th>Ngày ĐĐ</th>
+                                        <th>Người ĐĐ</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in ViewBag.DieuDong)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.MO
+                                            </td>
+                                            <td>
+                                                @item.MaKeo
+                                            </td>
+                                            <td>@item.SoThe</td>
+                                            <td>@item.BatchNo</td>
+                                            <td>@item.weight</td>
+                                            <td>@item.intime</td>
+                                            <td>@item.indat</td>
+                                            <td>@item.username</td>
+                                            @if (item.status != 2)
+                                            {
+                                                if (item.status == 1)
+                                                {
+                                                    <td>Hoàn thành</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>Đã hủy</td>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    @Html.ActionLink("Hủy", "DieuDong_Huy", "QuyTrinhSP", new { MO = item.MO },
+                                                         new
+                                                  {
+                                                      @class = "btn btn-danger btn-sm"
+                                                  })
+                                                </td>
 
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
-
-                    </form>
+                    </div>
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
@@ -88,7 +137,7 @@
                         makeo.prop('disabled', false);
                         makeo.append(data);
                     }
-                })          
+                })
             })
 
             $("#dieudongForm").submit(function (e) {
@@ -99,6 +148,7 @@
                     data: $("#dieudongForm").serialize(),
                     success: function (result) {
                         debugger
+                        if (result != '\r\nOK\r\n') {
                             let dia = bs4pop.dialog({
 
                                 title: 'Thông báo',
@@ -116,11 +166,48 @@
                                     console.log('onDrag');
                                 }
                             });
+                        }
+                        else
+                            window.location.href = "/QuyTrinhSP/DieuDong";
+
                     }
                 })
                 e.preventDefault();
             });
         })
+
+        $('.custom-select').select2();
+
+        $.fn.dataTable.ext.errMode = 'throw';
+
+        $('#example1').dataTable({
+            "aaSorting": [],
+            "info": false,
+            "bLengthChange": false,
+            // Your other options here...
+        });
+
+        var a = '@ViewBag.notice';
+        if (a != '') {
+            let dia = bs4pop.dialog({
+
+                title: 'Thông báo',
+                content: '@ViewBag.notice',
+
+                closeBtn: true,
+                backdrop: 'static',
+                btns: [
+                    { label: 'OK', className: 'btn-primary', onClick(cb) { } }
+                ],
+                onDragStart: function () {
+                    console.log('onDragStart');
+                },
+                onDrag: function () {
+                    console.log('onDrag');
+                }
+
+            });
+        }
     </script>
 
 }

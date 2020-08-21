@@ -34,6 +34,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             ViewBag.folderList = role;
         }
 
+        //Giao diện yêu cầu nghỉ phép
         public IActionResult dateoff_Request()
         {
             if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
@@ -46,6 +47,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View();
         }
 
+        //Yêu cầu nghỉ phép
         [HttpPost]
         public IActionResult dateoff_Request(DateOffModel um)
         {
@@ -71,15 +73,19 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return PartialView("DisplayError");
             }
 
+            /* Tính khoảng thời gian xin nghỉ phép */
             double number = 0;
             CultureInfo provider = CultureInfo.InvariantCulture;
             string datestart = um.dateoffStart;
             string dateend = um.dateoffEnd;
             TimeSpan Total = DateTime.ParseExact(dateend, "dd-MM-yyyy", provider) - DateTime.ParseExact(datestart, "dd-MM-yyyy", provider);
             number = (Total.TotalDays + 1) * 8;
+            /*----------------------------------------------------*/
+
+            /*Kiểm tra có phải phép việc riêng hoặc phép năm không */
             if (um.dateoffType == "4" || um.dateoffType == "1")
             {
-                if (um.dateoffEndTime != null && um.dateoffStartTime != null && um.dateoffStart == um.dateoffEnd && number == 1)
+                if (um.dateoffEndTime != null && um.dateoffStartTime != null && um.dateoffStart == um.dateoffEnd && number == 8)
                 {
                     int yearS = int.Parse(um.dateoffStart.Substring(6, 4));
                     int monthS = int.Parse(um.dateoffStart.Substring(3, 2));
@@ -108,6 +114,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 }
             }
 
+            /*Kiểm tra thời gian xin nghỉ phép */
             DateTime dt;
             DateTime.TryParseExact(um.dateoffStart,
                             "dd-MM-yyyy",
@@ -120,43 +127,48 @@ namespace ESSONS_MIS_2020_App.Controllers
                 return PartialView("DisplayError");
             }
 
-            if (number <= 4)
+            if(um.dateoffType == "1" || um.dateoffType == "4")
             {
-                if (dt.Date < DateTime.Now.Date)
+                if (number < 8)
                 {
-                    ViewBag.Error = "Không thể đăng kí nghỉ phép ngày làm việc đã kết thúc";
-                    return PartialView("DisplayError");
+                    if (dt.Date < DateTime.Now.Date)
+                    {
+                        ViewBag.Error = "Không thể đăng kí nghỉ phép ngày làm việc đã kết thúc";
+                        return PartialView("DisplayError");
+                    }
+                }
+
+                if (number >= 8 && number <= 16)
+                {
+                    if (dt.Date <= DateTime.Now.Date)
+                    {
+                        ViewBag.Error = "Đăng kí phép trước 1 ngày với trường hợp nghỉ 1-2 ngày";
+                        return PartialView("DisplayError");
+                    }
+                }
+
+                if (number > 16 && number <= 24)
+                {
+                    if (dt.Date <= DateTime.Now.AddDays(13).Date && dt.Date.AddDays(1).DayOfWeek != DayOfWeek.Sunday)
+                    {
+                        ViewBag.Error = "Đăng kí phép trước 2 tuần với trường hợp nghỉ 3 ngày";
+                        return PartialView("DisplayError");
+                    }
+                }
+
+                if (number >= 32)
+                {
+                    if (dt.Date <= DateTime.Now.AddDays(29).Date)
+                    {
+                        ViewBag.Error = "Đăng kí phép trước 1 tháng với trường hợp nghỉ 4 ngày";
+                        return PartialView("DisplayError");
+                    }
                 }
             }
 
-            if (number >= 8 && number <= 16)
-            {
-                if (dt.Date <= DateTime.Now.Date)
-                {
-                    ViewBag.Error = "Đăng kí phép trước 1 ngày với trường hợp nghỉ 1-2 ngày";
-                    return PartialView("DisplayError");
-                }
-            }
-
-            if (number > 16 && number <= 24)
-            {
-                if (dt.Date <= DateTime.Now.AddDays(13).Date && dt.Date.AddDays(1).DayOfWeek != DayOfWeek.Sunday)
-                {
-                    ViewBag.Error = "Đăng kí phép trước 2 tuần với trường hợp nghỉ 3 ngày";
-                    return PartialView("DisplayError");
-                }
-            }
-
-            if (number >= 32)
-            {
-                if (dt.Date <= DateTime.Now.AddDays(29).Date)
-                {
-                    ViewBag.Error = "Đăng kí phép trước 1 tháng với trường hợp nghỉ 4 ngày";
-                    return PartialView("DisplayError");
-                }
-            }
+          
+            /*Gửi dữ liệu đến API */
             um.dateoffNumber = number;
-
             um.username = ViewBag.empid;
             var res = hc.PostAsJsonAsync<DateOffModel>("api/dateoff/Create", um);
             res.Wait();
@@ -164,6 +176,8 @@ namespace ESSONS_MIS_2020_App.Controllers
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
+
+                /*Gửi mail đến người quản lý trực tiếp */
                 string dateoffName = "";
                 switch(um.dateoffType)
                 {
@@ -178,12 +192,14 @@ namespace ESSONS_MIS_2020_App.Controllers
                     case "16": dateoffName = "Dưỡng sức"; break;
                 }
 
+                //Lấy danh sách người quản lý
                 List<EmpModel> am = new List<EmpModel>();
                 res = hc.GetAsync($"api/emp/GetEmailEmpManager?empid={ViewBag.empid}");
                 res.Wait();
                 results = res.Result;
                 if (results.IsSuccessStatusCode)
                 {
+                    //Gửi mail 
                     var results2 = results.Content.ReadAsStringAsync().Result;
                     am = JsonConvert.DeserializeObject<List<EmpModel>>(results2);
                     if (am.Count > 0)
@@ -213,6 +229,8 @@ namespace ESSONS_MIS_2020_App.Controllers
             return PartialView("DisplayError");
         }
 
+
+        //Giao diện xác nhận nghỉ phép
         public async Task<IActionResult> dateoff_Confirm()
         {
             if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)
@@ -226,6 +244,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             HttpContext.Session.SetString("notice", "");
             List<DateOffModel> um = new List<DateOffModel>();
             HttpClient hc = _api.Initial();
+            //Lấy danh sách nhân viên thuộc quản lý
             HttpResponseMessage res = await hc.GetAsync($"api/dateoff/GetEmpConfirm/{ViewBag.empid}");
             if (res.IsSuccessStatusCode)
             {
@@ -235,6 +254,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View(um);
         }
 
+        //Xác nhận cho phép nghỉ
         public IActionResult dateoff_Update(string dateoffID)
         {
             getRole();
@@ -245,12 +265,14 @@ namespace ESSONS_MIS_2020_App.Controllers
             var res = hc.PostAsJsonAsync<DateOffModel>($"api/dateoff/Update", em);
             res.Wait();
 
+            //Gửi thông tin đên web api
             EmpModel am = new EmpModel();
             res = hc.GetAsync($"api/emp/GetEmailEmpInManager?dateoffID={dateoffID}");
             res.Wait();
             var results = res.Result;
             if (results.IsSuccessStatusCode)
             {
+                /* lấy email người đăng kí phép */
                 var results2 = results.Content.ReadAsStringAsync().Result;
                 am = JsonConvert.DeserializeObject<EmpModel>(results2);
                 if (am.empEmail != "")
@@ -273,6 +295,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return RedirectToAction("dateoff_Confirm");
         }
 
+        //Cập nhật phép BHXH
         public IActionResult dateoff_UpdatePaper(string dateoffID)
         {
             getRole();
@@ -310,6 +333,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return RedirectToAction("dateoff_Detail");
         }
 
+        //Hủy phép
         public IActionResult dateoff_Delete(string dateoffID, int page)
         {
             getRole();
@@ -375,7 +399,7 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View(um);
         }
 
-        //Lấy thông tin toàn bộ nhân viên công ty trừ thời vụ
+        //Lấy thông tin toàn bộ phép năm nhân viên công ty trừ thời vụ
         public async Task<IActionResult> dateoff_yearoff()
         {
             //Kiểm tra quyền truy cập nếu chưa lấy danh sách mục quản lý thì trở về trang đăng nhập

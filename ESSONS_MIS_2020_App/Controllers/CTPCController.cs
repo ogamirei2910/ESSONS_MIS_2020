@@ -140,6 +140,7 @@ namespace ESSONS_MIS_2020_App.Controllers
 
             return View(um);
         }
+        
 
         [HttpPost]
         public async Task<IActionResult> Update(CongThucPhaChe model)

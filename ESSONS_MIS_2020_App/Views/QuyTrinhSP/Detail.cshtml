@@ -545,7 +545,7 @@
                                                             <option value="" disabled selected>Cách xử lý</option>
                                                             <option value="Phủ bột">Phủ bột</option>
                                                             <option value="Nước trộn bột">Nước trộn bột</option>
-                                                            <option value="Bọc nilong">Bọc nilong</option>
+                                                            <option value="Bọc nilon">Bọc nilon</option>
                                                             <option value="Bọc vải">Bọc vải</option>
                                                         </select>
                                                     </td>
@@ -1084,8 +1084,24 @@
                                                             <option value="Không">Không</option>
                                                         </select>
                                                     </td>
+                                                    <th scope="row">Đóng thêm mộc chữ</th>
+                                                    <td>
+                                                        <select asp-for="DongThemMocChu" class="form-control custom-select">
+                                                            <option value="" disabled selected>Chọn</option>
+                                                            <option value="Có">Có</option>
+                                                            <option value="Không">Không</option>
+                                                        </select>
+                                                    </td>
                                                 </tr>
                                                 <tr>
+                                                    <th scope="row">Cắt theo bảng vẽ</th>
+                                                    <td>
+                                                        <select asp-for="CatTheoBangVe" class="form-control custom-select">
+                                                            <option value="" disabled selected>Chọn</option>
+                                                            <option value="Có">Có</option>
+                                                            <option value="Không">Không</option>
+                                                        </select>
+                                                    </td>
                                                     <th scope="row">Gắn linh kiện</th>
                                                     <td>
                                                         <select asp-for="GanLinhKien" class="form-control custom-select">
@@ -1356,12 +1372,16 @@
             if (depName = 'DHE') {
                 $('#tbDHE input').prop("readonly", false);
                 $('#btDHE').prop("visible", true);
+                $('#tbDG input').prop("readonly", false);
+                $('#btDG').prop("visible", true);
             }
             if (depName = 'KTC') {
                 $('#tbQCKN input').prop("readonly", false);
                 $('#tbKM input').prop("readonly", false);
                 $('#btQCKN').prop("visible", true);
                 $('#btKM').prop("visible", true);
+                $('#tbDG input').prop("readonly", false);
+                $('#btDG').prop("visible", true);
             }
             if (depName = 'BTP') {
                 $('#tbBT input').prop("readonly", false);
