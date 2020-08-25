@@ -8,6 +8,7 @@ using ESSONS_MIS_2020.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 namespace ESSONS_MIS_2020.Controllers
 {
@@ -525,6 +526,7 @@ namespace ESSONS_MIS_2020.Controllers
                         DepartmentModel dm = new DepartmentModel();
                         dm.depID = sdr["depID"].ToString();
                         dm.depName = sdr["depName"].ToString();
+                        dm.isVP = sdr["isVP"].ToString();
                         ldm.Add(dm);
                     }
                 }
@@ -539,20 +541,22 @@ namespace ESSONS_MIS_2020.Controllers
 
             using (SqlConnection sql = new SqlConnection(connection))
             {
-                using (SqlCommand sc = new SqlCommand("sp_department", sql))
+                using (SqlCommand sc = new SqlCommand("sp_departmentchild", sql))
                 {
                     sql.Open();
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
                     sc.Parameters.Add(
-                        new SqlParameter("@type", "Select"));
+                        new SqlParameter("@type", "SelectAll"));
                     SqlDataReader sdr = sc.ExecuteReader();
                     while (sdr.Read())
                     {
                         DepartmentChildModel dm = new DepartmentChildModel();
                         dm.DepChildID = sdr["DepChildID"].ToString();
                         dm.DepChildName = sdr["DepChildName"].ToString();
-                        dm.dep.depID = sdr["DepID"].ToString();
-                        dm.dep.depName = sdr["DepName"].ToString();
+                        DepartmentModel dm1 = new DepartmentModel();
+                        dm1.depID = sdr["DepID"].ToString();
+                        dm1.depName = sdr["DepName"].ToString();
+                        dm.dep = dm1;
                         ldm.Add(dm);
                     }
                 }
@@ -567,22 +571,26 @@ namespace ESSONS_MIS_2020.Controllers
 
             using (SqlConnection sql = new SqlConnection(connection))
             {
-                using (SqlCommand sc = new SqlCommand("sp_department", sql))
+                using (SqlCommand sc = new SqlCommand("sp_position", sql))
                 {
                     sql.Open();
                     sc.CommandType = System.Data.CommandType.StoredProcedure;
                     sc.Parameters.Add(
-                        new SqlParameter("@type", "Select"));
+                        new SqlParameter("@type", "SelectAll"));
                     SqlDataReader sdr = sc.ExecuteReader();
                     while (sdr.Read())
                     {
                         PositionModel dm = new PositionModel();
                         dm.positionID = sdr["positionID"].ToString();
                         dm.positionName = sdr["positionName"].ToString();
-                        dm.dep.depID = sdr["DepID"].ToString();
-                        dm.dep.depName = sdr["DepName"].ToString();
-                        dm.depchild.DepChildID = sdr["DepChildID"].ToString();
-                        dm.depchild.DepChildName = sdr["DepChildName"].ToString();
+                        DepartmentModel dm1 = new DepartmentModel();
+                        dm1.depID = sdr["DepID"].ToString();
+                        dm1.depName = sdr["DepName"].ToString();
+                        DepartmentChildModel dm2 = new DepartmentChildModel();
+                        dm2.DepChildID = sdr["DepChildID"].ToString();
+                        dm2.DepChildName = sdr["DepChildName"].ToString();
+                        dm.dep = dm1;
+                        dm.depchild = dm2;
                         ldm.Add(dm);
                     }
                 }

@@ -321,6 +321,55 @@ namespace ESSONS_MIS_2020_App.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> GetDataTable()
+        {
+            try
+            {
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+                List<ChildQuyTrinh> um = new List<ChildQuyTrinh>();
+                HttpClient hc = _api.Initial();
+                HttpResponseMessage res = await hc.GetAsync($"api/QuyTrinhSP/QuyTrinh_GetALL");
+                if (res.IsSuccessStatusCode)
+                {
+                    var results = res.Content.ReadAsStringAsync().Result;
+                    um = JsonConvert.DeserializeObject<List<ChildQuyTrinh>>(results);
+                }
+                var list = um.AsEnumerable();
+                if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
+                {
+                    if(sortColumnDirection == "asc")
+                        list = list.OrderBy(x => x.GetType().GetProperty(sortColumn).GetValue(x, null));
+                    else
+                        list = list.OrderByDescending(x => x.GetType().GetProperty(sortColumn).GetValue(x, null));
+                }
+
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    list = list.Where(m => m.SoDonKhuon.Contains(searchValue)
+                                                || m.CodeKH.Contains(searchValue)
+                                                || m.CodeSP.Contains(searchValue)
+                                                || m.MaKhuonTW.Contains(searchValue)
+                                                || m.NgayDuyet.Contains(searchValue));
+                }
+          
+                var data = list.Skip(skip).Take(pageSize).ToList();
+                var jsonData = new { draw = draw, recordsFiltered = um.Count, recordsTotal = um.Count, data = data };
+                return Ok(jsonData);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public async Task<IActionResult> Detail(string SoDonKhuon, string codeSP)
         {
             if (HttpContext.Session.GetObjectFromJson<List<UserRoleModel>>("folderList") is null)

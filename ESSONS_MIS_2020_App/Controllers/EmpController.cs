@@ -167,7 +167,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 HttpContext.Session.SetString("resultPage", path);
                 return RedirectToAction("Login", "User");
             }
-
+            getRole();
             ViewBag.notice = HttpContext.Session.GetString("notice");
             HttpContext.Session.SetString("notice", "");
 
@@ -194,7 +194,7 @@ namespace ESSONS_MIS_2020_App.Controllers
                 var results = res.Content.ReadAsStringAsync().Result;
                 ViewBag.positionList = JsonConvert.DeserializeObject<List<PositionModel>>(results);
             }
-            getRole();
+            
             return View();
         }
         //Chỉnh kích thước ảnh phù hợp với khung hình thẻ nhân viên
@@ -299,11 +299,27 @@ namespace ESSONS_MIS_2020_App.Controllers
             List<EmpModel> um = new List<EmpModel>();
             HttpClient hc = _api.Initial();
             HttpResponseMessage res = await hc.GetAsync("api/emp/Get");
-            if (res.IsSuccessStatusCode)
-            {
-                var results = res.Content.ReadAsStringAsync().Result;
-                um = JsonConvert.DeserializeObject<List<EmpModel>>(results);
-            }
+            //if (res.IsSuccessStatusCode)
+            //{
+            //    var results = res.Content.ReadAsStringAsync().Result;
+            //    um = JsonConvert.DeserializeObject<List<EmpModel>>(results);
+            //}
+            EmpModel a = new EmpModel();
+            a.empID = "04719";
+            EmpModel a1 = new EmpModel();
+            a1.empID = "04687";
+            EmpModel a2 = new EmpModel();
+            a2.empID = "04615";
+            EmpModel a3 = new EmpModel();
+            a3.empID = "03718";
+            EmpModel a4 = new EmpModel();
+            a4.empID = "03909";
+            um.Add(a);
+            um.Add(a1);
+            um.Add(a2);
+            um.Add(a3);
+            um.Add(a4);
+
 
             var i = 1;
             var j = 1;

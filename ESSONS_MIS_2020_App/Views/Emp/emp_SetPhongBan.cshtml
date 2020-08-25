@@ -1,4 +1,4 @@
-﻿
+﻿@model ESSONS_MIS_2020_App.Models.QuanLyBoPhan
 @{
     ViewData["Title"] = "emp_SetPhongBan";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -12,126 +12,265 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Quản lý bộ phận, chức vụ</h3>
-                        <br />
-                        <a class="btn btn-primary" id="btNhomBoPhan" >
-                            Nhóm bộ phận
-                        </a>
-                        <a class="btn btn-primary" id="btBoPhan" >
-                            Bộ phận
-                        </a>
-                        <a class="btn btn-primary" id="btChucVu">
-                            Chức vụ
-                        </a>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <div id="NhomBoPhan">
-                            <table id="example1" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Tên nhóm bộ phận</th>
-                                        <th>Mã nhóm bộ phận</th>
-                                        <th>Chức năng</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in ViewBag.departmentList)
-                                    {
+                        <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="custom-content-below-NBP-tab" data-toggle="pill" href="#custom-content-below-NBP" role="tab" aria-controls="custom-content-below-NBP" aria-selected="true">Nhóm bộ phận</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-content-below-BP-tab" data-toggle="pill" href="#custom-content-below-BP" role="tab" aria-controls="custom-content-below-BP" aria-selected="false">Bộ phận</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-content-below-CV-tab" data-toggle="pill" href="#custom-content-below-CV" role="tab" aria-controls="custom-content-below-CV" aria-selected="false">Chức vụ</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="custom-content-below-tabContent">
+                            <div class="tab-pane fade show active" id="custom-content-below-NBP" role="tabpanel" aria-labelledby="custom-content-below-NBP-tab">
+                                <form id="formNBP" method="post" asp-action="Update_NPB">
+                                    <div class="card-body">
+                                        <table class="table">
+                                            <tr>
+                                                <td>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">Tên nhóm bộ phận</label>
+                                                        <div class="col-5">
+                                                            <input type="text" asp-for="@Model.dep.depID" maxlength="10" class="form-control" placeholder="Số thời vụ" value="0">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">Mã nhóm</label>
+                                                        <div class="col-3">
+                                                            <input type="text" readonly asp-for="@Model.dep.depName" maxlength="10" class="form-control" placeholder="Số thời vụ" value="0">
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label">Khối VP</label>
+                                                        <select asp-for="@Model.dep.isVP" class="custom-select col-sm-4">
+                                                            <option value="NULL" selected>Không</option>
+                                                            <option value="VP">Có</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <div class="card-footer">
+                                            <button type="submit" class="btn btn-primary">
+                                                Cập nhật
+                                            </button>
+                                        </div>
+                                        <table id="tbNBP" class="table table-bordered table-striped" onclick="tbNBPClick()">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tên nhóm bộ phận</th>
+                                                    <th>Mã nhóm bộ phận</th>
+                                                    <th>Khối VP</th>
+                                                    <th>Chức năng</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in ViewBag.departmentList)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.depName
+                                                        </td>
+                                                        <td>
+                                                            @item.depID
+                                                        </td>
+                                                        @if (item.isVP != null && item.isVP != "")
+                                                        {
+                                                            <td>
+                                                                Có
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>
+                                                                Không
+                                                            </td>
+                                                        }
+
+                                                        <td>
+                                                            @Html.ActionLink("Xóa", "emp_Block", "Emp", new { },
+                                                                                                         new
+                                                                                                              {
+                                                                                                                  @class = "btn btn-danger btn-sm",
+                                                                                                                  id = "blockBT"
+                                                                                                              })
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="custom-content-below-BP" role="tabpanel" aria-labelledby="custom-content-below-BP-tab">
+                                <form id="formBP" method="post" asp-action="Update_BP">
+                                    <table id="tbBPU" class="table">
+                                        <tr>
+                                            <td colspan="2">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-2 col-form-label">Tên nhóm bộ phận</label>
+                                                    <div class="col-5">
+                                                        <input type="text" readonly asp-for="@Model.dep.depName" maxlength="10" class="form-control" placeholder="Số thời vụ" value="0">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        <tr />
                                         <tr>
                                             <td>
-                                                @item.depName
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Tên bộ phận</label>
+                                                    <div class="col-5">
+                                                        <input type="text" asp-for="@Model.depchild.DepChildName" maxlength="10" class="form-control" placeholder="Số thời vụ" value="0">
+                                                    </div>
+                                                </div>
                                             </td>
                                             <td>
-                                                @item.depID
-                                            </td>
-                                            <td>
-                                                @Html.ActionLink("Xóa", "emp_Block", "Emp", new { empID = item.empID },
-                                                                                             new
-                                                                                                  {
-                                                                                                      @class = "btn btn-danger btn-sm",
-                                                                                                      id = "blockBT"
-                                                                                                  })
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Mã bộ phận</label>
+                                                    <div class="col-3">
+                                                        <input type="text" readonly asp-for="@Model.depchild.DepChildID" maxlength="10" class="form-control" placeholder="Số thời vụ" value="0">
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="BoPhan">
-                            <table id="example1" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Tên nhóm bộ phận</th>
-                                        <th>Tên bộ phận</th>
-                                        <th>Mã bộ phận</th>
-                                        <th>Chức năng</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in ViewBag.departmentchildList)
-                                    {
+                                    </table>
+                                    <div class="card-footer">
+                                        <button id="btBP" type="submit" class="btn btn-primary">
+                                            Cập nhật
+                                        </button>
+                                    </div>
+
+                                    <table id="tbBP" class="table table-bordered table-striped" onclick="tbBPClick()">
+                                        <thead>
+                                            <tr>
+                                                <th>Tên nhóm bộ phận</th>
+                                                <th>Tên bộ phận</th>
+                                                <th>Mã bộ phận</th>
+                                                <th>Chức năng</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in ViewBag.departmentchildList)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.dep.depName
+                                                    </td>
+                                                    <td>
+                                                        @item.DepChildName
+                                                    </td>
+                                                    <td>
+                                                        @item.DepChildID
+                                                    </td>
+                                                    <td>
+                                                        @Html.ActionLink("Xóa", "emp_Block", "Emp", new { },
+                                                                                                     new
+                                                                                                          {
+                                                                                                              @class = "btn btn-danger btn-sm",
+                                                                                                              id = "blockBT"
+                                                                                                          })
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </form>
+
+                            </div>
+                            <div class="tab-pane fade" id="custom-content-below-CV" role="tabpanel" aria-labelledby="custom-content-below-CV-tab">
+                                <form id="formCV" method="post" asp-action="Update_CV">
+                                    <table id="tbCVU" class="table">
                                         <tr>
                                             <td>
-                                                @item.dep.depName
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Tên nhóm bộ phận</label>
+                                                    <div class="col-5">
+                                                        <input type="text" readonly asp-for="@Model.dep.depName" maxlength="10" class="form-control" placeholder="Số thời vụ" value="0">
+                                                    </div>
+                                                </div>
                                             </td>
                                             <td>
-                                                @item.DepChildName
-                                            </td>
-                                            <td>
-                                                @item.DepChildID
-                                            </td>
-                                            <td>
-                                                @Html.ActionLink("Xóa", "emp_Block", "Emp", new { empID = item.empID },
-                                                                                             new
-                                                                                                  {
-                                                                                                      @class = "btn btn-danger btn-sm",
-                                                                                                      id = "blockBT"
-                                                                                                  })
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Tên bộ phận</label>
+                                                    <div class="col-5">
+                                                        <input type="text" readonly asp-for="@Model.depchild.DepChildName" maxlength="10" class="form-control" placeholder="Số thời vụ" value="0">
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="ChucVu">
-                            <table id="example1" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Tên nhóm bộ phận</th>
-                                        <th>Tên bộ phận</th>
-                                        <th>Tên chức vụ</th>
-                                        <th>Mã chức vụ</th>
-                                        <th>Chức năng</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in ViewBag.positionList)
-                                    {
-                                    <tr>
-                                        <td>
-                                            @item.dep.depName
-                                        </td>
-                                        <td>
-                                            @item.DepChildName
-                                        </td>
-                                        <td>
-                                            @item.PositionName
-                                        </td>
-                                        <td>
-                                            @item.PositionID
-                                        </td>
-                                        <td>
-                                            @Html.ActionLink("Xóa", "emp_Block", "Emp", new { empID = item.empID },
-                                                                                         new
-                                                                                              {
-                                                                                                  @class = "btn btn-danger btn-sm",
-                                                                                                  id = "blockBT"
-                                                                                              })
-                                        </td>
-                                    </tr>
-                                    }
-                                </tbody>
-                            </table>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Tên chức vụ</label>
+                                                    <div class="col-5">
+                                                        <input type="text" asp-for="@Model.position.positionID" maxlength="10" class="form-control" placeholder="Số thời vụ" value="0">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Mã chức vụ</label>
+                                                    <div class="col-5">
+                                                        <input type="text" asp-for="@Model.position.positionName" maxlength="10" class="form-control" placeholder="Số thời vụ" value="0">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="card-footer">
+                                        <button id="btCV" type="submit" class="btn btn-primary">
+                                            Cập nhật
+                                        </button>
+                                    </div>
+
+                                    <table id="tbCV" class="table table-bordered table-striped" onclick="tbCVClick()">
+                                        <thead>
+                                            <tr>
+                                                <th>Tên nhóm bộ phận</th>
+                                                <th>Tên bộ phận</th>
+                                                <th>Tên chức vụ</th>
+                                                <th>Mã chức vụ</th>
+                                                <th>Chức năng</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in ViewBag.positionList)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.dep.depName
+                                                    </td>
+                                                    <td>
+                                                        @item.depchild.DepChildName
+                                                    </td>
+                                                    <td>
+                                                        @item.positionName
+                                                    </td>
+                                                    <td>
+                                                        @item.positionID
+                                                    </td>
+                                                    <td>
+                                                        @Html.ActionLink("Xóa", "emp_Block", "Emp", new { },
+                                                                                                     new
+                                                                                                          {
+                                                                                                              @class = "btn btn-danger btn-sm",
+                                                                                                              id = "blockBT"
+                                                                                                          })
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </form>
+
+                            </div>
                         </div>
                     </div>
                     <!-- /.card-body -->
@@ -147,6 +286,20 @@
 
 @section scripts{
     <script type="text/javascript">
+
+        $("#tbNBP").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+        $("#tbBP").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+        $("#tbCV").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+
        var a = '@ViewBag.notice';
         if (a != '') {
             let dia = bs4pop.dialog({
@@ -167,6 +320,67 @@
                 }
 
             });
+        }
+
+        function tbNBPClick() {
+            var tbl = document.getElementById("tbNBP");
+            if (tbl != null) {
+                for (var i = 0; i < tbl.rows.length; i++) {
+                    for (var j = 0; j < tbl.rows[i].cells.length; j++)
+                    tbl.rows[i].onclick = function () {
+                        getvalNBP(this);
+                    };
+                }
+            }
+        }
+
+        function getvalNBP(row) {
+            debugger
+            document.getElementById("dep_depID").value = row.cells[0].innerHTML.trim();
+            document.getElementById("dep_depName").value = row.cells[1].innerHTML.trim();
+            if (row.cells[2].innerHTML.trim() == 'Không')
+                document.getElementById("dep_isVP").value = 'NULL';
+            else
+                document.getElementById("dep_isVP").value = 'VP';
+        }
+
+        function tbBPClick() {
+            var tbl = document.getElementById("tbBP");
+            if (tbl != null) {
+                for (var i = 0; i < tbl.rows.length; i++) {
+                    for (var j = 0; j < tbl.rows[i].cells.length; j++)
+                        tbl.rows[i].onclick = function () {
+                            getvalBP(this);
+                        };
+                }
+            }
+        }
+
+        function getvalBP(row) {
+            debugger
+            $('#tbBPU input[id=dep_depName]').prop("value", row.cells[0].innerHTML.trim());
+            document.getElementById("depchild_DepChildID").value = row.cells[2].innerHTML.trim();
+            document.getElementById("depchild_DepChildName").value = row.cells[1].innerHTML.trim();
+        }
+
+        function tbCVClick() {
+            var tbl = document.getElementById("tbCV");
+            if (tbl != null) {
+                for (var i = 0; i < tbl.rows.length; i++) {
+                    for (var j = 0; j < tbl.rows[i].cells.length; j++)
+                        tbl.rows[i].onclick = function () {
+                            getvalCV(this);
+                        };
+                }
+            }
+        }
+
+        function getvalCV(row) {
+            debugger
+            $('#tbCVU input[id=dep_depName]').prop("value", row.cells[0].innerHTML.trim());
+            $('#tbCVU input[id=depchild_DepChildName]').prop("value", row.cells[1].innerHTML.trim());
+            $('#tbCVU input[id=position_positionID]').prop("value", row.cells[2].innerHTML.trim());
+            $('#tbCVU input[id=position_positionName]').prop("value", row.cells[3].innerHTML.trim());
         }
     </script>
 }

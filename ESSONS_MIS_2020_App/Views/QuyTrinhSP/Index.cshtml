@@ -40,36 +40,36 @@
                     </div>
                 }
                 <div class="card-body">
-                    <table id="example1" class="table table-bordered table-hover">
+                    <table id="exampleT" class="table table-bordered table-hover dt-responsive nowrap">
                         <thead>
                             <tr>
                                 <th>Số đơn khuôn</th>
                                 <th>Ngày duyệt</th>
                                 <th>Code KH</th>
                                 <th>Code SP</th>
-                                <th>Mã khuônTW</th>
-                                <th></th>
+                                <th>Mã khuôn TW</th>
+                                <th>Chức năng</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        @*<tbody>
                             @foreach (var item in ViewBag.quytrinhList)
-                            {
-                                <tr>
-                                    <td>
-                                        @item.SoDonKhuon
-                                    </td>
-                                    <td>
-                                        @item.NgayDuyet
-                                    </td>
-                                    <td>@item.CodeKH</td>
-                                    <td>@item.CodeSP</td>
-                                    <td>@item.MaKhuonTW</td>
-                                    <td>
-                                        @Html.ActionLink("Chi tiết", "Detail", "QuyTrinhSP", new { SoDonKhuon = item.SoDonKhuon, codeSP = item.CodeSP }, new { @class = "btn btn-primary btn-sm", @target = "_blank" })
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.SoDonKhuon
+                                        </td>
+                                        <td>
+                                            @item.NgayDuyet
+                                        </td>
+                                        <td>@item.CodeKH</td>
+                                        <td>@item.CodeSP</td>
+                                        <td>@item.MaKhuonTW</td>
+                                        <td>
+                                            @Html.ActionLink("Chi tiết", "Detail", "QuyTrinhSP", new { SoDonKhuon = item.SoDonKhuon, codeSP = item.CodeSP }, new { @class = "btn btn-primary btn-sm", @target = "_blank" })
+                                        </td>
+                                    </tr>
+                                }
+                        </tbody>*@
                     </table>
                 </div>
             </div>
@@ -85,7 +85,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered">
+                            <table id="table" class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Kinh Doanh</th>
@@ -192,7 +192,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> 
         </div>
     </section>
 </div>
@@ -222,6 +222,30 @@
                     });
                     e.preventDefault();
                 }
+            });
+
+            debugger
+            $("#exampleT").DataTable({
+                serverSide: true,
+                filter: true,               
+                autoWidth: false,
+                ajax: {
+                    url: "/QuyTrinhSP/GetDataTable",
+                    type: "POST",
+                    datatype: "json",
+                    dataSrc: 'data'
+                },
+                columns: [
+                    { "data": "SoDonKhuon", "name": "SoDonKhuon", "autoWidth": true },
+                    { "data": "NgayDuyet", "name": "NgayDuyet", "autoWidth": true },
+                    { "data": "CodeKH", "name": "CodeKH", "autoWidth": true },
+                    { "data": "CodeSP", "name": "CodeSP", "autoWidth": true },
+                    { "data": "MaKhuonTW", "name": "MaKhuonTW", "autoWidth": true },
+                    {
+                        "render": function (data, type, full, meta) {
+                                    return "<a href='/QuyTrinhSP/Detail?SoDonKhuon="+ full.SoDonKhuon +"&&codeSP="+full.CodeSP+"' class='btn btn-primary btn-sm' target = '_blank'; >Chi Tiết</a>";; }
+                    }
+                ]
             });
         });
 
